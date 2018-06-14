@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+/* Common Icons */
+
+.trackIcon {
+	background-image: url('cd.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newtrackIcon {
+	background-image: url('cd_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletetrackIcon {
+	background-image: url('cd_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

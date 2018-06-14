@@ -1,0 +1,201 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.ComboBox");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.TimeTextBox");
+
+var tagType = "E";
+var slaveID = "'.$this->eventArray['event_id'].'";
+
+dojo.addOnLoad(function(){
+	commentTab(tagType,slaveID);
+});
+
+if (top.location != self.location) {
+	top.location = self.location.href
+};';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/comments.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Events | Edit Event' );
+$this->placeholder ( 'title' )->set ( 'Edit Event' );
+$this->placeholder('section')->set('events');
+?>
+<?php
+include_once('../'.$registry->site->site->publicdir.'/_scripts/fckeditor/fckeditor.php') ;
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/events/details?id=<?php echo $this->eventArray['event_id']; ?>" style="min-height: 50px;"></div>
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="Event" style="padding: 10px;">
+
+		<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+			<div class="cFormItm">
+				<label for="title"><strong>Event Name</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			required="true"
+        			promptMessage="Input an event name"
+        			invalidMessage="Invalid event name"
+            		name="title" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="title" 
+            		value="<?php echo $this->eventArray['event_title']; ?>" 
+            		size="55" 
+            		style="width: 440px;"/>
+			</div>
+				
+			<div class="cFormItmH">
+				<label for="category"><strong>Category</strong></label><br />
+        		<select dojoType="dijit.form.FilteringSelect"
+        			name="category"
+        			id="category"
+        			required="true"
+        			autocomplete="false"
+        			style="width: 295px;"
+        			class="cFormSelect"
+        			value="<?php echo $this->eventArray['event_category']; ?>">
+    		        <?php $this->ECatSelect(); ?>
+    			</select>
+			</div>
+			
+			<div class="cFormItmH">
+				<label for="category"><strong>Venue</strong></label><br />
+        		<select dojoType="dijit.form.FilteringSelect"
+        			name="venue"
+        			id="venue"
+        			required="true"
+        			autocomplete="true"
+        			style="width: 295px;"
+        			class="cFormSelect">
+    		        <?php $this->EVenueSelect($this->eventArray['event_venue']); ?>
+    			</select>
+			</div>
+			
+			<p class="ClearAll"></p>
+			
+			<div class="cFormItmH">
+				<label for="date"><strong>Start Date</strong></label><br />
+        		<input type="text" name="datestart" id="datestart" value="<?php echo $this->MakeDate('Y-m-d',$this->eventArray['event_date']); ?>" dojoType="dijit.form.DateTextBox" required="true" onChange="dijit.byId('dateend').constraints.min = arguments[0];" />
+			</div>
+			
+			<div class="cFormItmH">
+				<label for="date"><strong>Start Time</strong></label><br />
+        		<input type="text" name="Jtimestart" id="Jtimestart" value="T<?php echo $this->MakeDate('H:i:s',$this->eventArray['event_date']); ?>" dojoType="dijit.form.TimeTextBox" onChange="dojo.byId('timestart').value=arguments[0].toString().replace(/.*1970\s(\S+).*/,'$1')"  required="true" />
+				<input type="hidden" id="timestart" name="timestart" value="<?php echo $this->MakeDate('H:i:s',$this->eventArray['event_date']); ?>" />
+			</div>
+			
+			<div class="cFormItmH">
+				<label for="date"><strong>End Date</strong></label><br />
+        		<input type="text" name="dateend" id="dateend" value="<?php echo $this->MakeDate('Y-m-d',$this->eventArray['event_end']); ?>" dojoType="dijit.form.DateTextBox" required="true" onChange="dijit.byId('datestart').constraints.max = arguments[0];"/>
+			</div>
+			
+			<div class="cFormItmH">
+				<label for="date"><strong>End Time</strong></label><br />
+        		<input type="text" name="Jtimeend" id="Jtimeend" value="T<?php echo $this->MakeDate('H:i:s',$this->eventArray['event_end']); ?>" dojoType="dijit.form.TimeTextBox" onChange="dojo.byId('timeend').value=arguments[0].toString().replace(/.*1970\s(\S+).*/,'$1')" required="true" />
+				<input type="hidden" id="timeend" name="timeend" value="<?php echo $this->MakeDate('H:i:s',$this->eventArray['event_end']); ?>" />
+			</div>
+				
+			<div class="cFormItm">
+    			<label for="description"><strong>Description</strong></label><br />
+    	        <?php
+                    $FCKeditor = new FCKeditor( 'description' ) ;
+			        $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			        $FCKeditor->Width	= 760 ;
+			        $FCKeditor->Height	= 300 ;
+			        $FCKeditor->Value	= $this->eventArray['event_description'];
+			        $FCKeditor->HtmlEncodeOutput = 'false';
+                    $FCKeditor->Create() ;
+                ?>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    		
+    		<div class="cFormItm">
+				<label for="title"><strong>Link</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			invalidMessage="Enter a valid URL"
+            		name="url" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="url" 
+            		regExp="(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?"
+            		value="<?php echo $this->eventArray['event_url']; ?>" 
+            		size="55" 
+            		style="width: 440px;"/>
+			</div>
+			
+			<div class="cFormItm">
+				<label for="title"><strong>Ticket Link</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			invalidMessage="Enter a valid URL"
+            		name="ticket" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="ticket"
+            		regExp="(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?" 
+            		value="<?php echo $this->eventArray['event_tickets']; ?>" 
+            		size="55" 
+            		style="width: 440px;"/>
+			</div>
+    			
+    		<label><strong>Options</strong></label><br />
+    			
+			<div class="cFormItmH">
+    			<input dojotype="dijit.form.CheckBox"
+    				id="comments"
+            		name="comments" 
+                    <?php if($this->eventArray['event_comments'] == 'Y') : ?>checked="checked"<?php endif; ?>
+            		value="Y"
+            		type="checkbox" />
+    			<label for="comments"> Allow comments?</label>
+    		</div>
+    			
+    		<div class="cFormItmH">
+    			<input dojotype="dijit.form.CheckBox"
+    				id="moderate"
+            		name="moderate" 
+                    <?php if($this->eventArray['event_moderate'] == 'Y') : ?>checked="checked"<?php endif; ?>
+            		value="Y"
+            		type="checkbox" />
+    			<label for="moderate"> Moderate comments?</label>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    
+		</form>
+
+	</div>
+	
+	<?php if($this->acl->isAllowed($this->user->user_role, 'gcomments')) : ?>
+	<?php echo $this->partial('_partials/commentspane.phtml', array('type' => 'E','slave' => $this->eventArray['event_id'])); ?>
+	<?php endif; ?>
+	
+</div>

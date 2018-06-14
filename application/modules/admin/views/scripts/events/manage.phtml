@@ -1,0 +1,107 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.TimeTextBox");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Events | Manage' );
+$this->placeholder ( 'title' )->set ( 'Events' );
+$this->placeholder('section')->set('events');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+				
+				<?php if($this->acl->isAllowed($this->user->user_role, 'eeventnew')) : ?><button dojoType="dijit.form.Button" name="neweventButton" iconClass="neweventIcon" id="neweventButton" value="New Event" onClick="getDialog('/admin/events/new/','New Event');">New Event</button><?php endif; ?>
+				<?php if($this->acl->isAllowed($this->user->user_role, 'evenuenew')) : ?><button dojoType="dijit.form.Button" name="newvenueButton" id="newvenueButton" value="New Venue" iconClass="newvenueIcon" onClick="getDialog('/admin/events/venuenew/','New Venue');">New Venue</button><?php endif; ?>
+				<?php if($this->acl->isAllowed($this->user->user_role, 'ecategorynew')) : ?><button dojoType="dijit.form.Button" name="newcategoryButton" iconClass="newcategoryIcon" id="newcategoryButton" value="New Category" onClick="getDialog('/admin/events/categorynew/','New Category');">New Category</button><?php endif; ?>
+    			<button dojoType="dijit.form.Button" name="venueButton" iconClass="venueIcon" id="venueButton" value="Venues" onClick="goTo('<?php echo $this->url(array('action' => 'venues')); ?>');">Venues...</button>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Filter</legend>
+				
+				<?php if ($this->venue != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('venue' => NULL)); ?>');" title="Remove Filter">Venue: <?php echo $this->venue; ?></span><?php endif; ?>
+				<?php if ($this->category != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('category' => NULL)); ?>');" title="Remove Filter">Category: <?php echo $this->category; ?></span><?php endif; ?>
+    			<?php if ($this->venue == NULL & $this->category == NULL) : ?><span class="tagItm">No active filter</span><?php endif; ?>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<div id="categoriesPane">
+	<fieldset class="cFieldset">
+		<legend class="cFLegend">Categories</legend>
+		<div dojoType="dijit.layout.ContentPane" class="pane" id="categoriesResponse" preload="true" href="/admin/events/categories" style="clear:both;"></div>
+	</fieldset>
+</div>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th>Event</th>
+		<th>Category</th>
+		<th>Venue</th>
+		<th>Date</th>
+	</tr>
+	<?php if (count($this->eventsArray)) : ?>
+    <?php foreach($this->eventsArray as $event) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $event['event_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $event['event_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td>
+			<strong><a href="<?php echo $this->baseUrl(); ?>/admin/events/edit/id/<?php echo $event['event_id']; ?>"><?php echo $event['event_title']; ?></a> <?php if($event['event_status'] == 'draft') : ?>(draft)<?php endif; ?></strong>
+			<div id="edit<?php echo $event['event_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><a href="<?php echo $this->url(array('action' => 'edit','id' => $event['event_id'])); ?>">Edit</a><?php if($this->acl->isAllowed($this->user->user_role, 'eeventdelete')) : ?> | <a onClick="getDialog('/admin/events/delete/id/<?php echo $event['event_id']; ?>/','Delete Event')" style="cursor: pointer;">Delete</a><?php endif; ?></div>
+		</td>
+		<td><a href="<?php echo $this->url(array('action' => 'manage','category' => $event['event_category'])); ?>" title="Add to Filter"><?php echo $event['ecat_title']; ?></a></td>
+		<td><?php if($event['venue_id'] != '1') : ?><a href="<?php echo $this->url(array('action' => 'manage','venue' => $event['event_venue'])); ?>" title="Add to Filter"><?php echo $event['venue_title']; ?> (<?php echo $event['venue_city']; ?>)</a><?php else : ?><?php echo $event['venue_title']; ?><?php endif; ?></td>
+		<td><?php echo $this->EDate($event['event_date'],$event['event_end']); ?></td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="4">
+			<div class="cUpd">No Events!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->eventsArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->eventsArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

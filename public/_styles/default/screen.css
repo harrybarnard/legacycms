@@ -1,0 +1,7 @@
+/* CMS Default Screen CSS */
+
+@import url("dijit/frontDij.css");
+@import url("default.css");
+@import url("copy.css");
+@import url("wordcloud.css");
+@import url("icons.css");

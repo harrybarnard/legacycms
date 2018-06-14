@@ -1,0 +1,7 @@
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+

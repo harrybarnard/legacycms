@@ -1,0 +1,39 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+if ($this->pageCount): ?>
+
+<div class="nButWrapL">Page <?php echo $this->current; ?> of <?php echo $this->last; ?></div>
+
+<div class="nButWrapR">
+
+<!-- Previous page link -->
+<?php if (isset($this->previous)): ?>
+<a href="<?php echo $this->url(array('page' => $this->previous)); ?>">Previous</a>
+<?php else: ?>
+<span class="nButN">Previous</span>
+<?php endif; ?>
+
+<!-- Numbered page links -->
+<?php foreach ($this->pagesInRange as $page): ?>
+  <?php if ($page != $this->current): ?>
+    <a href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a>
+  <?php else: ?>
+    <span class="nButA"><?php echo $page; ?></span>
+  <?php endif; ?>
+<?php endforeach; ?>
+
+<!-- Next page link -->
+<?php if (isset($this->next)): ?>
+<a href="<?php echo $this->url(array('page' => $this->next)); ?>">Next</a>
+<?php else: ?>
+<span class="nButN">Next</span>
+<?php endif; ?>
+
+</div>
+
+<?php endif; ?>

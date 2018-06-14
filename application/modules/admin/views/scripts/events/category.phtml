@@ -1,0 +1,122 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.TabContainer");
+
+var slaveID = "'.$this->categoryArray['ecat_id'].'";';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Events | Edit Category' );
+$this->placeholder ( 'title' )->set ( 'Edit Category' );
+$this->placeholder('section')->set('events');
+?>
+<?php
+include_once('../'.$registry->site->site->publicdir.'/_scripts/fckeditor/fckeditor.php') ;
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/events/categorydetails?id=<?php echo $this->categoryArray['ecat_id']; ?>" style="min-height: 50px;"></div>
+
+<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="Category" style="padding: 10px;">
+
+		<div class="cFormItm">
+			<label for="title"><strong>Title</strong></label><br />
+        	<input dojoType="dijit.form.ValidationTextBox"
+        		trim="true"
+        		required="true"
+        		invalidMessage="Enter a valid title"
+            	name="title" 
+            	type="text" 
+            	class="cFormInput" 
+            	id="title" 
+            	value="<?php echo $this->categoryArray['ecat_title']; ?>" 
+            	size="55" 
+            	style="width: 440px;"/>
+		</div>
+				
+		<p class="ClearAll"></p>
+			
+		<div class="cFormItm">
+    		<label for="description"><strong>Teaser</strong></label><br />
+    	    <?php
+                $FCKeditor = new FCKeditor( 'description' ) ;
+			    $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			    $FCKeditor->Width	= 760 ;
+			    $FCKeditor->Height	= 200 ;
+			    $FCKeditor->Value	= $this->categoryArray['ecat_description'];
+			    $FCKeditor->HtmlEncodeOutput = 'false';
+                $FCKeditor->Create() ;
+            ?>
+    	</div>
+    		
+    	<div class="cFormItm">
+    		<label for="content"><strong>Description</strong></label><br />
+    	    <?php
+                $FCKeditor = new FCKeditor( 'content' ) ;
+			    $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			    $FCKeditor->Width	= 760 ;
+			    $FCKeditor->Height	= 300 ;
+			    $FCKeditor->Value	= $this->categoryArray['ecat_content'];
+			    $FCKeditor->HtmlEncodeOutput = 'false';
+                $FCKeditor->Create() ;
+            ?>
+    	</div>
+    			
+    	<p class="ClearAll"></p>
+    		
+	</div>
+	
+	<div id="DefaultsPane" dojoType="dijit.layout.ContentPane" title="Defaults" style="padding: 10px;">
+	
+		<div class="cFormItm">
+			<label for="venue"><strong>Default Venue</strong></label><br />
+        	<select dojoType="dijit.form.FilteringSelect"
+        		name="venue"
+        		id="venue"
+        		autocomplete="true"
+        		style="width: 295px;"
+        		class="cFormSelect">
+    		    <?php $this->EVenueSelect($this->categoryArray['ecat_venue']); ?>
+    		</select>
+		</div>
+    			
+    	<div class="cFormItm">
+    		<label for="default"><strong>Default Event Description</strong></label><br />
+    	    <?php
+                $FCKeditor = new FCKeditor( 'default' ) ;
+			    $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			    $FCKeditor->Width	= 760 ;
+			    $FCKeditor->Height	= 300 ;
+			    $FCKeditor->Value	= $this->categoryArray['ecat_default'];
+			    $FCKeditor->HtmlEncodeOutput = 'false';
+                $FCKeditor->Create() ;
+            ?>
+    	</div>
+	
+	</div>
+	
+</div>
+
+</form>

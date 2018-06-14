@@ -1,0 +1,76 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<form dojoType="dijit.form.Form" id="selectimageForm" jsId="selectimageForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItmH">
+		<label for="type"><strong>Resize</strong></label> 
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="type"
+        	id="type"
+        	required="true"
+        	autocomplete="false"
+        	value=""
+        	style="width: 150px;">
+            <option value="resize">Fit to Box</option>
+            <option value="adaptive">Adaptive Crop</option>
+            <option value="crop">Crop from Center</option>
+    	</select>
+	</div>
+    <div class="cFormItmH">
+		<label for="width"><strong>Width</strong></label> 
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="width" 
+            type="text" 
+            invalidMessage="Invalid width"
+            class="cFormInput" 
+            id="width" 
+            value="<?php echo $this->size['width']; ?>" 
+            size="55" 
+            style="width: 60px;"/> px
+	</div>
+	<div class="cFormItmH">
+		<label for="height"><strong>Height</strong></label> 
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="height" 
+            type="text" 
+            invalidMessage="Invalid height"
+            class="cFormInput" 
+            id="height" 
+            value="<?php echo $this->size['height']; ?>" 
+            size="55" 
+            style="width: 60px;"/> px
+	</div>
+	<div class="cFormItmH">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newfoldersubmitButton" 
+			value="Create" 
+			iconClass="refreshIcon" 
+			onClick="imagePreview('<?php echo $this->key; ?>');">Preview</button>
+	</div>
+	<div dojoType="dijit.layout.ContentPane" class="pane" id="imagePreview" style="clear:both; width: 800px; height: 450px; overflow: auto;" preload="true" href="/admin/assets/imagepreview/key/<?php echo $this->key; ?>/width/<?php echo $this->size['width']; ?>/height/<?php echo $this->size['height']; ?>/type/resize/"></div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="insertimagesubmitButton" 
+			value="Create" 
+			iconClass="insertimageIcon" 
+			onClick="imageInsert('<?php echo $this->key; ?>');">Insert</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="insertimagecancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>

@@ -1,0 +1,153 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.ComboBox");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+
+var tagType = "A";
+var slaveID = "'.$this->articleArray['article_id'].'";
+
+dojo.addOnLoad(function(){
+	commentTab(tagType,slaveID);
+});';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/comments.js','text/javascript')
+                   ->appendFile('/_scripts/admin/tags.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Articles | Edit Article' );
+$this->placeholder ( 'title' )->set ( 'Edit Article' );
+$this->placeholder('section')->set('articles');
+?>
+<?php
+include_once('../'.$registry->site->site->publicdir.'/_scripts/fckeditor/fckeditor.php') ;
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/articles/details?id=<?php echo $this->articleArray['article_id']; ?>"></div>	
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="Article" style="padding: 10px;">
+
+		<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+			<div class="cFormItmH">
+				<label for="title"><strong>Title</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			required="true"
+        			invalidMessage="Enter a valid article title"
+            		name="title" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="title" 
+            		value="<?php echo $this->articleArray['article_title']; ?>" 
+            		size="55" 
+            		style="width: 490px;"/>
+			</div>
+				
+			<div class="cFormItmH">
+				<label for="category"><strong>Category</strong></label><br />
+        		<select dojoType="dijit.form.FilteringSelect"
+        			name="category"
+        			id="category"
+        			autocomplete="false"
+        			style="width: 240px;"
+        			class="cFormSelect">
+    		        <?php $this->EditCatSelect($this->articleArray['article_category']); ?>
+    			</select>
+			</div>
+				
+			<div class="cFormItm">
+    			<label for="introduction"><strong>Teaser</strong></label><br />
+    	        <?php
+                    $FCKeditor = new FCKeditor( 'introduction' ) ;
+			        $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			        $FCKeditor->Width	= 760 ;
+			        $FCKeditor->Height	= 300 ;
+			        $FCKeditor->Value	= $this->articleArray['article_intro'];
+			        $FCKeditor->HtmlEncodeOutput = 'false';
+                    $FCKeditor->Create() ;
+                ?>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    
+    		<div class="cFormItm">
+    			<label for="content"><strong>Content</strong></label><br />
+    	        <?php
+                    $FCKeditor = new FCKeditor( 'content' ) ;
+			        $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			        $FCKeditor->Width	= 760 ;
+			        $FCKeditor->Height	= 300 ;
+			        $FCKeditor->Value	= $this->articleArray['article_content'];
+			        $FCKeditor->HtmlEncodeOutput = 'false';
+                    $FCKeditor->Create() ;
+                ?>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    			
+    		<label><strong>Options</strong></label><br />
+    			
+			<div class="cFormItmH">
+    			<input dojotype="dijit.form.CheckBox"
+    				id="comments"
+            		name="comments" 
+                    <?php if($this->articleArray['article_comments'] == 'Y') : ?>checked="checked"<?php endif; ?>
+            		value="Y"
+            		type="checkbox" />
+    			<label for="comments"> Allow comments?</label>
+    		</div>
+    			
+    		<div class="cFormItmH">
+    			<input dojotype="dijit.form.CheckBox"
+    				id="moderate"
+            		name="moderate" 
+                    <?php if($this->articleArray['article_moderate'] == 'Y') : ?>checked="checked"<?php endif; ?>
+            		value="Y"
+            		type="checkbox" />
+    			<label for="moderate"> Moderate comments?</label>
+    		</div>
+    			
+    		<div class="cFormItmH">
+    			<input dojotype="dijit.form.CheckBox"
+    				id="sticky"
+            		name="sticky" 
+                    <?php if($this->articleArray['article_sticky'] == 'Y') : ?>checked="checked"<?php endif; ?>
+            		value="Y"
+            		type="checkbox" />
+    			<label for="sticky"> Make sticky?</label>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    
+		</form>
+
+	</div>
+	
+	<?php echo $this->partial('_partials/tagspane.phtml', array('type' => 'A','slave' => $this->articleArray['article_id'])); ?>
+	
+	<?php if($this->acl->isAllowed($this->user->user_role, 'gcomments')) : ?>
+	<?php echo $this->partial('_partials/commentspane.phtml', array('type' => 'A','slave' => $this->articleArray['article_id'])); ?>
+	<?php endif; ?>
+	
+</div>

@@ -1,0 +1,91 @@
+@CHARSET "ISO-8859-1";
+
+/* Users Icons */
+
+.activeIcon {
+	background-image: url('flag_green.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.inactiveIcon {
+	background-image: url('flag_yellow.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.suspendIcon {
+	background-image: url('flag_red.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.userstatusIcon {
+	background-image: url('user_go.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.usersIcon {
+	background-image: url('group.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newuserIcon {
+	background-image: url('user_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.passwordIcon {
+	background-image: url('key.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.roleIcon {
+	background-image: url('group.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newroleIcon {
+	background-image: url('group_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.editroleIcon {
+	background-image: url('group_edit.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deleteroleIcon {
+	background-image: url('group_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

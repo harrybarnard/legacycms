@@ -1,0 +1,81 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");
+dojo.require("dojox.layout.RotatorContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Search');
+$this->placeholder('title')->set('Search');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="cLWrap">
+
+	<div class="aBox copy nopad">
+		<h2>Search Results</h2>
+	</div>
+
+	<p class="Spacer"></p>
+	
+	<?php if(count($this->hits)) : ?>
+	
+    <?php foreach ($this->hits as $hit) : ?>
+	<div class="aBox copy nopad">
+
+		<h3><a href="<?php echo $hit->url; ?>"><?php echo $hit->title; ?></a></h3>
+		<?php if($hit->details != NULL) : ?>
+		<h5><?php echo $hit->details; ?></h5>
+		<?php endif; ?>
+	    <?php echo $hit->stub; ?>
+		<div class="aMore">
+			<a href="<?php echo $this->baseUrl().$hit->url; ?>">View page &raquo;</a>
+		</div>
+
+	</div>
+	<p class="Spacer"></p>
+    <?php endforeach; ?>
+    
+    <?php echo $this->paginationControl($this->hits,'Sliding','_pagination/search.phtml', array('query' => $this->query)); ?>
+    
+    <p class="Spacer"></p>
+    
+    <?php else : ?>
+    
+    <div class="aBox error copy">
+    	<?php if(strlen($this->query) > 0) : ?>
+	    <h3>No results were found for '<?php echo $this->query; ?>'</h3>
+	    <?php else : ?>
+	    <h3>You did not enter a search query!</h3>
+	    <?php endif; ?>
+	    <p class="Spacer"></p>
+	    <div class="tagList"><a href="<?php echo $this->baseUrl();?>/">Visit our Home Page &raquo;</a></div>
+        <div class="tagList"><a href="<?php echo $this->baseUrl();?>/contact/">Contact us to report a problem &raquo;</a></div>
+	</div>
+	<p class="Spacer"></p>
+    
+    <?php endif; ?>
+    
+</div>
+
+<div class="cRWrap">
+				    
+	<?php echo $this->partial('_partials/searchbox.phtml', array('query' => $this->query)); ?>
+	
+    <?php $this->TBox(); ?>
+				    		
+</div>
+				    
+<p class="ClearAll"></p>

@@ -1,0 +1,59 @@
+@CHARSET "ISO-8859-1";
+
+/* Resources Icons */
+
+.resourcesIcon {
+	background-image: url('basket.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deleteresourceIcon {
+	background-image: url('basket_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newresourceIcon {
+	background-image: url('basket_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.brandsIcon {
+	background-image: url('package.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newbrandIcon {
+	background-image: url('package_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletebrandIcon {
+	background-image: url('package_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.editbrandIcon {
+	background-image: url('package_edit.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

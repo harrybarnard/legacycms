@@ -1,0 +1,299 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.ComboBox");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.TimeTextBox");
+dojo.require("dijit.form.SimpleTextarea");
+
+var tagType = "U";
+var slaveID = "'.$this->userArray['user_id'].'";';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Users | Edit User' );
+$this->placeholder ( 'title' )->set ( 'Edit User' );
+$this->placeholder('section')->set('users');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/users/details?id=<?php echo $this->userArray['user_id']; ?>" style="min-height: 50px;"></div>
+
+<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="User" style="padding: 10px;">
+
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Identity</legend>
+			
+				<div class="cFormItmH">
+					<label for="name"><strong>First Name</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid name"
+            			name="first" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="first" 
+            			value="<?php echo $this->userArray['upro_first']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+				
+				<div class="cFormItmH">
+					<label for="name"><strong>Last Name</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid name"
+            			name="last" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="last" 
+            			value="<?php echo $this->userArray['upro_last']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+				
+				<p class="ClearAll"></p>
+			
+				<div class="cFormItmH">
+					<label for="alias"><strong>Alias</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid alias"
+            			name="alias" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="alias" 
+            			value="<?php echo $this->userArray['user_alias']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+			
+				<div class="cFormItmH">
+					<label for="role"><strong>Role</strong></label><br />
+        			<select dojoType="dijit.form.FilteringSelect"
+        				name="role"
+        				id="role"
+        				autocomplete="false"
+        				style="width: 140px;"
+        				value="<?php echo $this->userArray['user_role']; ?>"
+        				class="cFormSelect">
+    		            <?php $this->URoleSelect(); ?>
+    				</select>
+				</div>
+					
+			</fieldset>
+			
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Personal</legend>
+				
+				<div class="cFormItmH">
+    				<label for="gender"><strong>Gender</strong></label><br />
+    				<select dojoType="dijit.form.FilteringSelect"
+        				name="gender"
+        				id="gender"
+        				required="true"
+        				autocomplete="true"
+        				style="width: 100px;"
+        				class="cFormSelect"
+        				value="<?php echo $this->userArray['upro_gender'];?>">
+        				<option value="N" selected>Unknown</option>
+        				<option value="F" selected>Female</option>
+        				<option value="M" selected>Male</option>
+    				</select>
+    			</div>
+    			
+    			<div class="cFormItmH">
+					<label for="dob"><strong>Date of Birth</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				invalidMessage="Invalid date"
+            			name="dob" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="dob" 
+            			value="<?php if($this->userArray['upro_dob'] != '0000-00-00') : echo $this->userArray['upro_dob']; endif; ?>" 
+            			size="55" 
+            			style="width: 100px;"/>
+            		<div class="reMarkup">(YYYY-MM-DD)</div>
+				</div>
+				
+			</fieldset>
+			
+        	<fieldset class="cFieldset">
+				<legend class="cFLegend">Contact</legend>
+			
+				<div class="cFormItmH">
+					<label for="email"><strong>E-mail Address</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid e-mail address"
+            			name="email" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="email" 
+            			value="<?php echo $this->userArray['user_email']; ?>" 
+            			size="55" 
+            			style="width: 320px;"/>
+				</div>
+			
+				<div class="cFormItmH">
+    				<label><strong>Phone Number</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="phone" 
+        				value="<?php echo $this->escape($this->userArray['upro_phone']); ?>" 
+        				regExp=".{3}.*" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Your phone number" 
+        				invalidMessage="Invalid input"
+        				style="width: 120px;"
+        				class="cFormInput"/>
+        		</div>
+        		
+        		<p class="ClearAll"></p>
+        			
+        	</fieldset>
+        	
+        	<fieldset class="cFieldset">
+				<legend class="cFLegend">Organisation</legend>
+				
+				<div class="cFormItm">
+					<label for="organisation"><strong>Organisation</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				invalidMessage="Invalid organisation"
+            			name="organisation" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="organisation" 
+            			value="<?php echo $this->userArray['upro_organisation']; ?>" 
+            			size="55" 
+            			style="width: 300px;"/>
+				</div>
+				
+				<div class="cFormItm">
+					<label for="position"><strong>Position</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				invalidMessage="Invalid position"
+            			name="position" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="position" 
+            			value="<?php echo $this->userArray['upro_position']; ?>" 
+            			size="55" 
+            			style="width: 300px;"/>
+				</div>
+				
+			</fieldset>
+        	
+        	<fieldset class="cFieldset">
+				<legend class="cFLegend">Location</legend>
+				
+				<div class="cFormItm">
+					<label for="address"><strong>Address</strong></label><br />
+        			<textarea dojoType="dijit.form.SimpleTextarea" name="address" id="address" style="width:400px;"><?php echo $this->userArray['upro_address']; ?></textarea>
+				</div>
+				
+				<div class="cFormItmH">
+					<label for="city"><strong>City</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				invalidMessage="Invalid city"
+            			name="city" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="city" 
+            			value="<?php echo $this->userArray['upro_city']; ?>" 
+            			size="55" 
+            			style="width: 300px;"/>
+				</div>
+				
+				<p class="ClearAll"></p>
+        		
+    			<div class="cFormItmH">
+    				<label for="country"><strong>Country</strong></label><br />
+    				<select dojoType="dijit.form.FilteringSelect"
+        				name="country"
+        				id="country"
+        				required="true"
+        				autocomplete="true"
+        				style="width: 200px;"
+        				class="cFormSelect"
+        				value="<?php echo $this->userArray['upro_country'];?>">
+        				<option value="#" selected>Pick a Country</option> 
+    		        	<?php $this->countriesOptions(); ?>
+    				</select>
+    			</div>
+    			
+    			<div class="cFormItmH">
+        			<label for="postcode"><strong>Postcode</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="postcode" 
+        				value="<?php echo $this->userArray['upro_postcode'];?>"
+        				regExp="[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}"
+        				required="false"
+        				promptMessage="Enter a postcode"
+        				invalidMessage="Invalid Postcode"
+        				style="width: 80px;"
+        				class="cFormInput"/>
+        		</div>
+    			
+    			<p class="ClearAll"></p>
+    			
+    		</fieldset>
+    
+	</div>
+	
+	<?php if ($this->userArray['user_member'] == 'Y') : ?>
+	<div id="MembershipPane" dojoType="dijit.layout.ContentPane" title="Membership" style="padding: 10px;"></div>
+	<?php endif; ?>
+	
+	<div id="SubscriptionsPane" dojoType="dijit.layout.ContentPane" title="Subscriptions" style="padding: 10px;">
+		<fieldset class="cFieldset">
+        	<legend class="cFLegend">Subscriptions</legend>
+    	
+		    <?php if(count($this->listsArray) > 0) : ?>
+            <?php foreach($this->listsArray as $list) : ?>
+    		<div class="aBox soft copy botpad <?php if($this->MSubStatusAll($list['mgroup_id'],$this->userArray['user_id'])) : ?>yBG<?php endif; ?>" style="cursor: default; margin-bottom: 5px;" onclick="toggleCheckbox('list<?php echo $list['mgroup_id']; ?>','sub<?php echo $list['mgroup_id']; ?>');" id="sub<?php echo $list['mgroup_id']; ?>">
+    			<h4><?php if ($list['mgroup_open'] == 'N') : ?><img src="/_styles/admin/icons/lock.gif" alt="Closed List" title="Closed List" border="0" style="vertical-align: text-top;"/> <?php else : ?><img src="/_styles/admin/icons/lock_open.gif" alt="Open List" title="Open List" border="0" style="vertical-align: text-top;"/> <?php endif; ?><?php echo $list['mgroup_title']; ?></h4>
+    			<p><?php echo $list['mgroup_description']; ?></p>
+    			<label for="list<?php echo $list['mgroup_id']; ?>"><input dojotype="dijit.form.CheckBox" name="lists[]" id="list<?php echo $list['mgroup_id']; ?>" value="<?php echo $list['mgroup_id']; ?>" type="checkbox" <?php if($this->MSubStatusAll($list['mgroup_id'],$this->userArray['user_id'])) : ?>checked="checked"<?php endif; ?>/> Subscribed</label>
+    		</div>
+    		<?php endforeach;?>
+    		<?php endif; ?>
+    		    
+    	</fieldset>
+	</div>
+	
+	</form>
+	
+</div>

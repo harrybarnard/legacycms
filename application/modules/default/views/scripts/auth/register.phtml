@@ -1,0 +1,308 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.FilteringSelect");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Register An Account');
+$this->placeholder('title')->set('Register');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/user.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="cLWrap">
+
+	<?php if($this->posted != 'N') : ?>
+	<div class="aBox copy nopad">
+	
+		<h2>Account Created</h2>
+		
+	</div>
+	
+	<p class="Spacer"></p>
+	
+	<div class="aBox copy botpad">
+	
+		<p>Your account has been created.</p>
+		<p>You should shortly receive an e-mail containing details of how to activate it.</p>
+	
+	</div>
+	<?php else: ?>
+	<div class="aBox copy nopad">
+	
+		<h2>Register An Account</h2>
+	
+	</div>
+	
+	<p class="Spacer"></p>
+	
+	<?php echo $this->RenderMessages($this->messages); ?>
+	<?php if (isset($this->captchamessage)) : ?>
+    	<div class="aBox cErr" style="margin-top: 5px;">Invalid Verification Code - you entered an incorrect verification code</div>
+    <?php endif; ?>
+	
+	<div class="aBox copy botpad">
+	
+    	<form dojoType="dijit.form.Form" id="registerForm" jsId="registerForm" encType="multipart/form-data" action="<?php echo $this->baseUrl(); ?>/auth/register/" method="POST" class="cForm">
+    	
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Identity</legend>
+    		
+        		<div class="cFormItm">
+    				<label for="alias"><strong>Alias</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="alias" 
+        				id="alias"
+        				value="<?php echo $this->escape($this->alias); ?>" 
+        				regExp=".{3}.*" 
+        				required="true" 
+        				trim="true"
+        				onblur="aliasCheck(this.value)"
+        				promptMessage="Enter an alias" 
+        				invalidMessage="Invalid alias"
+        				style="width: 220px; float: left;"
+        				class="cFormInput"/>
+        			<div dojoType="dijit.layout.ContentPane" id="aliasResponse" preload="false" style="margin-left: 10px; float: left;"></div>
+        			<div class="reMarkup" style="clear: both;">This will be your public identity</div>
+        		</div>
+        		
+        		<div class="cFormItmH">
+    				<label for="name"><strong>First Name</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="first" 
+        				value="<?php echo $this->escape($this->first); ?>" 
+        				regExp=".{3}.*" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Enter your first name" 
+        				invalidMessage="Invalid first name"
+        				style="width: 220px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">(Private by default)</div>
+        		</div>
+        		
+        		<div class="cFormItmH">
+    				<label for="name"><strong>Last Name</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="last" 
+        				value="<?php echo $this->escape($this->last); ?>" 
+        				regExp=".{3}.*" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Enter your last name" 
+        				invalidMessage="Invalid last name"
+        				style="width: 220px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">(Private by default)</div>
+        		</div>
+        	
+        	</fieldset>
+        	
+        	<fieldset class="cFieldset">
+    			<legend class="cFLegend">Password</legend>
+        
+        		<div class="cFormItmH">
+    				<label for="password"><strong>Password</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox"
+        				type="password"
+        				name="password" 
+        				id="password"
+        				value="" 
+        				regExp=".{8}.*" 
+        				required="true" 
+        				onblur="passwordCheck(this.value)"
+        				promptMessage="Enter a password" 
+        				invalidMessage="Minimum of 8 characters"
+        				class="cFormInput"/>
+        			<div class="reMarkup">Minimum of 8 characters in length</div>
+    			</div>
+    		
+    			<div class="cFormItmH">
+    				<label for="password2"><strong>Confirm Password</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox"
+        				type="password"
+        				name="password2" 
+        				id="password2"
+        				value="" 
+        				regExp=".{8}.*" 
+        				required="true" 
+        				promptMessage="Re-enter your password" 
+        				invalidMessage="Passwords don't match"
+        				validator="return sameCheck(this, dijit.byId('password'));"
+        				style="float: left;"
+        				class="cFormInput"/>
+        			<div dojoType="dijit.layout.ContentPane" id="passwordResponse" preload="false" style="margin-left: 10px; float: left;"></div>
+    			</div>
+    			
+    		</fieldset>
+    		
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Contact Details</legend>
+    		
+    			<div class="cFormItm">
+    				<label for="email"><strong>E-mail Address</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="email" 
+        				value="<?php echo $this->escape($this->email); ?>" 
+        				regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Enter your e-mail address" 
+        				invalidMessage="Invalid e-mail address"
+        				style="width: 340px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">This will be used to sign in to your account and receive notifications</div>
+        		</div>
+        		
+        	</fieldset>
+    		
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Location</legend>
+    			
+    			<div class="cFormItmH">
+    				<label for="country"><strong>Country</strong></label><br />
+    				<select dojoType="dijit.form.FilteringSelect"
+        				name="country"
+        				id="country"
+        				required="true"
+        				autocomplete="true"
+        				style="width: 200px;"
+        				class="cFormSelect"
+        				value="<?php if(isset($this->country)) : echo $this->escape($this->country); else: echo 'GB'; endif; ?>"
+        				onchange="countryCheck(this.value);">
+        				<option value="GB">United Kingdom</option>
+        				<option value="#">-----------------------</option>
+    		        	<?php $this->countriesOptions(); ?>
+    				</select>
+    			</div>
+    			
+    			<div class="cFormItmH">
+        			<label for="postcode"><strong>City</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="city" 
+        				id="city"
+        				value="<?php echo $this->escape($this->city);?>"
+        				promptMessage="Enter your city"
+        				invalidMessage="Invalid city"
+        				style="width: 250px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">(Optional)</div>
+        		</div>
+    		</fieldset>
+    		
+    		<fieldset class="cFieldset">
+        		<legend class="cFLegend">Subscriptions</legend>
+           		
+           		<?php if(count($this->listsArray) > 0) : ?>
+                <?php foreach($this->listsArray as $list) : ?>
+    			<div class="aBox soft copy botpad <?php if($list['mgroup_default'] == 'Y') : ?>yBG<?php endif; ?>" style="cursor: default; margin-bottom: 5px;" onclick="toggleCheckbox('list<?php echo $list['mgroup_id']; ?>','sub<?php echo $list['mgroup_id']; ?>');" id="sub<?php echo $list['mgroup_id']; ?>">
+    				<h4><?php echo $list['mgroup_title']; ?></h4>
+    			    <?php echo $list['mgroup_description']; ?><br />
+    				<label for="list<?php echo $list['mgroup_id']; ?>"><input dojotype="dijit.form.CheckBox" name="lists[]" id="list<?php echo $list['mgroup_id']; ?>" value="<?php echo $list['mgroup_id']; ?>" type="checkbox" <?php if($list['mgroup_default'] == 'Y') : ?>checked="checked"<?php endif; ?>/> <strong>Subscribe to this mailing list</strong></label>
+    			</div>
+    		    <?php endforeach;?>
+    		    <?php endif; ?>
+    		    
+    		    <div class="cFormItm">
+           			<label><strong>Preferred Mail Format</strong></label><br />
+           			<label for="format1"><input dojoType="dijit.form.RadioButton" 
+           				id="format1" name="format"
+           				<?php if(isset($this->format) & $this->format == 'text' | !isset($this->format)) : ?> checked="checked"<?php endif; ?> value="text" 
+           				type="radio" /> Text Only</label>&nbsp&nbsp
+    				<label for="format2"><input dojoType="dijit.form.RadioButton" 
+           				id="format2" name="format"
+           				value="html"
+           				<?php if(isset($this->format) & $this->format == 'html') : ?> checked="checked"<?php endif; ?> 
+           				type="radio" /> HTML</label>
+           		</div>
+
+        	</fieldset>
+    		
+        	<fieldset class="cFieldset">
+        		<legend class="cFLegend">Verification</legend>
+        	
+        	    <div class="cFormItmH" style="padding-top: 5px;">
+    		        <?php echo $this->captcha->render(new Zend_View());?>
+    		    </div>
+    		    
+    		    <div class="cFormItmH">
+    		    	<label for="captcha[input]"><strong>Verification Code</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="captcha[input]"
+        				id="captcha"
+        				required="true"
+        				promptMessage="Enter verification code"
+        				style="width: 100px;"
+        				class="cFormInput" />  
+					<input type="hidden" name="captcha[id]" value="<?php echo $this->id; ?>" />
+					<div class="reMarkup">Enter the code on the left</div>
+				</div>
+				
+				<p class="ClearAll"></p>
+				
+			</fieldset>
+    		
+    	
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Register">Register</button>
+    		</div>
+    	
+    	</form>
+
+	</div>
+	
+	<?php endif; ?>
+        
+	<p class="Spacer"></p>
+
+</div>
+
+<div class="cRWrap">
+				    
+	<div class="rBox">
+				    	
+		<h3>Why Register?</h3>
+		
+		<p>Register now to add comments to the site and receive the latest news.</p>
+				    		
+	</div>
+				    	
+	<p class="Spacer"></p>
+	
+	<div class="rBox">
+				    	
+		<h3>Forgotten Your Password?</h3>
+		
+		<p>If you have forgotten your password <a href="<?php echo $this->baseUrl();?>/auth/password/">click here</a> to have a new one e-mailed to you.</p>
+		
+		<div class="rMore">
+			<a href="<?php echo $this->baseUrl();?>/auth/password/">Reset your password &raquo;</a>
+		</div>
+				    		
+	</div>
+				    	
+	<p class="Spacer"></p>
+	
+</div>
+				    
+<p class="ClearAll"></p>
+				

@@ -1,0 +1,45 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dojox.layout.RotatorContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | '.$this->pageArray['page_title']);
+$this->placeholder('title')->set('Page');
+$this->placeholder('section')->set($this->pageArray['page_section']);
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+	<h2><?php echo $this->escape($this->pageArray['page_title']); ?></h2>
+</div>
+
+<p class="Spacer"></p>
+
+<div class="aBox copy botpad">
+
+	<?php echo $this->pageArray['page_content']; ?>
+	    
+	<div class="aComFoot">Last updated: <?php echo $this->ADate($this->pageArray['page_edit']); ?></div>
+	
+</div>
+
+<p class="Spacer"></p>
+
+<div class="aBox nopad">
+	<div class="tagHead">Tags:</div><?php $this->TList($this->pageArray['page_id'],'P','pages'); ?>
+	<p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>

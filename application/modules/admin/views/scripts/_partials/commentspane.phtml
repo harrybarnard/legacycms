@@ -1,0 +1,13 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<div id="CommentsPane" dojoType="dijit.layout.ContentPane" title="Comments" style="padding: 10px;">
+	
+	<div dojoType="dijit.layout.ContentPane" class="pane" id="commentsResponse" preload="true" href="/admin/comments/show?type=<?php echo $this->type; ?>&slave=<?php echo $this->slave; ?>"></div>
+		
+</div>

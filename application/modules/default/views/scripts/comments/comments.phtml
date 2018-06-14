@@ -1,0 +1,21 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<?php if(count($this->commentsArray) > 0 ) : ?>
+
+<?php echo $this->partialLoop('_partials/commentlist.phtml', $this->commentsArray); ?>
+
+<?php echo $this->paginationControl($this->commentsArray,'Sliding','_pagination/comments.phtml'); ?>
+
+<?php else : ?>
+
+<div class="aBox cUpd">No comments</div>
+
+<?php endif; ?>
+
+<p class="Spacer"></p>

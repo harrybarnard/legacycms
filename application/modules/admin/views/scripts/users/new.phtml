@@ -1,0 +1,123 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="newuserForm" jsId="newuserForm" encType="multipart/form-data" method="POST" class="cForm" >
+    
+    <div class="cFormItm">
+    	<label for="email"><strong>E-mail Address</strong></label><br />
+    	<input dojoType="dijit.form.ValidationTextBox" 
+        	type="text" 
+        	name="email" 
+        	id="email"
+        	value="<?php echo $this->escape($this->email); ?>" 
+        	regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b" 
+        	trim="true"
+        	required="true" 
+        	promptMessage="Input an e-mail address" 
+        	invalidMessage="Invalid e-mail address"
+        	style="width: 260px;"
+        	class="cFormInput"/>
+    </div>
+    
+    <div class="cFormItm">
+    	<label for="alias"><strong>Alias</strong></label><br />
+    	<input dojoType="dijit.form.ValidationTextBox" 
+        	type="text" 
+        	name="alias" 
+        	id="alias"
+        	value="<?php echo $this->escape($this->alias); ?>" 
+        	regExp=".{3}.*" 
+        	required="true" 
+        	trim="true"
+        	promptMessage="Input an alias" 
+        	invalidMessage="Invalid alias"
+        	style="width: 260px;"
+        	class="cFormInput"/>
+        <div dojoType="dijit.layout.ContentPane" class="pane" id="aliasResponse" preload="false" style="margin-left: 10px; float: left;"></div>
+    </div>
+    
+    <div class="cFormItm"">
+		<label for="roletitle"><strong>First Name</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	trim="true"
+        	required="true"
+        	promptMessage="Input a first name"
+        	invalidMessage="Invalid name"
+            name="first" 
+            type="text" 
+            class="cFormInput" 
+            regExp=".{3}.*" 
+            id="first" 
+            value="<?php echo $this->escape($this->first); ?>" 
+            size="55" 
+            style="width: 260px;"/>
+	</div>
+	
+	<div class="cFormItm"">
+		<label for="roletitle"><strong>Last Name</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	trim="true"
+        	required="true"
+        	promptMessage="Input a last name"
+        	invalidMessage="Invalid name"
+            name="last" 
+            type="text" 
+            class="cFormInput" 
+            regExp=".{3}.*" 
+            id="last" 
+            value="<?php echo $this->escape($this->last); ?>" 
+            size="55" 
+            style="width: 260px;"/>
+	</div>
+	
+	<div class="cFormItm">
+    	<label for="country"><strong>Country</strong></label><br />
+    	<select dojoType="dijit.form.FilteringSelect"
+        	name="country"
+        	id="country"
+        	required="true"
+        	autocomplete="true"
+        	style="width: 260px;"
+        	class="cFormSelect"
+        	value="<?php echo $this->country;?>">
+        	<option value="#" selected>Pick a Country</option> 
+    		<?php $this->countriesOptions(); ?>
+    	</select>
+    </div>
+				
+	<div class="cFormItmH">
+		<label for="roleinherit"><strong>Role</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="role"
+        	id="role"
+        	autocomplete="false"
+        	style="width: 140px;"
+        	class="cFormSelect">
+    		<?php $this->URoleSelect($this->role); ?>
+    	</select>
+	</div>
+				
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newusersubmitButton" 
+			value="Create" 
+			iconClass="newuserIcon" 
+			onClick="doDialog('/admin/users/new/','newuserForm','New User');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newusercancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

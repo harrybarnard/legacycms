@@ -1,0 +1,141 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Pages | Manage' );
+$this->placeholder ( 'title' )->set ( 'Pages' );
+$this->placeholder('section')->set('pages');
+?>
+
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td valign="top" width="120">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+
+				<?php if($this->acl->isAllowed($this->user->user_role, 'ppagenew')) : ?><button dojoType="dijit.form.Button" name="newpageButton" iconClass="newpageIcon" id="newpageButton" value="New Page" onClick="getDialog('/admin/pages/new/','New Page');">New Page</button><?php endif; ?>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Filter</legend>
+				
+				<?php if (isset($this->filter['author'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('author' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Author: <?php echo $this->escape($this->filter['author']); ?></span><?php endif; ?>
+    			<?php if (isset($this->filter['sort'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('sort' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Sort: <?php echo $this->escape(ucwords($this->filter['sort'])); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['order'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('order' => $this->filter['orderopt'],'page' => NULL)); ?>');" title="Toggle Filter">Order: <?php echo $this->escape(strtoupper($this->filter['order'])); ?></span><?php endif; ?>
+    			<?php if (!count($this->filter)) : ?><span class="tagItm">No active filter</span><?php endif; ?>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th width="16"></th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'page','page' => NULL)); ?>" title="Add to Filter">Page</a>
+			<?php if ($this->filter['sort'] == 'page') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'author','page' => NULL)); ?>" title="Add to Filter">Author</a>
+			<?php if ($this->filter['sort'] == 'author') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'slug','page' => NULL)); ?>" title="Add to Filter">URL</a>
+			<?php if ($this->filter['sort'] == 'slug') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'date','page' => NULL)); ?>" title="Add to Filter">Date</a>
+			<?php if ($this->filter['sort'] == 'date') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+	</tr>
+	
+	<?php if (count($this->pagesArray)) : ?>
+    <?php foreach($this->pagesArray as $page) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $page['page_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $page['page_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td>
+			<?php if ($page['page_protected'] == 'Y') : ?>
+			<img src="/_styles/admin/icons/lock.gif" alt="Protected" title="Protected" border="0" />
+			<?php endif; ?>
+		</td>
+		<td>
+			<strong><a href="/admin/pages/edit/id/<?php echo $page['page_id']; ?>"><?php echo $page['page_title']; ?></a> <?php if($page['page_status'] == 'draft') : ?>(draft)<?php endif; ?></strong>
+			<div id="edit<?php echo $page['page_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><?php if($this->acl->isAllowed($this->user->user_role, 'ppageedit')) : ?><a href="<?php echo $this->url(array('action' => 'edit','id' => $page['page_id'])); ?>">Edit</a><?php endif; ?><?php if($this->acl->isAllowed($this->user->user_role, 'ppagedelete')) : ?><?php if ($page['page_protected'] != 'Y') : ?> | <a onClick="getDialog('/admin/pages/delete/id/<?php echo $page['page_id']?>/','Delete Page');" style="cursor: pointer;">Delete</a><?php endif; ?><?php endif; ?></div>
+		</td>
+		<td><a href="<?php echo $this->url(array('action' => 'manage','author' => $page['page_user'],'page' => NULL)); ?>" title="Add to Filter"><?php echo $page['user_alias']; ?></a></td>
+		<td><?php echo $page['page_slug']; ?></td>
+		<td>
+		    <?php if ($page['page_status'] == 'published') : ?>
+		        <?php echo $this->MakeDate('d/m/Y H:i',$page['page_published']); ?>
+        		<br/>Published
+		    <?php else : ?>
+		        <?php echo $this->MakeDate('d/m/Y H:i',$page['page_edit']); ?>
+            	<br/>Last Edited
+		    <?php endif; ?>
+        </td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="5">
+			<div class="cUpd">No Pages!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->pagesArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->pagesArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

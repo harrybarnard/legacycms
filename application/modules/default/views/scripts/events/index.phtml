@@ -1,0 +1,63 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");
+dojo.require("dojox.layout.RotatorContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Events');
+$this->placeholder('title')->set('Events');
+$this->placeholder('section')->set('events');
+$this->headLink()->appendStylesheet('/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/events.js','text/javascript')
+                   ->appendFile('http://www.google.com/jsapi','text/javascript')
+                   ->appendFile($this->baseUrl().'http://maps.google.com/maps/api/js?sensor=false','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/gmaps/infobox_packed.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/eventsmap.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+	<h2>Events</h2>
+</div>
+
+<p class="Spacer"></p>
+
+<?php $this->RenderRotator('EventsIndex'); ?>
+
+<div class="aMap js-on" id="map" style="height: 300px;"></div>
+<p class="Spacer js-on"></p>
+
+<p class="ClearAll"><a name="categories"></a></p>
+
+<?php if(count($this->eventsArray) > 0) : ?>
+
+<div class="aBox copy toppad">
+
+<?php echo $this->partialLoop('_partials/eventlist.phtml', $this->eventsArray); ?>
+
+</div>
+
+<p class="Spacer"></p>
+
+<?php echo $this->paginationControl($this->eventsArray,'Sliding','_pagination/default.phtml'); ?>
+
+<?php else : ?>
+
+<?php echo $this->partial('_partials/info.phtml', array('message' => 'No events to display at the moment')); ?>
+
+<?php endif; ?>
+
+<p class="Spacer"></p>

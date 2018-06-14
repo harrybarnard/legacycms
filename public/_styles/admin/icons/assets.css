@@ -1,0 +1,123 @@
+@CHARSET "ISO-8859-1";
+
+/* Assets Icons */
+
+.newfolderIcon {
+	background-image: url('folder_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.uploadIcon {
+	background-image: url('page_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.downloadIcon {
+	background-image: url('arrow_down.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.uploadIcon {
+	background-image: url('picture_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.clearassetsIcon {
+	background-image: url('picture_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.selectfileIcon {
+	background-image: url('page_white_go.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.openfileIcon {
+	background-image: url('page_white_magnify.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.downloadfileIcon {
+	background-image: url('page_white_put.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletefileIcon {
+	background-image: url('page_white_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.editfileIcon {
+	background-image: url('page_white_edit.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.propertiesfileIcon {
+	background-image: url('page_white_wrench.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletecacheIcon {
+	background-image: url('database_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.browseIcon {
+	background-image: url('pictures.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.insertimageIcon {
+	background-image: url('picture_go.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.refreshIcon {
+	background-image: url('arrow_refresh.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

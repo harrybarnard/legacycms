@@ -1,0 +1,183 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.TabContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Mail | Manage' );
+$this->placeholder ( 'title' )->set ( 'Mail' );
+$this->placeholder('section')->set('mail');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="255px" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+
+    			<div dojoType="dijit.form.DropDownButton" id="newmailButton" iconClass="newmailIcon">
+    				<span>New Mail</span>
+    				<div dojoType="dijit.Menu" id="mailmenu" contextMenuForWindow="false" style="display: none;">
+  	                	<div dojoType="dijit.MenuItem" iconClass="listIcon" onClick="getDialog('/admin/mail/maillist/','New Mail');">Mailing List</div>
+  						<div dojoType="dijit.MenuItem" iconClass="roleIcon" onClick="getDialog('/admin/mail/mailrole/','New Mail');">Role</div>
+					</div>
+				</div>
+    			<?php if($this->acl->isAllowed($this->user->user_role, 'urolenew')) : ?><button dojoType="dijit.form.Button" type="button" id="newlistButton" iconClass="newlistIcon" value="New Mailing List" onClick="getDialog('/admin/mail/groupnew/','New Mailing List');">New Mailing List</button><?php endif; ?>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Filter</legend>
+				
+                <?php if (isset($this->filter['author'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('author' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Author: <?php echo $this->escape($this->filter['author']); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['group'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('group' => NULL,'page' => NULL)); ?>');" title="Remove Filter">List: <?php echo $this->escape($this->filter['group']); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['role'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('role' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Role: <?php echo $this->escape($this->filter['role']); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['user'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('user' => NULL,'page' => NULL)); ?>');" title="Remove Filter">User: <?php echo $this->escape($this->filter['user']); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['status'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('status' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Status: <?php echo $this->escape(ucwords($this->filter['status'])); ?></span><?php endif; ?>
+    			<?php if (isset($this->filter['sort'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('sort' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Sort: <?php echo $this->escape(ucwords($this->filter['sort'])); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['order'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('order' => $this->filter['orderopt'],'page' => NULL)); ?>');" title="Toggle Filter">Order: <?php echo $this->escape(strtoupper($this->filter['order'])); ?></span><?php endif; ?>
+    			<?php if (!count($this->filter)) : ?><span class="tagItm">No active filter</span><?php endif; ?>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td valign="top">
+			
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Mail Status</legend>
+				<span class="tagItm" id="statSent"><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'sent')); ?>">Sent (<?php $this->MStatusCount('sent'); ?>)</a></span>
+				<span class="tagItm" id="statDraft"><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'draft')); ?>">Draft (<?php $this->MStatusCount('draft'); ?>)</a></span>
+			</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<div id="categoriesPane">
+		
+				<fieldset class="cFieldset" style="margin-left: 10px;">
+					<legend class="cFLegend">Mailing Lists</legend>
+					<?php if(count($this->groupArray)) : ?>
+                    <?php foreach($this->groupArray as $group) : ?>
+					<span class="tagItm" id="cat<?php echo $group['mgroup_id']; ?>" title="Right click to edit">
+						<?php if($group['mgroup_status'] != 'draft') : ?>
+						<a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'user' => NULL,'role' => NULL,'group' => $group['mgroup_id'])); ?>" title="Right Click To Edit"><?php if ($group['mgroup_open'] == 'N') : ?><img src="/_styles/admin/icons/lock.gif" alt="Closed List" title="Closed List" border="0" style="vertical-align: text-top;"/> <?php endif; ?><?php echo $this->escape($group['mgroup_title']); ?> (<?php $this->MGroupCount($group['mgroup_id']); ?>)</a>
+						<?php else : ?>
+						<?php if ($group['mgroup_open'] == 'N') : ?><img src="/_styles/admin/icons/lock.gif" alt="Closed List" title="Closed List" border="0" style="vertical-align: text-top;"/> <?php endif; ?><?php echo $this->escape($group['mgroup_title']); ?>
+						<?php endif; ?>
+					</span>
+					<div dojoType="dijit.Menu" id="menu<?php echo $group['mgroup_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="cat<?php echo $group['mgroup_id']; ?>">
+  	                	<?php if ($group['mgroup_id'] != '1' & $this->acl->isAllowed($this->user->user_role, 'mlistdelete')) : ?>
+  	                	<div dojoType="dijit.MenuItem" iconClass="deletelistIcon" onClick="getDialog('/admin/mail/groupdelete/id/<?php echo $group['mgroup_id']; ?>/','Delete Mailing List');">Delete</div>
+  						<?php endif; ?>
+  						<div dojoType="dijit.MenuItem" iconClass="editlistIcon" onClick="goTo('/admin/mail/group/id/<?php echo $group['mgroup_id']; ?>/');">Edit</div>
+					</div>
+                    <?php endforeach; ?>
+                    <?php else : ?>
+					<span class="tagItm">No Mailing Lists!</span>
+                    <?php endif;?>
+				</fieldset>
+			
+			</div>
+			
+		</td>
+	</tr>
+</table>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'subject','page' => NULL)); ?>" title="Add to Filter">Subject</a> 
+			<?php if ($this->filter['sort'] == 'subject') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th>To</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'author','page' => NULL)); ?>" title="Add to Filter">Author</a> 
+			<?php if ($this->filter['sort'] == 'author') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'date','page' => NULL)); ?>" title="Add to Filter">Date</a> 
+			<?php if ($this->filter['sort'] == 'date') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+	</tr>
+	<?php if (count($this->mailArray)) : ?>
+    <?php foreach($this->mailArray as $mail) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $mail['mail_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $mail['mail_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td>
+			<strong><a href="/admin/mail/edit/id/<?php echo $mail['mail_id']; ?>"><?php echo $mail['mail_subject']; ?></a> <?php if($mail['mail_status'] == 'draft') : ?>(draft)<?php endif; ?></strong>
+			<div id="edit<?php echo $mail['mail_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><a href="/admin/mail/edit/id/<?php echo $mail['mail_id']; ?>">Edit</a><?php if($this->acl->isAllowed($this->user->user_role, 'mmaildelete') & $mail['mail_status'] != 'sent') : ?> | <a onclick="getDialog('/admin/mail/delete/id/<?php echo $mail['mail_id']; ?>/','Delete Mail');" style="cursor: pointer;">Delete</a><?php endif; ?></div>
+		</td>
+		<td><?php echo $this->mgetTo($mail['mail_slave'],$mail['mail_type']); ?></td>
+		<td><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'group' => NULL,'role' => NULL,'author' => $mail['user_id'])); ?>" title="Add to Filter"><?php echo $mail['user_alias']; ?></a></td>
+		<td>
+			<?php if ($mail['mail_status'] != 'sent') : ?>	
+            <?php echo $this->MakeDate('d/m/Y H:i',$mail['mail_date']); ?><br />
+			Last Updated
+			<?php else: ?>
+			<?php echo $this->MakeDate('d/m/Y H:i',$mail['mail_sent']); ?><br />
+			Sent
+			<?php endif; ?>
+		</td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="4">
+			<div class="cUpd">No Mail!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->mailArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->mailArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

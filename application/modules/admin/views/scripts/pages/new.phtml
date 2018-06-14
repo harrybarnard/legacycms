@@ -1,0 +1,42 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="newpageForm" jsId="newpageForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+		<label for="url"><strong>Title</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="pagetitle" 
+            type="text" 
+            invalidMessage="Enter a valid category title"
+            class="cFormInput" 
+            id="pagetitle" 
+            value="" 
+            size="55" 
+            style="width: 400px;"/>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newpagesubmitButton" 
+			value="Create" 
+			iconClass="newpageIcon" 
+			onClick="doDialog('/admin/pages/new/','newpageForm','New Page');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newcategorycancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

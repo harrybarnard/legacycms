@@ -1,0 +1,74 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="newroleForm" jsId="newroleForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm" style="padding-bottom: 1px;">
+		<label for="roletitle"><strong>Name</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	trim="true"
+        	required="true"
+        	promptMessage="Input a name"
+        	invalidMessage="Invalid name"
+            name="roletitle" 
+            type="text" 
+            class="cFormInput" 
+            id="roletitle" 
+            value="<?php echo $this->roletitle; ?>" 
+            size="55" 
+            style="width: 260px;"/>
+	</div>
+				
+	<div class="cFormItmH" style="padding-bottom: 1px;">
+		<label for="rolecolour"><strong>Comments Colour</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	trim="true"
+        	required="true"
+        	promptMessage="Input a hex colour code"
+        	invalidMessage="Invalid hex colour code"
+            name="rolecolour" 
+            type="text" 
+            class="cFormInput" 
+            id="rolecolour" 
+            regExp="^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$"
+            value="<?php echo $this->rolecolour; ?>" 
+            size="55" 
+            style="width: 100px;"/>
+	</div>
+	
+	<div class="cFormItmH">
+		<label for="roleinherit"><strong>Inherit From</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="roleinherit"
+        	id="roleinherit"
+        	autocomplete="false"
+        	style="width: 140px;"
+        	class="cFormSelect">
+        	<option vaue="">None</option>
+    		<?php $this->URoleSelect($this->userArray['user_role']); ?>
+    	</select>
+	</div>
+				
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newrolesubmitButton" 
+			value="Create" 
+			iconClass="newroleIcon" 
+			onClick="doDialog('/admin/users/rolenew/','newroleForm','New Role');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newrolecancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

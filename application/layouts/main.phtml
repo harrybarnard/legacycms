@@ -1,0 +1,102 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$registry = Zend_Registry::getInstance();
+echo '<?xml version="1.0" encoding="utf-8" ?>';
+echo $this->doctype() 
+?>
+
+<html>
+
+<head>
+
+<!-- META -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		
+<?php echo $this->headTitle(); ?>
+
+<!-- END META -->
+
+<!-- HEAD LINKS -->
+<?php echo $this->headLink(); ?>
+
+<link href="<?php echo $this->baseUrl();?>/_styles/default/images/favicon.ico" rel="shortcut icon" >
+
+<!-- END HEAD LINKS -->
+
+<!-- HEAD SCRIPTS -->
+<script type="text/javascript" src="/_scripts/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+<?php echo $this->headScript(); ?>
+
+<noscript>
+<style type="text/css">
+	.js-on {
+		display:none;
+	}
+</style>
+</noscript>
+
+<!-- END HEAD SCRIPTS -->
+
+<!-- HEAD STYLES -->
+<?php echo $this->headStyle(); ?>
+
+<!-- END HEAD STYLES -->
+	    
+</head>
+	
+<body class="frontDij">
+	
+	<div class="tWrap">
+		
+		<?php include('../application/layouts/template/userMenu.phtml'); ?>
+			
+		<div class="tBox">
+			
+			<?php include('../application/layouts/template/header.phtml'); ?>
+				
+			<div class="cWrap test">
+			
+			<!-- CONTENT -->
+			
+			<?php echo $this->layout()->content ?>
+			
+			<!-- END CONTENT -->
+				
+			</div>
+				
+			<?php include('../application/layouts/template/footer.phtml'); ?>
+			
+		</div>
+		
+		<p class="Spacer"></p>
+		
+	</div>
+	
+<!-- INLINE SCRIPTS -->
+<?php echo $this->inlineScript(); ?>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '<?php echo $registry->site->key->ganalytics; ?>']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- END INLINE SCRIPTS -->
+	
+</body>
+
+</html>

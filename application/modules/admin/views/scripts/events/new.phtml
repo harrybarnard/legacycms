@@ -1,0 +1,56 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="neweventForm" jsId="neweventForm" encType="multipart/form-data" method="POST" class="cForm" >
+	<div class="cFormItmH">
+		<label for="url"><strong>Category</strong></label><br />
+    	<select dojoType="dijit.form.FilteringSelect"
+    		name="eventcategory"
+        	id="eventcategory"
+        	required="true"
+        	promptMessage="Select a category"
+            invalidMessage="Invalid category"
+        	autocomplete="false"
+        	value="<?php if (isset($this->eventcategory)) : echo $this->eventcategory; else : echo '1'; endif; ?>"
+        	style="width: 295px;">
+    	    <?php $this->ECatSelect(); ?>
+   		</select>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormItmH">
+	    <label for="category"><strong>Venue</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+            name="eventvenue"
+        	id="eventvenue"
+        	required="true"
+        	autocomplete="true"
+        	style="width: 295px;"
+        	class="cFormSelect">
+    		<?php $this->EVenueSelect($this->eventArray['event_venue']); ?>
+    	</select>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="neweventsubmitButton" 
+			value="Create" 
+			iconClass="continueIcon" 
+			onClick="doDialog('/admin/events/new/','neweventForm','New Event');">Continue</button>
+		<?php if($this->acl->isAllowed($this->user->user_role, 'evenuenew')) : ?><button dojoType="dijit.form.Button" name="newvenueButton" id="newvenueButton2" value="New Venue" iconClass="newvenueIcon" onClick="getDialog('/admin/events/venuenew/','New Venue');">New Venue</button><?php endif; ?>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="neweventcancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

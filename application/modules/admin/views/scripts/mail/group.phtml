@@ -1,0 +1,137 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.TabContainer");
+
+var slaveID = "'.$this->categoryArray['ecat_id'].'";';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Mail | Edit Mailing List' );
+$this->placeholder ( 'title' )->set ( 'Edit Mailing List' );
+$this->placeholder('section')->set('mail');
+?>
+<?php
+include_once('../'.$registry->site->site->publicdir.'/_scripts/fckeditor/fckeditor.php') ;
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/mail/groupdetails?id=<?php echo $this->groupArray['mgroup_id']; ?>" style="min-height: 50px;"></div>
+
+<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="Mailing List" style="padding: 10px;">
+
+		<div class="cFormItm">
+			<label for="title"><strong>Title</strong></label><br />
+        	<input dojoType="dijit.form.ValidationTextBox"
+        		trim="true"
+        		required="true"
+        		invalidMessage="Enter a valid title"
+            	name="title" 
+            	type="text" 
+            	class="cFormInput" 
+            	id="title" 
+            	value="<?php echo $this->groupArray['mgroup_title']; ?>" 
+            	size="55" 
+            	style="width: 440px;"/>
+		</div>
+		
+		<div class="cFormItm">
+    		<label for="text"><strong>Description</strong></label><br />
+    	    <input dojoType="dijit.form.SimpleTextarea"
+    	    	required="true"
+        		trim="true"
+            	name="description" 
+            	type="text" 
+            	class="cFormInput" 
+            	id="description"
+            	value="<?php echo $this->groupArray['mgroup_description']; ?>" 
+            	size="55" 
+            	style="width: 750px; height: 60px;"/>
+    	</div>
+    	
+    	<label for="slave"><strong>Type</strong></label><br />
+    	
+    	<div class="cFormItmH">	
+        	<select dojoType="dijit.form.FilteringSelect"
+        		name="open"
+        		id="open"
+        		autocomplete="false"
+        		style="width: 300px;"
+        		value="<?php echo $this->groupArray['mgroup_open']; ?>"
+        		class="cFormSelect">
+    		    <option value="Y">Open List - Any user may subscribe</option>
+    		    <option value="N">Closed List - Only admins may subscribe users</option>
+    		</select>
+    	</div>
+    	
+    	<div class="cFormItmH">
+    		<input dojotype="dijit.form.CheckBox"
+    			id="default"
+            	name="default" 
+                <?php if($this->groupArray['mgroup_default'] == 'Y') : ?>checked="checked"<?php endif; ?>
+            	value="Y"
+            	type="checkbox" />
+    			<label for="default"> Subscribe users by default?</label>
+    	</div>
+    	
+		<p class="ClearAll"></p>
+			
+	</div>
+	
+	<div id="DefaultsPane" dojoType="dijit.layout.ContentPane" title="Templates" style="padding: 10px;">
+	
+		<div class="cFormItm">
+    		<label for="text"><strong>Text</strong></label><br />
+    	    <input dojoType="dijit.form.SimpleTextarea"
+        		trim="true"
+            	name="text" 
+            	type="text" 
+            	class="cFormInput" 
+            	id="text"
+            	value="<?php echo $this->groupArray['mgroup_text']; ?>" 
+            	size="55" 
+            	style="width: 750px; height: 260px;"/>
+    	</div>
+    			
+    	<p class="ClearAll"></p>
+    
+    	<div class="cFormItm">
+    		<label for="html"><strong>HTML</strong></label><br />
+    	    <?php
+                $FCKeditor = new FCKeditor( 'html' ) ;
+			    $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			    $FCKeditor->Width	= 760 ;
+			    $FCKeditor->Height	= 300 ;
+			    $FCKeditor->Value	= $this->groupArray['mgroup_html'];
+			    $FCKeditor->HtmlEncodeOutput = 'false';
+                $FCKeditor->Create() ;
+            ?>
+    	</div>
+	
+	</div>
+	
+</div>
+
+</form>

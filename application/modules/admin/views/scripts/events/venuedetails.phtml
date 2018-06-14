@@ -1,0 +1,40 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="50%" valign="top">
+
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Status: <?php echo ucwords($this->venueArray['venue_status']); ?></span>
+			</fieldset>
+
+		</td>
+		<td width="50%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<?php if ($this->venueArray['venue_status'] != 'published' & $this->acl->isAllowed($this->user->user_role, 'evenuepublish')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="publishButton" value="Publish" iconClass="publishIcon" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/events/venuepublish/id/<?php echo $this->venueArray['venue_id']; ?>/','Publish Venue');">Publish</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/events/venuesave/id/<?php echo $this->venueArray['venue_id']; ?>/','editForm','Save Venue','1');">Save<?php if ($this->venueArray['venue_status'] != 'published') : ?> Draft<?php endif; ?></button> 
+					<?php if ($this->venueArray['venue_id'] != '1' & $this->acl->isAllowed($this->user->user_role, 'evenuedelete')): ?>
+					<button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deletevenueIcon" onClick="getDialog('/admin/events/venuedelete/id/<?php echo $this->venueArray['venue_id']; ?>/','Delete Venue');">Delete</button>
+		            <?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="venuesButton" iconClass="venueIcon" value="Venues" onClick="goTo('/admin/events/venues');">Venues...</button>
+					<button dojoType="dijit.form.Button" type="button" id="eventsButton" iconClass="eventIcon" value="Events" onClick="goTo('/admin/events/');">Events...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>	

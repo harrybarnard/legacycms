@@ -1,0 +1,123 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.form.ComboBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+
+var tagType = "P";
+var slaveID = "'.$this->pageArray['page_id'].'";';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/tags.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Pages | Edit Page' );
+$this->placeholder ( 'title' )->set ( 'Edit Page' );
+$this->placeholder('section')->set('pages');
+?>
+<?php
+include_once('../'.$registry->site->site->publicdir.'/_scripts/fckeditor/fckeditor.php') ;
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/pages/details?id=<?php echo $this->pageArray['page_id']; ?>"></div>
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="Page" style="padding: 10px;">
+
+		<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+			<div class="cFormItmH">
+				<label for="title"><strong>Title</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			required="true"
+        			promptMessage="Input a page title"
+            		invalidMessage="Invalid title"
+            		name="title" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="title" 
+            		value="<?php echo $this->pageArray['page_title']; ?>" 
+            		size="55" 
+            		style="width: 750px;"/>
+			</div>
+				
+    		<p class="ClearAll"></p>
+    
+    		<div class="cFormItm">
+    			<label for="content"><strong>Content</strong></label><br />
+    	        <?php
+                    $FCKeditor = new FCKeditor( 'content' ) ;
+			        $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			        $FCKeditor->Width	= 760 ;
+			        $FCKeditor->Height	= 500 ;
+			        $FCKeditor->Value	= $this->pageArray['page_content'];
+			        $FCKeditor->HtmlEncodeOutput = 'false';
+                    $FCKeditor->Create() ;
+                ?>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    			
+    		<div class="cFormItmH">
+				<label for="title"><strong>URL</strong></label><br />
+				<?php echo $registry->site->site->url; ?>/page/ 
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			required="true"
+        			promptMessage="Input a page slug"
+            		invalidMessage="Invalid slug"
+            		name="slug" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="slug" 
+            		value="<?php echo $this->pageArray['page_slug']; ?>" 
+            		size="55" 
+            		style="width: 160px;"
+            		<?php if ($this->pageArray['page_protected'] == "Y") : ?>readonly="readonly"<?php endif; ?>/>
+            	 / &nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
+			
+			<div class="cFormItmH">
+				<label for="title"><strong>Section (Advanced)</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			required="false"
+        			promptMessage="Input a page section"
+            		invalidMessage="Invalid section"
+            		name="section" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="section" 
+            		value="<?php echo $this->pageArray['page_section']; ?>" 
+            		size="55" 
+            		style="width: 160px;"
+            		<?php if ($this->pageArray['page_protected'] == "Y") : ?>readonly="readonly"<?php endif; ?>/>
+			</div>
+    			
+    		<p class="ClearAll"></p>
+    
+		</form>
+
+	</div>
+	
+	<?php echo $this->partial('_partials/tagspane.phtml', array('type' => 'P','slave' => $this->pageArray['page_id'])); ?>
+
+</div>

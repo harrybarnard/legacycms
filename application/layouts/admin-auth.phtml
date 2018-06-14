@@ -1,0 +1,66 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+echo '<?xml version="1.0" encoding="utf-8" ?>';
+echo $this->doctype();
+$registry = Zend_Registry::getInstance(); 
+?>
+
+<html>
+
+<head>
+
+<!-- META -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex">
+		
+<?php echo $this->headTitle(); ?>
+
+<!-- END META -->
+
+<!-- HEAD LINKS -->
+<?php echo $this->headLink(); ?>
+
+<link href="<?php echo $this->baseUrl();?>/_styles/admin/images/favicon.ico" rel="shortcut icon" >
+
+<!-- END HEAD LINKS -->
+
+<!-- HEAD SCRIPTS -->
+<script type="text/javascript" src="/_scripts/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+<?php echo $this->headScript(); ?>
+
+<!-- END HEAD SCRIPTS -->
+
+<!-- HEAD STYLES -->
+<?php echo $this->headStyle(); ?>
+
+<!-- END HEAD STYLES -->
+	    
+</head>
+
+<body class="adminDij">
+	
+	<div class="eOuter">
+		
+		<div class="eInner">
+				
+	    	<div class="eWrap">
+	    		<div class="eHead"><?php echo $this->placeholder('title') ?></div>
+    			<div id="eContent">
+		            <?php echo $this->layout()->content ?>
+		    	</div>
+				<div id="template_foot" style="margin-bottom: 10px !important;"><a href="http://bluu.harrybarnard.com/" target="_blank">&copy; Harry Barnard 2007-<?php $thisyear = strftime( "%Y", time() ); echo $thisyear; ?></a></div>
+  			</div>
+  		
+  		</div>
+  		
+  	</div>
+  			
+</body>
+
+</html>

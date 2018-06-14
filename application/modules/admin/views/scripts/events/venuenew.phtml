@@ -1,0 +1,88 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="newvenueForm" jsId="newvenueForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+		<label for="venuetitle"><strong>Venue Name</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+        	name="venuetitle" 
+        	type="text" 
+        	promptMessage="Input a venue name"
+        	invalidMessage="Invalid venue name"
+        	class="cFormInput" 
+        	id="venuetitle" 
+        	value="<?php echo $this->venuetitle; ?>" 
+        	size="55" 
+        	style="width: 300px;"/>
+	</div>
+	<div class="cFormItm">
+		<label for="address"><strong>Address</strong></label><br />
+        <input dojoType="dijit.form.SimpleTextarea"
+        	trim="true"
+        	required="true"
+        	promptMessage="Enter an address"
+        	invalidMessage="Invalid address"
+            name="venueaddress" 
+            type="text" 
+            class="cFormInput" 
+            id="venueaddress"
+            value="<?php echo $this->venueaddress; ?>" 
+            size="55" 
+            style="width: 300px;"/>
+	</div>
+	<div class="cFormItm">
+		<label for="venuecity"><strong>City</strong></label><br />
+    	<input dojoType="dijit.form.ValidationTextBox"
+    		required="true"
+    		trim="true"
+    		name="venuecity" 
+    		type="text" 
+    		promptMessage="Input a town or city"
+    		invalidMessage="Invalid town or city"
+        	class="cFormInput" 
+        	id="venuecity" 
+        	value="<?php echo $this->venuecity; ?>" 
+        	size="55" 
+        	style="width: 300px;"/>
+	</div>
+	<div class="cFormItm">
+    	<label for="country"><strong>Country</strong></label><br />
+    	<select dojoType="dijit.form.FilteringSelect"
+    		name="venuecountry"
+    		id="venuecountry"
+    		required="true"
+    		autocomplete="true"
+    		promptMessage="Select a country"
+    		invalidMessage="Invalid country"
+    		style="width: 300px;"
+        	value="<?php if(isset($this->venuecountry)) : echo $this->venuecountry; else: echo 'United Kingdom'; endif;?>"
+        	class="cFormSelect">
+    		<?php $this->ecountriesOptions(); ?>
+    	</select>
+    </div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newvenuesubmitButton" 
+			value="Create" 
+			iconClass="newvenueIcon" 
+			onClick="doDialog('/admin/events/venuenew/','newvenueForm','New Venue');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newcategorycancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

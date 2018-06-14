@@ -1,0 +1,26 @@
+@CHARSET "ISO-8859-1";
+
+/*********************/
+/* CMS - Default CSS */
+/*********************/
+
+/* Body */ 
+ 
+body {
+	background: #222;
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #EEE;
+}
+
+html {
+	background: #222;
+}
+
+body a:link, body a:visited {
+	color: #FF3333;
+	text-decoration: none;
+	font-weight: bold;
+}

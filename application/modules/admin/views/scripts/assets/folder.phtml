@@ -1,0 +1,42 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="editfolderForm" jsId="editfolderForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+		<label for="foldertitle"><strong>Name</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="foldertitle" 
+            type="text" 
+            invalidMessage="Enter a valid folder title"
+            class="cFormInput" 
+            id="foldertitle" 
+            value="<?php echo $this->foldername; ?>" 
+            size="55" 
+            style="width: 300px;"/>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="editfoldersubmitButton" 
+			value="Save" 
+			iconClass="saveIcon" 
+			onClick="doDialog('/admin/assets/folder/folder/<?php echo $this->folder; ?>/','editfolderForm','Edit Folder');">Save</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="editfoldercancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

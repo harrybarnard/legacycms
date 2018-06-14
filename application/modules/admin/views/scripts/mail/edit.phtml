@@ -1,0 +1,182 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.ComboBox");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+
+var tagType = "M";
+var slaveID = "'.$this->mailArray['mail_id'].'";
+
+dojo.addOnLoad(function(){
+	attachmentTab(tagType,slaveID);
+});';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/attachments.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Mail | Edit Mail' );
+$this->placeholder ( 'title' )->set ( 'Edit Mail' );
+$this->placeholder('section')->set('mail');
+?>
+<?php
+include_once('../'.$registry->site->site->publicdir.'/_scripts/fckeditor/fckeditor.php') ;
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/mail/details?id=<?php echo $this->mailArray['mail_id']; ?>"></div>	
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ContentPane" dojoType="dijit.layout.ContentPane" title="Mail" style="padding: 10px;">
+	
+		<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+			<div class="cFormItm">
+				<?php if($this->mailArray['mail_type'] == 'G') : ?>
+				<label for="slave"><strong>To Mailing List</strong></label><br />
+        		<select dojoType="dijit.form.FilteringSelect"
+        			name="slave"
+        			id="slave"
+        			autocomplete="false"
+        			style="width: 240px;"
+        			value="<?php echo $this->mailArray['mail_slave']; ?>"
+        			class="cFormSelect">
+    		        <?php $this->MListSelect(); ?>
+    			</select>
+    			<?php elseif($this->mailArray['mail_type'] == 'R') : ?>
+    			<label for="slave"><strong>To Role</strong></label><br />
+        		<select dojoType="dijit.form.FilteringSelect"
+        			name="slave"
+        			id="slave"
+        			autocomplete="false"
+        			style="width: 240px;"
+        			value="<?php echo $this->mailArray['mail_slave']; ?>"
+        			class="cFormSelect">
+    		        <?php $this->URoleSelect(); ?>
+    			</select>
+    			<?php elseif($this->mailArray['mail_type'] == 'U') : ?>
+    			<label for="slave"><strong>To User</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			required="true"
+            		name="user" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="user" 
+            		value="<?php echo $this->MUserDetails($this->mailArray['mail_slave']); ?>" 
+            		size="55" 
+            		readonly="readonly"
+            		style="width: 450px;"/>
+            	<input type="hidden" value="<?php echo $this->mailArray['mail_slave']; ?>" name="slave" id="slave"/>
+    			<?php endif; ?>
+			</div>
+			
+			<div class="cFormItm">
+				<label for="subject"><strong>Subject</strong></label><br />
+        		<input dojoType="dijit.form.ValidationTextBox"
+        			trim="true"
+        			required="true"
+        			invalidMessage="Invalid mail subject"
+            		name="subject" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="subject" 
+            		value="<?php echo $this->mailArray['mail_subject']; ?>" 
+            		size="55" 
+            		style="width: 750px;"/>
+			</div>
+				
+			<div class="cFormItm">
+    			<label for="text"><strong>Text</strong></label><br />
+    	        <input dojoType="dijit.form.SimpleTextarea"
+        			trim="true"
+        			promptMessage="Input a caption"
+        			invalidMessage="Invalid caption"
+            		name="text" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="text"
+            		value="<?php echo $this->mailArray['mail_text']; ?>" 
+            		size="55" 
+            		style="width: 750px; height: 260px;"/>
+    		</div>
+    			
+    		<p class="ClearAll"></p>
+    
+    		<div class="cFormItm">
+    			<label for="html"><strong>HTML</strong></label><br />
+    	        <?php
+                    $FCKeditor = new FCKeditor( 'html' ) ;
+			        $FCKeditor->BasePath	= '/_scripts/fckeditor/' ;
+			        $FCKeditor->Width	= 760 ;
+			        $FCKeditor->Height	= 300 ;
+			        $FCKeditor->Value	= $this->mailArray['mail_html'];
+			        $FCKeditor->HtmlEncodeOutput = 'false';
+                    $FCKeditor->Create() ;
+                ?>
+    		</div>
+    		
+    		<div class="cUpd" style="width: 750px">Remember to use a full web address when including links, images and other media in HTML messages. Relative and absolute links will NOT work!</div>
+    			
+    		<p class="ClearAll"></p>
+    			
+		</form>
+
+	</div>
+	
+	<div id="AttachmentsPane" dojoType="dijit.layout.ContentPane" title="Attachments" style="padding: 10px;">
+	
+		<form dojoType="dijit.form.Form" id="attachmentForm" jsId="attachmentForm" method="POST" class="cForm" onSubmit="return false;">
+
+			<?php if($this->mailArray['mail_status'] != 'sent') : ?>
+			
+			<div class="cFormItmH">
+				<label for="url"><strong>Attachment</strong></label>&nbsp;&nbsp;
+    			<input dojoType="dijit.form.ValidationTextBox"
+            		name="assetFile" 
+            		type="text" 
+            		class="cFormInput" 
+            		id="assetFile" 
+            		value="" 
+            		size="55" 
+            		readonly="readonly" 
+            		style="width: 200px;"/>
+            	<input type="hidden" name="asset" id="asset" value="<?php echo $this->resourceArray['resource_asset']; ?>"/>
+            	<button dojoType="dijit.form.Button" type="button" id="assetButton" value="Browse..." iconClass="browseIcon" onClick="openAssetMan('n','select','asset');">Browse...</button>
+			</div>
+				
+			<div class="cFormItmH">
+				<button dojoType="dijit.form.Button" name="attachmentButton" id="attachmentButton" iconClass="newattachmentIcon" value="Add Attachment" onClick="newAttachment();">Add Attachment</button>
+				<input type="hidden" name="slave" id="slave" value="<?php echo $this->mailArray['mail_id']; ?>"/>
+				<input type="hidden" name="type" id="type" value="M"/>
+			</div>
+			
+			<?php endif; ?>
+				
+			<fieldset class="cFieldset" style="clear: both;">
+				<legend class="cFLegend">Attachments</legend>
+				<div dojoType="dijit.layout.ContentPane" id="attachmentsResponse" preload="true" href="/admin/attachments/show?type=M&status=<?php echo $this->mailArray['mail_status']; ?>&slave=<?php echo $this->mailArray['mail_id']; ?>"></div>
+			</fieldset>
+
+		</form>
+	
+	</div>
+	
+</div>

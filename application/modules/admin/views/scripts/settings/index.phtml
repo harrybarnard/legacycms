@@ -1,0 +1,227 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.ComboBox");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.TimeTextBox");
+dojo.require("dijit.form.SimpleTextarea");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/user.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Settings' );
+$this->placeholder ( 'title' )->set ( 'Settings' );
+$this->placeholder('section')->set('settings');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div dojoType="dijit.layout.ContentPane" id="detailsResponse" preload="true" href="/admin/settings/details/" style="min-height: 50px;"></div>
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+	<div id="ProfilePane" dojoType="dijit.layout.ContentPane" title="Profile" style="padding: 10px;">
+
+		<form dojoType="dijit.form.Form" id="profileForm" jsId="profileForm" method="POST" class="cForm" >
+			
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Identity</legend>
+				
+				<div class="cFormItmH">
+					<label for="name"><strong>First Name</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid name"
+            			name="first" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="first" 
+            			value="<?php echo $this->userArray['upro_first']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+				
+				<div class="cFormItmH">
+					<label for="name"><strong>Last Name</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid name"
+            			name="last" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="last" 
+            			value="<?php echo $this->userArray['upro_last']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+				
+				<p class="ClearAll"></p>
+			
+				<div class="cFormItmH">
+					<label for="alias"><strong>Alias</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid alias"
+            			name="alias" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="alias" 
+            			value="<?php echo $this->userArray['user_alias']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+			
+				<div class="cFormItmH">
+					<label for="role"><strong>Role</strong></label><br />
+        			<select dojoType="dijit.form.FilteringSelect"
+        				name="role"
+        				id="role"
+        				autocomplete="false"
+        				style="width: 140px;"
+        				class="cFormSelect"
+        				readonly="readonly">
+    		            <?php $this->URoleSelect($this->userArray['user_role']); ?>
+    				</select>
+				</div>
+					
+			</fieldset>
+			
+        	<fieldset class="cFieldset">
+				<legend class="cFLegend">Contact</legend>
+			
+				<div class="cFormItmH">
+					<label for="email"><strong>E-mail Address</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				invalidMessage="Invalid e-mail address"
+            			name="email" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="email" 
+            			value="<?php echo $this->userArray['user_email']; ?>" 
+            			size="55" 
+            			style="width: 320px;"/>
+				</div>
+			
+				<div class="cFormItmH">
+    				<label><strong>Phone Number</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="phone" 
+        				value="<?php echo $this->escape($this->userArray['upro_phone']); ?>" 
+        				regExp=".{3}.*" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Your phone number" 
+        				invalidMessage="Invalid input"
+        				style="width: 120px;"
+        				class="cFormInput"/>
+        		</div>
+        		
+        		<p class="ClearAll"></p>
+        			
+        	</fieldset>
+        	
+        	<fieldset class="cFieldset">
+				<legend class="cFLegend">Blurb</legend>
+        	
+        		<div class="cFormItm">
+        			<textarea dojoType="dijit.form.SimpleTextarea" name="blurb" id="blurb" style="width:600px;"><?php echo $this->userArray['upro_blurb']; ?></textarea>
+				</div>
+				
+			</fieldset>
+        	
+        	<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="button" id="profileButton" value="Update Profile" iconClass="saveIcon" onClick="postDialog('/admin/settings/profile/','profileForm','Update Profile','1');">Update Profile</button>
+    		</div>
+        	
+        </form>
+        	
+	</div>
+	
+	<div id="PasswordPane" dojoType="dijit.layout.ContentPane" title="Password" style="padding: 10px;">
+	
+		<form dojoType="dijit.form.Form" id="passwordForm" jsId="passwordForm" method="POST" class="cForm">
+    	
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Password</legend>
+    		
+    			<div class="cFormItm">
+    				<label for="oldpassword"><strong>Current Password</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox"
+        				type="password"
+        				name="oldpassword" 
+        				id="oldpassword"
+        				value="" 
+        				regExp=".{8}.*" 
+        				required="true" 
+        				promptMessage="Enter your current password" 
+        				invalidMessage="Minimum of 8 characters"
+        				class="cFormInput"/>
+    			</div>
+    			
+    			<div class="cFormItmH">
+    				<label for="password"><strong>New Password</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox"
+        				type="password"
+        				name="password" 
+        				id="password"
+        				value="" 
+        				regExp=".{8}.*" 
+        				required="true" 
+        				onblur="passwordCheck(this.value)"
+        				promptMessage="Enter a new password" 
+        				invalidMessage="Minimum of 8 characters"
+        				class="cFormInput"/>
+        			<div class="reMarkup">Minimum of 8 characters in length</div>
+    			</div>
+    		
+    			<div class="cFormItmH">
+    				<label for="password2"><strong>Confirm New Password</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox"
+        				type="password"
+        				name="password2" 
+        				id="password2"
+        				value="" 
+        				regExp=".{8}.*" 
+        				required="true" 
+        				promptMessage="Re-enter your new password" 
+        				invalidMessage="Passwords don't match"
+        				validator="return sameCheck(this, dijit.byId('password'));"
+        				style="float: left;"
+        				class="cFormInput"/>
+        			<div dojoType="dijit.layout.ContentPane" class="pane" id="passwordResponse" preload="false" style="margin-left: 10px; float: left;"></div>
+    			</div>
+    			
+    		</fieldset>
+    		
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="button" id="passwordButton" value="Change Password" iconClass="saveIcon" onClick="postDialog('/admin/settings/password/','passwordForm','Change Password','0');">Change Password</button>
+    		</div>
+    	
+    	</form>
+	
+	</div>
+	
+</div>

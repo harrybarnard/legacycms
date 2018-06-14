@@ -1,0 +1,95 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.TabContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Events | Venues' );
+$this->placeholder ( 'title' )->set ( 'Venues' );
+$this->placeholder('section')->set('events');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="225px" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+
+    			<?php if($this->acl->isAllowed($this->user->user_role, 'evenuenew')) : ?><button dojoType="dijit.form.Button" name="newvenueButton" id="newvenueButton" value="New Venue" iconClass="newvenueIcon" onClick="getDialog('/admin/events/venuenew/','New Venue');">New Venue</button><?php endif; ?>
+    			<button dojoType="dijit.form.Button" name="eventsButton" id="eventsButton" value="Events" iconClass="eventIcon" onClick="goTo('<?php echo $this->url(array('action' => 'manage')); ?>');">Events...</button>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Filter</legend>
+				
+				<?php if ($this->city != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('city' => NULL)); ?>');" title="Remove Filter">City: <?php echo $this->city; ?></span><?php endif; ?>
+				<?php if ($this->country != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('country' => NULL)); ?>');" title="Remove Filter">Country: <?php echo $this->country; ?></span><?php endif; ?>
+    			<?php if ($this->city == NULL & $this->country == NULL) : ?><span class="tagItm">No active filter</span><?php endif; ?>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th>Venue</th>
+		<th>City</th>
+		<th>Country</th>
+	</tr>
+	<?php if (count($this->venuesArray)) : ?>
+    <?php foreach($this->venuesArray as $venue) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $venue['venue_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $venue['venue_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td>
+			<strong><a href="/admin/events/venue/id/<?php echo $venue['venue_id']; ?>"><?php echo $venue['venue_title']; ?></a> <?php if($venue['venue_status'] == 'draft') : ?>(draft)<?php endif; ?></strong>
+			<div id="edit<?php echo $venue['venue_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><a href="<?php echo $this->url(array('action' => 'venue','id' => $venue['venue_id'])); ?>">Edit</a><?php if($this->acl->isAllowed($this->user->user_role, 'evenuedelete')) : ?> | <a onClick="getDialog('/admin/events/venuedelete/id/<?php echo $venue['venue_id']; ?>/','Delete Venue');" style="cursor: pointer;">Delete</a><?php endif; ?></div>
+		</td>
+		<td><a href="<?php echo $this->url(array('action' => 'venues','city' => urlencode($venue['venue_city']))); ?>"><?php echo $venue['venue_city']; ?></a></td>
+		<td><a href="<?php echo $this->url(array('action' => 'venues','country' => urlencode($venue['venue_country']))); ?>"><?php echo $venue['venue_country']; ?></a></td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="4">
+			<div class="cUpd">No Venues!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->venuesArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->venuesArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

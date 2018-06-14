@@ -1,0 +1,36 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if(count($this->commentArray)) : ?>
+<?php foreach($this->commentArray as $comment) : ?>
+<fieldset class="comFieldset<?php if ($comment['comment_approved'] == 'N') : ?> notapproved<?php endif; ?>" <?php if($this->acl->isAllowed($this->user->user_role, 'gcommentsstatus') | $this->acl->isAllowed($this->user->user_role, 'gcommentdelete')) : ?>onMouseOver="toggleDisp('comedit<?php echo $comment['comment_id']; ?>',1)" onMouseOut="toggleDisp('comedit<?php echo $comment['comment_id']; ?>',0)"<?php endif; ?>>
+	<?php if($this->acl->isAllowed($this->user->user_role, 'gcommentsstatus') & $this->acl->isAllowed($this->user->user_role, 'gcommentdelete')) : ?>
+	<div class="comEdit" id="comedit<?php echo $comment['comment_id']; ?>" style="display:none;">
+		<?php if ($comment['comment_approved'] == 'N') : ?><img src="/_styles/admin/icons/accept.gif" width="16" height="16" align="texttop"/> <a onClick="approveComment(<?php echo $comment['comment_id']; ?>,'Y',1);" title="Approve Comment">Approve</a> | <?php else : ?><img src="/_styles/admin/icons/cross.gif" width="16" height="16" align="texttop"/> <a onClick="approveComment(<?php echo $comment['comment_id']; ?>,'N',1);" title="Disapprove Comment">Disapprove</a> | <?php endif; ?><img src="<?php echo $this->baseUrl();?>/_styles/admin/icons/delete.gif" width="16" height="16" align="texttop"/> <a onClick="deleteComment(<?php echo $comment['comment_id']; ?>,1);" title="Delete Comment">Delete</a>
+	</div>
+	<?php elseif($this->acl->isAllowed($this->user->user_role, 'gcommentdelete')) : ?>
+	<div class="comEdit" id="comedit<?php echo $comment['comment_id']; ?>" style="display:none;">
+		<img src="<?php echo $this->baseUrl();?>/_styles/admin/icons/delete.gif" width="16" height="16" align="texttop"/> <a onClick="deleteComment(<?php echo $comment['comment_id']; ?>,1);" title="Delete Comment">Delete</a>
+	</div>
+	<?php elseif($this->acl->isAllowed($this->user->user_role, 'gcommentsstatus')) : ?>
+	<div class="comEdit" id="comedit<?php echo $comment['comment_id']; ?>" style="display:none;">
+		<?php if ($comment['comment_approved'] == 'N') : ?><img src="/_styles/admin/icons/accept.gif" width="16" height="16" align="texttop"/> <a onClick="approveComment(<?php echo $comment['comment_id']; ?>,'Y',1);" title="Approve Comment">Approve</a> | <?php else : ?><img src="/_styles/admin/icons/cross.gif" width="16" height="16" align="texttop"/> <a onClick="approveComment(<?php echo $comment['comment_id']; ?>,'N',0);" title="Disapprove Comment">Disapprove</a><?php endif; ?>
+	</div>
+	<?php endif; ?>
+	<div class="comInfo">
+	    <img src="/_styles/admin/icons/user.gif" width="16" height="16" align="texttop"/> <a href="/admin/users/edit/id/<?php echo $comment['user_id']; ?>"><?php echo $comment['user_alias']; ?></a><br />
+	    <img src="/_styles/admin/icons/date.gif" width="16" height="16" align="texttop"/> <?php echo $this->MakeDate('d/m/Y',$comment['comment_date']); ?>
+    </div>
+	<p class="comContent">
+	    <?php echo $comment['comment_content']; ?>
+	</p>
+</fieldset>
+<?php endforeach; ?>
+<?php else : ?>
+<div class="cErr">No Comments!</div>
+<?php endif;?>

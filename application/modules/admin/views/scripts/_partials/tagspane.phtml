@@ -1,0 +1,42 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<div id="TagsPane" dojoType="dijit.layout.ContentPane" title="Tags" style="padding: 10px;">
+
+	<form dojoType="dijit.form.Form" id="tagForm" jsId="tagForm" method="POST" class="cForm" onSubmit="return false;">
+
+		<div dojoType="dojo.data.ItemFileReadStore" jsId="tagStore" url="/admin/tags/autocomplete"></div>
+		<div class="cFormItmH">
+			<label for="url"><strong>Tag</strong></label>&nbsp;&nbsp;
+			<input dojoType="dijit.form.ComboBox"
+				required="true"
+            	value=""
+            	store="tagStore"
+            	searchAttr="tag_tag"
+            	promptMessage="Input a tag"
+            	invalidMessage="Invalid tag"
+            	name="tag"
+            	class="cFormInput"
+            	id="stateInput"
+            	style="width: 250px;"/>
+		</div>
+				
+		<div class="cFormItmH">
+			<button dojoType="dijit.form.Button" name="tagButton" id="tagButton" iconClass="newtagIcon" value="Add Tag" onClick="newTag();">Add Tag</button>
+			<input type="hidden" name="slave" id="slave" value="<?php echo $this->slave; ?>"/>
+			<input type="hidden" name="type" id="type" value="<?php echo $this->type; ?>"/>
+		</div>
+				
+		<fieldset class="cFieldset" style="clear: both;">
+			<legend class="cFLegend">Tags</legend>
+			<div dojoType="dijit.layout.ContentPane" id="tagsResponse" preload="true" href="/admin/tags/show?type=<?php echo $this->type; ?>&slave=<?php echo $this->slave; ?>"></div>
+		</fieldset>
+
+	</form>
+	
+</div>

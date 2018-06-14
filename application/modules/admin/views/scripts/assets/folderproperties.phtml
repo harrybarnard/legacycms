@@ -1,0 +1,37 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table class="propertiesTable" border="0" cellspacing="0">
+	<tr>
+		<th class="propHR">Title:</th>
+		<td class="propHR"><?php echo $this->folderArray['folder_name']; ?></td>
+	</tr>
+	<tr>
+		<th>Created:</th>
+		<td><?php echo $this->MakeDate('jS F Y g:i:sa',$this->folderArray['folder_date']); ?></td>
+	</tr>
+	<tr>
+		<th>Modified:</th>
+		<td><?php echo $this->MakeDate('jS F Y g:i:sa',$this->folderArray['folder_modify']); ?></td>
+	</tr>
+</table>
+<p class="ClearAll"></p>
+<div class="cFormDS">
+	<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="editfolderButton" 
+			value="Edit" 
+			iconClass="editcategoryIcon" 
+			onClick="getDialog('/admin/assets/folder/folder/<?php echo $this->folderArray['folder_id']; ?>/','Edit Folder');">Edit</button>
+    <button dojoType="dijit.form.Button" 
+    	type="button" 
+    	name="editfoldercancelButton" 
+    	value="Cancel" 
+    	iconClass="cancelIcon" 
+    	onClick="dijit.byId('ajaxDialog').hide();">Close</button>
+</div>

@@ -1,0 +1,19 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<div class="aBox copy botpad" style="background-color: <?php echo $this->role_colour; ?>">
+
+	<h4><a><?php echo $this->escape($this->user_alias);?></a> says:</h4>
+	
+	<p><?php echo $this->BBCode($this->comment_content);?></p>
+
+	<div class="aComFoot">Posted: <?php echo $this->CDate($this->comment_date); ?></div>
+
+</div>
+
+<p class="Spacer"></p>

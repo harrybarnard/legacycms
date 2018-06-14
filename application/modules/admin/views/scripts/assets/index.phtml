@@ -1,0 +1,252 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Menu");
+dojo.require("dojo.parser");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/assets.css')
+                 ->appendStylesheet('/_scripts/mediabox/css/mediaboxAdmin.css');
+$this->headScript()->appendFile('/_scripts/mootools/mootools-yui-compressed.js','text/javascript')
+                   ->appendFile('/_scripts/mediabox/mediaboxAdv-1.1.7.js','text/javascript')
+                   ->appendFile('/_scripts/mediabox/swfobject.js','text/javascript')
+                   ->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/assets.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Assets' );
+$this->placeholder ( 'title' )->set ( 'Assets' );
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<div class="toolbar">
+
+	<button dojoType="dijit.form.Button" type="button" id="closeButton" value="Close" iconClass="cancelIcon" style="float: right;" onClick="window.close();">Close</button>
+	
+	<?php if($this->acl->isAllowed($this->user->user_role, 'fassetupload')) : ?><button dojoType="dijit.form.Button" type="button" id="uploadButton" value="Upload" iconClass="uploadIcon" onclick="goTo('<?php echo $this->url(array('action' => 'upload','type' => $this->type,'folder' => $this->folder,'method' => $this->method,'field' => $this->field)); ?>');">Upload</button><?php endif; ?>
+	
+	<?php if($this->acl->isAllowed($this->user->user_role, 'ffoldernew')) : ?><button dojoType="dijit.form.Button" type="button" id="newfolderButton" value="New Folder" iconClass="newfolderIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'foldernew','parent' => $this->folder)); ?>','New Folder');">New Folder</button><?php endif; ?>
+	
+    <?php if($this->folder != '0') : ?>
+	
+        <?php if($this->parentArray['folder_parent'] != '0') : ?>
+	
+	        <button dojoType="dijit.form.Button" type="button" id="upButton" value="Up" iconClass="upIcon" onclick="goTo('<?php echo $this->url(array('type' => $this->type,'folder' => $this->parentArray['folder_parent'],'method' => $this->method,'field' => $this->field)); ?>');">Up</button>
+	
+	        <button dojoType="dijit.form.Button" type="button" id="topButton" value="Top" iconClass="upIcon" onclick="goTo('<?php echo $this->url(array('type' => $this->type,'folder' => NULL,'method' => $this->method,'field' => $this->field)); ?>');">Top</button>
+	
+        <?php else: ?>
+	
+	        <button dojoType="dijit.form.Button" type="button" id="upButton" value="Up" iconClass="upIcon" onclick="goTo('<?php echo $this->url(array('type' => $this->type,'folder' => NULL,'method' => $this->method,'field' => $this->field)); ?>');">Up</button>
+	
+        <?php endif; ?>
+	
+    <?php endif; ?>
+    
+</div>
+
+<div class="paneCont" style="overflow: auto">
+
+	<?php if (count($this->folderArray)) : ?>
+	
+	<ul class="jqueryFileTree">
+	
+	    <?php foreach($this->folderArray as $folder) : ?>
+	    
+	    <li class="directory collapsed" style="float: left; width: 280px; margin-right: 10px;" id="folder<?php echo $folder['folder_id']; ?>"><a href="<?php echo $this->url(array('type' => $this->type,'folder' => $folder['folder_id'],'method' => $this->method,'field' => $this->field)); ?>"><?php echo $folder['folder_name']; ?></a></li>
+		
+		<div dojoType="dijit.Menu" id="menu<?php echo $folder['folder_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="folder<?php echo $folder['folder_id']; ?>">
+  			
+  			<div dojoType="dijit.MenuItem" iconClass="opencategoryIcon" onclick="goTo('<?php echo $this->url(array('type' => $this->type,'folder' => $folder['folder_id'],'method' => $this->method,'field' => $this->field)); ?>');"><strong>Open</strong></div>
+  			
+  			<div dojoType="dijit.MenuSeparator"></div>
+  			
+  			<?php if($this->acl->isAllowed($this->user->user_role, 'ffolderdelete')) : ?><div dojoType="dijit.MenuItem" iconClass="deletecategoryIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'folderdelete','folder' => $folder['folder_id'])); ?>','Delete Folder');">Delete</div><?php endif; ?>
+  			
+  			<?php if($this->acl->isAllowed($this->user->user_role, 'ffolderdelete')) : ?><div dojoType="dijit.MenuItem" iconClass="editcategoryIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'folder','folder' => $folder['folder_id'])); ?>','Edit Folder');">Edit</div><?php endif; ?>
+  			
+  			<div dojoType="dijit.MenuItem" iconClass="propertiescategoryIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'folderproperties','folder' => $folder['folder_id'])); ?>','Folder Properties');">Properties</div>
+		
+		</div>
+		
+	    <?php endforeach; ?>
+	</ul>
+	
+	<?php endif; ?>
+	
+	<?php if (count($this->assetArray)) : ?>
+	
+	<ul class="jqueryFileTree">
+	
+	    <?php foreach($this->assetArray as $asset) : ?>
+	    
+	    <?php $type = str_replace('/','_',$asset['asset_mime']); ?>
+	    
+	    <?php if (isset($this->type)) : if($this->AssetType($asset['asset_mime']) == $this->type) : ?>
+	    
+	        <li class="ext_<?php echo $type; ?>" style="float: left; width: 280px; margin-right: 10px;" id="asset<?php echo $asset['asset_id']; ?>">
+	    
+	        <?php if($this->method == 'editor') : ?>
+			
+		    <?php if($this->AssetType($asset['asset_mime']) == 'image') : ?>
+			
+	            <a href="#" onclick="getDialog('<?php echo $this->url(array('action' => 'imageinsert','key' => $asset['asset_key'])); ?>','Insert Image'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+		
+		    <?php else: ?>
+	        
+	            <a href="#" onclick="insertFile('/assets/open/<?php echo $asset['asset_key']; ?>/'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+	        
+	        <?php endif; ?>
+	    
+	    <?php elseif($this->method == 'link') : ?>
+	    
+	        <a href="#" onclick="getDialog('<?php echo $this->url(array('action' => 'linkinsert','key' => $asset['asset_key'])); ?>','Insert Link'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+			
+	    <?php elseif($this->method == 'select') : ?>
+	    
+	        <a href="#" onclick="chooseFile('<?php echo $this->field;?>', '<?php echo $asset['asset_key']; ?>', '<?php echo $asset['asset_name']; ?>.<?php echo $asset['asset_extension']; ?>'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+	    
+	    <?php endif; ?>
+	        
+		<div dojoType="dijit.Menu" id="amenu<?php echo $asset['asset_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="asset<?php echo $asset['asset_id']; ?>">
+			
+	        <?php if($this->method == 'editor') : ?>
+			
+			    <?php if($this->AssetType($asset['asset_mime']) == 'image') : ?>
+			
+			        <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="getDialog('<?php echo $this->url(array('action' => 'imageinsert','key' => $asset['asset_key'])); ?>','Insert Image');"><strong>Insert</strong></div>	
+	        
+	            <?php else: ?>
+	        
+	                <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="insertFile('/assets/open/<?php echo $asset['asset_key']; ?>/');"><strong>Insert</strong></div>	
+	        
+	            <?php endif; ?>
+	        
+	        <?php elseif($this->method == 'link') : ?>
+	        
+	            <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="getDialog('<?php echo $this->url(array('action' => 'linkinsert','key' => $asset['asset_key'])); ?>','Insert Link');"><strong>Insert</strong></div>	
+			
+			<?php elseif($this->method == 'select') : ?>
+	        
+	            <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="chooseFile('<?php echo $this->field;?>', '<?php echo $asset['asset_key']; ?>', '<?php echo $asset['asset_name']; ?>.<?php echo $asset['asset_extension']; ?>');"><strong>Select</strong></div>	
+	        
+	        <?php endif; ?>
+			
+			<?php if($this->AssetType($asset['asset_mime']) == 'image' | $this->AssetType($asset['asset_mime']) == 'audio' | $this->AssetType($asset['asset_mime']) == 'video') : ?>
+  			
+  			    <div dojoType="dijit.MenuItem" iconClass="openfileIcon" onclick="Mediabox.open('/admin/assets/open/key/<?php echo $asset['asset_key']; ?>/.<?php echo $asset['asset_extension']; ?>', '<?php echo $asset['asset_name']; ?>.<?php echo $asset['asset_extension']; ?>','');">Open</div>
+  			
+	        <?php endif; ?>
+			
+			<div dojoType="dijit.MenuItem" iconClass="downloadfileIcon" onclick="goTo('/admin/assets/download/key/<?php echo $asset['asset_key']; ?>');">Download</div>
+  			
+  			<div dojoType="dijit.MenuSeparator"></div>
+  			
+  			<?php if($this->acl->isAllowed($this->user->user_role, 'fassetdelete')) : ?><div dojoType="dijit.MenuItem" iconClass="deletefileIcon" onClick="getDialog('/admin/assets/delete/id/<?php echo $asset['asset_id']; ?>/','Delete Asset');">Delete</div><?php endif; ?>
+  			
+  			<?php if($this->acl->isAllowed($this->user->user_role, 'fassetedit')) : ?><div dojoType="dijit.MenuItem" iconClass="editfileIcon" onClick="getDialog('/admin/assets/asset/asset/<?php echo $asset['asset_id']; ?>/','Edit Asset');">Edit</div><?php endif; ?>
+  			
+  			<div dojoType="dijit.MenuItem" iconClass="propertiesfileIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'properties','asset' => $asset['asset_id'])); ?>','Asset Properties');">Properties</div>
+		
+		</div>
+		
+	    <?php endif; else : ?>
+	    
+	    <li class="ext_<?php echo $type; ?>" style="float: left; width: 280px; margin-right: 10px;" id="asset<?php echo $asset['asset_id']; ?>">
+	    
+	    <?php if($this->method == 'editor') : ?>
+			
+		    <?php if($this->AssetType($asset['asset_mime']) == 'image') : ?>
+			
+	            <a href="#" onclick="getDialog('<?php echo $this->url(array('action' => 'imageinsert','key' => $asset['asset_key'])); ?>','Insert Image'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+		
+		    <?php else: ?>
+	        
+	    <a href="#" onclick="insertFile('/assets/open/<?php echo $asset['asset_key']; ?>/'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+	        
+	    <?php endif; ?>
+	    
+	    <?php elseif($this->method == 'link') : ?>
+	    
+	    <a href="#" onclick="getDialog('<?php echo $this->url(array('action' => 'linkinsert','key' => $asset['asset_key'])); ?>','Insert Link'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+			
+	    <?php elseif($this->method == 'select') : ?>
+	    
+	    <a href="#" onclick="chooseFile('<?php echo $this->field;?>', '<?php echo $asset['asset_key']; ?>', '<?php echo $asset['asset_name']; ?>.<?php echo $asset['asset_extension']; ?>'); return false;"><?php echo substr($asset['asset_name'],0,45); ?><?php if (strlen($asset['asset_name']) > 45 ) : ?>...<?php else : ?>.<?php echo $asset['asset_extension']; ?><?php endif; ?></a></li>
+	    
+	    <?php endif; ?>
+	        
+		<div dojoType="dijit.Menu" id="amenu<?php echo $asset['asset_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="asset<?php echo $asset['asset_id']; ?>">
+			
+			<?php if($this->method == 'editor') : ?>
+			
+			<?php if($this->AssetType($asset['asset_mime']) == 'image') : ?>
+			
+			<div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="getDialog('<?php echo $this->url(array('action' => 'imageinsert','key' => $asset['asset_key'])); ?>','Insert Image');"><strong>Insert</strong></div>	
+	        
+	        <?php else: ?>
+	        
+	        <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="insertFile('/assets/open/<?php echo $asset['asset_key']; ?>/');"><strong>Insert</strong></div>	
+	        
+	        <?php endif; ?>
+	        
+	        <?php elseif($this->method == 'link') : ?>
+	        
+	        <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="getDialog('<?php echo $this->url(array('action' => 'linkinsert','key' => $asset['asset_key'])); ?>','Insert Link');"><strong>Insert</strong></div>	
+			
+			<?php elseif($this->method == 'select') : ?>
+	        
+	        <div dojoType="dijit.MenuItem" iconClass="selectfileIcon" onclick="chooseFile('<?php echo $this->field;?>', '<?php echo $asset['asset_key']; ?>', '<?php echo $asset['asset_name']; ?>.<?php echo $asset['asset_extension']; ?>');"><strong>Select</strong></div>	
+	        
+	        <?php endif; ?>
+	        
+		    <?php if($this->AssetType($asset['asset_mime']) == 'image' | $this->AssetType($asset['asset_mime']) == 'audio' | $this->AssetType($asset['asset_mime']) == 'video') : ?>
+  			
+  			<div dojoType="dijit.MenuItem" iconClass="openfileIcon" onclick="Mediabox.open('/admin/assets/open/key/<?php echo $asset['asset_key']; ?>/.<?php echo $asset['asset_extension']; ?>', '<?php echo $asset['asset_name']; ?>.<?php echo $asset['asset_extension']; ?>','');">Open</div>
+  			
+		    <?php endif; ?>
+			
+			<div dojoType="dijit.MenuItem" iconClass="downloadfileIcon" onclick="goTo('/admin/assets/download/key/<?php echo $asset['asset_key']; ?>');">Download</div>
+  			
+  			<div dojoType="dijit.MenuSeparator"></div>
+  			
+  			<?php if($this->acl->isAllowed($this->user->user_role, 'fassetdelete')) : ?><div dojoType="dijit.MenuItem" iconClass="deletefileIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'delete','id' => $asset['asset_id'])); ?>','Delete Asset');">Delete</div><?php endif; ?>
+  			
+  			<?php if($this->acl->isAllowed($this->user->user_role, 'fassetedit')) : ?><div dojoType="dijit.MenuItem" iconClass="editfileIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'asset','asset' => $asset['asset_id'])); ?>','Edit Asset');">Edit</div><?php endif; ?>
+  			
+  			<div dojoType="dijit.MenuItem" iconClass="propertiesfileIcon" onClick="getDialog('<?php echo $this->url(array('action' => 'properties','asset' => $asset['asset_id'])); ?>','Asset Properties');">Properties</div>
+		
+		</div>
+		
+		<?php endif; ?>
+	    
+		<?php endforeach; ?>
+	
+	</ul>
+	
+    <?php endif; ?>
+
+</div>
+
+<div class="paneFoot">
+	
+	<ul class="jqueryFileTree">
+		
+		<li class="directory expanded"><?php if($this->folder == '0') : ?>Root<?php else : echo $this->parentArray['folder_name']; endif; ?></li>
+	
+	</ul>
+	
+</div>

@@ -1,0 +1,15 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if(count($this->tagArray)) : ?>
+<?php foreach($this->tagArray as $tag) : ?>
+    <span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="deleteTag(<?php echo $tag['tag_id']; ?>);" title="Remove Tag"><?php echo $tag['tag_tag']; ?></span>
+<?php endforeach; ?>
+<?php else : ?>
+	<span class="tagItm">No Tags!</span>
+<?php endif;?>

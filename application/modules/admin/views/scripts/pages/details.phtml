@@ -1,0 +1,45 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="60%" valign="top">
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Author: <?php echo $this->pageArray['user_alias']; ?></span>
+				<span class="tagItm">Status: <?php echo ucwords($this->pageArray['page_status']); ?></span>
+    			<span id="dates">
+					<span class="tagItm">Created: <?php echo $this->MakeDate('d/m/Y H:i',$this->pageArray['page_date']); ?></span>
+		            <?php if ($this->pageArray['page_status'] == 'published') : ?>
+					<span class="tagItm">Published: <?php echo $this->MakeDate('d/m/Y H:i',$this->pageArray['page_published']); ?></span>
+		            <?php endif; ?>
+					<span class="tagItm">Last Edited: <?php echo $this->MakeDate('d/m/Y H:i',$this->pageArray['page_edit']); ?></span>
+				</span>
+			</fieldset>
+		</td>
+		<td width="40%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+    			<div>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/pages/save/id/<?php echo $this->pageArray['page_id']; ?>/','editForm','Save Page','1');">Save</button> 
+					<?php if ($this->pageArray['page_protected'] != 'Y') : ?>
+					<button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deletepageIcon" onClick="getDialog('/admin/pages/delete/id/<?php echo $this->pageArray['page_id']; ?>/','Delete Page');">Delete</button>
+		            <?php endif; ?>
+					<?php if ($this->pageArray['page_status'] != 'published') : ?>
+					<button dojoType="dijit.form.Button" type="button" id="publishButton" value="Publish" iconClass="publishIcon" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/pages/publish/id/<?php echo $this->pageArray['page_id']; ?>/','Publish Page');">Publish</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" iconClass="pagesIcon" id="pagesButton" value="Pages..." onClick="goTo('/admin/pages/');">Pages...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>

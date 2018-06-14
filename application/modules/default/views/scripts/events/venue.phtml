@@ -1,0 +1,103 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");
+
+var vlat = "'.$this->venueArray['venue_latitude'].'";
+var vlng = "'.$this->venueArray['venue_longitude'].'";
+var vtitle = "'.$this->venueArray['venue_title'].'";';
+
+$registry = Zend_Registry::getInstance();
+Zend_Date::setOptions(array('format_type' => 'php'));
+$this->headTitle($registry->site->site->name.' | Events | Venue | '.$this->venueArray['venue_title']);
+$this->placeholder('title')->set('Venue');
+$this->placeholder('section')->set('events');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/events.js','text/javascript')
+                   ->appendFile('http://www.google.com/jsapi','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/eventsvenue.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+	<h2>Venue: <?php echo $this->venueArray['venue_title']; ?></h2>
+</div>
+<p class="Spacer"></p>
+<?php if ($this->page == '1') : ?>
+<?php if ($this->venueArray['venue_description'] != NULL) : ?>
+<div class="aBox copy nopad">
+    <?php echo $this->venueArray['venue_description']; ?>
+    <p class="ClearAll"></p>
+</div>
+<p class="Spacer"></p>
+<?php endif; ?>
+<div class="aMap" id="map" style="width: 250px; height: 200px; float: left;">
+	<noscript>
+		<p style="padding-left: 10px; padding-right: 10px; color: #CCC;">This map requires JavaScript. Your browser either doesn't support JavaScript or you have it disabled.</p>
+	</noscript>
+</div>
+<div class="aBox" style="width: 325px; height: 180px; float: right;">
+	<table class="conInfoTab" border="0" cellspacing="0">
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/house.gif" width="16" height="16" /></th>
+			<td><strong><?php echo $this->venueArray['venue_title']; ?></strong><br />
+			    <?php echo $this->venueArray['venue_address']; ?><br />
+				<?php echo $this->venueArray['venue_city']; ?><br />
+				<?php echo $this->venueArray['venue_country']; ?>
+		</tr>
+		<?php if($this->venueArray['venue_phone'] != NULL) : ?>
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/phone.gif" width="16" height="16" /></th>
+			<td><?php echo $this->venueArray['venue_phone']; ?></td>
+		</tr>
+		<?php endif; ?>
+		<?php if($this->venueArray['venue_email'] != NULL) : ?>
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/mouse.gif" width="16" height="16" /></th>
+			<td><a href="mailto:<?php echo $this->venueArray['venue_email']; ?>">E-mail <?php echo $this->venueArray['venue_title']; ?></a></td>
+		</tr>
+		<?php endif; ?>
+		<?php if($this->venueArray['venue_url'] != NULL) : ?>
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/link.gif" width="16" height="16" /></th>
+			<td><a href="<?php echo $this->venueArray['venue_url']; ?>" target="_blank"><?php echo $this->venueArray['venue_title']; ?> Website</a></td>
+		</tr>
+		<?php endif; ?>
+	</table>
+</div>
+<p class="ClearAll"></p>
+<p class="Spacer"></p>
+<?php endif; ?>
+<?php if(count($this->eventsArray) > 0) : ?>
+
+<div class="aBox copy toppad">
+
+<?php echo $this->partialLoop('_partials/eventlist.phtml', $this->eventsArray); ?>
+
+</div>
+
+<p class="Spacer"></p>
+
+<?php echo $this->paginationControl($this->eventsArray,'Sliding','_pagination/default.phtml'); ?>
+
+<?php else : ?>
+
+<?php echo $this->partial('_partials/info.phtml', array('message' => 'No events to display at the moment')); ?>
+
+<?php endif; ?>
+
+<p class="Spacer"></p>

@@ -1,0 +1,46 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+echo $this->RenderMessages($this->messages); ?>
+
+<div class="aBox copy botpad">
+
+	<h3><a name="comment"></a>Post a comment</h3>
+	
+	<?php if($this->auth) : ?>
+	<?php if($this->acl) : ?>
+
+	<form dojoType="dijit.form.Form" id="editForm" jsId="commentForm" encType="multipart/form-data" action="<?php echo $this->action;?>" method="POST" class="cForm" >
+
+		<div class="cFormItm">
+        	<textarea dojoType="dijit.form.SimpleTextarea" name="content" style="width:576px;"><?php echo $this->comment; ?></textarea>
+		</div>
+		
+		<div class="cFormItmS">
+			<button dojoType="dijit.form.Button" type="submit">Post Comment</button>
+        	<?php if($this->moderate == 'Y') : ?>
+        	<span class="cInfo" style="margin-top: 5px;">Comment moderation is enabled</span>
+        	<?php endif; ?>
+        </div>
+			
+	</form>
+	
+	<?php else : ?>
+	
+	<div class="cInfo">You don't have permission to post a comment</div>
+	
+	<?php endif; ?>
+	
+    <?php else : ?>
+	
+	<div class="cInfo">Please <a href="/auth/login">login</a> or <a href="<?php echo $this->baseUrl();?>/auth/register">register</a> to post a comment</div>
+	
+	<?php endif; ?>
+
+</div>
+
+<p class="Spacer"></p>

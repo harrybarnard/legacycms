@@ -1,0 +1,50 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$this->placeholder ( 'pageSection' )->set ( '1.2' );
+$this->placeholder ( 'pageTab' )->set ( '1' );
+$this->headTitle ( 'ECP Control Panel | Articles | Add New Article' );
+$this->placeholder ( 'title' )->set ( 'Add New Article' );
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="60%" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Author: <?php echo $this->articleArray['user_alias']; ?></span>
+				<span class="tagItm">Status: <?php echo ucwords($this->articleArray['article_status']); ?></span>
+    			<span id="dates">
+					<span class="tagItm">Created: <?php echo $this->MakeDate('d/m/Y H:i',$this->articleArray['article_date']); ?></span>
+		            <?php if ($this->articleArray['article_status'] == 'published') : ?>
+					<span class="tagItm">Published: <?php echo $this->MakeDate('d/m/Y H:i',$this->articleArray['article_published']); ?></span>
+		            <?php endif; ?>
+					<span class="tagItm">Last Edited: <?php echo $this->MakeDate('d/m/Y H:i',$this->articleArray['article_edit']); ?></span>
+				</span>
+			</fieldset>
+
+		</td>
+		<td width="40%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/articles/save/id/<?php echo $this->articleArray['article_id']; ?>/','editForm','Save Article','1');">Save</button> 
+					<?php if($this->acl->isAllowed($this->user->user_role, 'aarticledelete')) : ?><button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deletearticleIcon" onClick="getDialog('/admin/articles/delete/id/<?php echo $this->articleArray['article_id']; ?>/','Delete Article');">Delete</button><?php endif; ?>
+		            <?php if ($this->articleArray['article_status'] != 'published' & $this->acl->isAllowed($this->user->user_role, 'aarticlepublish')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="publishButton" iconClass="publishIcon" value="Publish" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/articles/publish/id/<?php echo $this->articleArray['article_id']; ?>/','Publish Article');">Publish</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="articlesButton" value="Articles..." iconClass="articlesIcon" onClick="goTo('/admin/articles/');">Articles...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,171 @@
+@CHARSET "ISO-8859-1";
+
+/* Common Icons */
+
+.searchIcon {
+	background-image: url('magnifier.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.upIcon {
+	background-image: url('arrow_up.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.saveIcon {
+	background-image: url('disk.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deleteIcon {
+	background-image: url('delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.continueIcon {
+	background-image: url('arrow_right.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.cancelIcon {
+	background-image: url('cross.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.previewIcon {
+	background-image: url('page_white_magnify.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.publishIcon {
+	background-image: url('page_white_go.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.downloadIcon {
+	background-image: url('arrow_down.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.viewIcon {
+	background-image: url('magnifier.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.settingsIcon {
+	background-image: url('cog.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.backIcon {
+	background-image: url('arrow_left.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.opencategoryIcon {
+	background-image: url('folder_explore.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newcategoryIcon {
+	background-image: url('folder_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.editcategoryIcon {
+	background-image: url('folder_edit.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletecategoryIcon {
+	background-image: url('folder_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.propertiescategoryIcon {
+	background-image: url('folder_wrench.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.editIcon {
+	background-image: url('pencil.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.commentsIcon {
+	background-image: url('comments.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newtagIcon {
+	background-image: url('tag_blue_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newattachmentIcon {
+	background-image: url('plugin_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

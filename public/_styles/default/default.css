@@ -1,0 +1,1081 @@
+@CHARSET "ISO-8859-1";
+
+/*********************/
+/* CMS - Default CSS */
+/*********************/
+
+/* Body */ 
+ 
+body {
+	background: #EEEEEE;
+	margin: 10px;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #333333;
+	height: 100%;
+}
+
+html {
+	height: 100%;
+	background: #EEEEEE;
+}
+
+body a:link, body a:visited {
+	color: #4885D7;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/* Layout */ 
+
+.tWrap {
+	width: 960px;
+	position: relative;
+	margin: 0 auto;
+	margin-top: 25px;
+}
+
+.tBox {
+	padding: 10px;
+	background: #FFF;
+	border: 1px solid #999;
+	clear: both;
+}
+
+/* User Strip */
+
+.tUser {
+	position: absolute;
+	top: -31px;
+	right: 20px;
+	background: #FFF;
+	border: 1px solid #999;
+	border-bottom: none;
+	height: 16px;
+	padding: 10px;
+	padding-top: 4px;
+	padding-bottom: 0px;
+}
+
+/* Header */
+
+.hWrap {
+	height: 90px;
+	background: #D4E3FB;
+	position: relative;
+}
+
+.hLogo {
+	float: left;
+	margin: 20px;
+	margin-top: 5px;
+}
+
+.hBanner {
+	float: right;
+	margin: 10px;
+}
+
+.hBanner img {
+	border: 0px;
+}
+
+/* Social Links */
+
+.tSocial {
+	position:absolute;
+	top: 105px;
+	right: 18px;
+}
+
+.tSocial a {
+	margin-left: 3px;
+}
+
+/* Menu */
+
+.mWrap {
+	height: 30px;
+	background: #72A0E0;
+	border-bottom: 3px solid #4885D7;
+}
+
+/* Styles for the entire menu */
+.mMenu {
+    position: relative;
+    height: 31px;
+    padding: 0px; 
+    margin: 0px;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+/* Force the list to flow horizontally */
+.mMenu li {
+	float: left;
+    list-style: none;
+}
+
+/* Styles for each menu-item. */
+.mMenu li a {
+	position: relative; 
+	overflow: hidden;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: normal;
+    color: #fff; 
+    text-align: center;
+    top: 5px; 
+    z-index: 10; 
+    letter-spacing: 0;
+    float: left; 
+    display: block;
+    margin: 0px;
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 4px;
+}
+
+/* Styles for each menu-item. */
+.mMenu li a:link, .mMenu li a:visited {
+    color: #fff;
+}
+
+/* Styles for each menu-item. */
+.mMenu li a:hover, .mMenu li a:active {
+    color: #333;
+    background: #D4E3FB;
+}
+
+/* Represents the background of the highlighted menu-item. */
+.mMenu li a.active {
+	color: #fff;
+    background: #4885D7;
+}
+
+/* Content */
+
+/* Content */
+
+.cWrap {
+	padding: 10px;
+	padding-bottom: 0px;
+	background: #DDDDDD;
+	border-bottom: 3px solid #4885D7;
+}
+
+/* Footer */
+
+.fWrap {
+	background: #D4E3FB;
+	border-top: 10px solid #72A0E0;
+	padding-bottom: 10px;
+}
+
+.fWrap a {
+	color: #FFF !important;
+	text-decoration: none !important;
+	font-weight: normal !important;
+}
+
+.fWrap p {
+	color: #333;
+	padding: 15px;
+	padding-bottom: 10px;
+	margin: 0px;
+	font-size: 10px;
+}
+
+.fLink {
+	padding: 0px !important;
+	padding-bottom: 5px !important;
+	padding-left: 20px !important;
+}
+
+/* Content Columns */
+
+.cLWrap {
+	float: left;
+	width: 608px;
+}
+
+.cRWrap {
+	float: right;
+	width: 300px;
+}
+
+/* Div Backgrounds */
+
+.yBG {
+	background: #FFFFDD !important;
+}
+
+/* Article Boxes */
+
+.aBox {
+	border: 1px solid #999;
+	background: #FFF;
+	padding: 10px;
+	color: #666;
+}
+
+.aBox.nopad {
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+}
+
+.aBox.toppad {
+	padding-top: 10px !important;
+	padding-bottom: 5px !important;
+}
+
+.aBox.botpad {
+	padding-top: 5px !important;
+	padding-bottom: 10px !important;
+}
+
+.aBox h2, .aBox h2 a, .aBox h3, .aBox h3 a, .aBox h4, .aBox h4 a {
+	color: #333;
+}
+
+.aBox h5 {
+	font-size: 12px;
+	color: #999;
+	font-weight: normal;
+	padding: 0px;
+	padding-bottom: 5px;
+	margin: 0px;
+}
+
+.aBox.toppad h5 {
+	padding-bottom: 0px !important;
+}
+
+.aBox.error {
+	min-height: 260px;
+}
+
+.aBox.success {
+	min-height: 230px;
+	padding-right: 280px;
+}
+
+.aBox.soft {
+	border: 1px solid #DDD !important;
+}
+
+.aThumb {
+	float: left;
+	border: 1px solid #CCC;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.aThumb.list {
+	margin-top: 7px;
+	margin-bottom: 0px;
+}
+
+.aMore {
+	padding: 10px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	line-height: 25px;
+	clear: both;
+}
+
+.aMore a {
+	margin-right: 10px;
+	white-space:nowrap;
+}
+
+.aFoot {
+	padding-top: 10px;
+	clear: both;
+}
+
+.aFoot.list {
+	clear: both;
+}
+
+.aFootL {
+	float: left;
+	width: 65px;
+	height: 51px;
+	margin-right: 10px;
+	line-height: 40px;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	vertical-align: middle;
+	background: url(images/comments_bg.png) no-repeat top left;
+}
+
+.aFootL a {
+}
+
+.aFootR {
+	margin-bottom: 5px;
+	float: right;
+	width: 510px;
+}
+
+.aFootR span {
+	padding-right: 20px;
+}
+
+.aComFoot {
+	padding-top: 10px;
+	text-align: right;
+	font-size: 10px;
+	color: #999;
+}
+
+/* Copy Styles */
+
+.aCopy h3 {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}	
+
+/* Right Boxes */
+
+.rBox {
+	border: 1px solid #999;
+	background: #FFF;
+	padding: 10px;
+	color: #666;
+}
+
+.rBox h3 {
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 10px;
+	font-size: 20px;
+	font-weight: bold;
+	color: #222;
+}
+
+.rBox h3 a {
+	color: #222;
+}
+
+.rBox h4 {
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 5px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #222;
+}
+
+.rBox p {
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 10px;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 140%;
+}
+
+.rMore {
+	padding: 10px;
+	padding-bottom: 0px;
+	padding-right: 10px;
+	padding-top: 0px;
+	text-align: right;
+	line-height: 20px;
+}
+
+.rMore a {
+	margin-left: 10px;
+}
+
+/* List Boxes */
+
+.lBox {
+	padding-left: 3px;
+	padding-bottom: 2px;
+	margin-bottom: 5px;
+}
+
+.lBox a {
+	display: block;
+	padding: 2px;
+	color: #333 !important;
+}
+
+.lBox small {
+	font-size: 10px;
+	color: #999;
+	padding: 2px;
+	display: block;
+}
+
+.lBox img {
+	float: left;
+	margin-top: 2px;
+	margin-right: 5px;
+	border: 1px solid #CCC;
+}
+
+.lBoxOff {
+	border-left: 10px solid #EEE;
+}
+
+.lBoxOn {
+	border-left: 10px solid #D4E3FB;
+	background: #EEE;
+	cursor: pointer;
+}
+
+/* Right Banners */
+
+.rBanner {
+	border: 1px solid #ED1E24;
+	background: #111111;
+}
+
+/* Pagination Controls */
+
+.aNav {
+	padding: 10px;
+	padding-top: 7px;
+	padding-bottom: 5px;
+	border: 1px solid #999;
+	background: #FFF;
+	line-height: 20px;
+	height: 26px;
+	overflow: hidden;
+}
+
+.nButWrapL {
+	float: left;
+	padding: 3px;
+	padding-left: 0px;
+	line-height: 20px;
+}
+
+.nButWrapR {
+	float: right;
+}
+
+.nButWrapR a {
+	border: 1px solid #BBBBBB;
+	padding: 1px;
+	padding-left: 7px;
+	padding-right: 7px;
+	line-height: 20px;
+	text-align: center;
+	text-decoration: none;
+	margin-right: 5px;
+	display: block;
+	float: left;
+}
+
+.nButWrapR a:link, .nButWrapR a:visited { 
+	background: #EEEEEE;
+	color: #666666;
+	}
+.nButWrapR a:hover, .nButWrapR a:active { 
+	background: #F9F9F9;
+	color: #666666;
+	}
+
+.nButA {
+	background: #F9F9F9;
+	color: #666666;
+	font-weight: bold;
+	border: 1px solid #BBBBBB;
+	padding: 1px;
+	padding-left: 7px;
+	padding-right: 7px;
+	line-height: 20px;
+	text-align: center;
+	text-decoration: none;
+	margin-right: 5px;
+	display: block;
+	float: left;
+	cursor: default;
+}
+
+.nButN {
+	background: #EEEEEE;
+	color: #BBBBBB;
+	border: 1px solid #BBBBBB;
+	padding: 1px;
+	padding-left: 7px;
+	padding-right: 7px;
+	line-height: 20px;
+	text-align: center;
+	text-decoration: none;
+	margin-right: 5px;
+	display: block;
+	float: left;
+	cursor: default;
+}
+
+/* Cheeky Cheats */
+
+.ClearAll {
+	clear: both !important;
+	height: 0px !important;
+	font-size: 0px !important;
+	line-height: 0px !important;
+	padding: 0px !important;
+	margin: 0px !important;
+	float: none !important;
+}
+
+.Spacer {
+	height: 10px;
+	font-size: 0px;
+	line-height: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.tagHead {
+	float: left;
+	clear: both;
+	font-weight: bold;
+	margin-right: 5px;
+	line-height: 25px;
+}
+
+.tagList {
+	float: left;
+	margin-right: 10px;
+	line-height: 25px;
+}
+
+.headList {
+	float: left;
+	margin-right: 10px;
+}
+
+.tabBGroup {
+	height: 22px;
+	position: relative;
+	top: -1px;
+}
+
+.BTab {
+	border: 1px solid #999;
+	margin-left: 7px;
+	padding-left: 7px;
+	padding-right: 7px;
+	height: 22px;
+	line-height: 22px;
+	float: left;
+}
+
+a.BTab:link, a.BTab:visited {
+	background: #EEE;
+	font-weight: normal;
+	color: #333;
+}
+
+a.BTab:hover, a.BTab:active {
+	background: #F6F6F6;
+	font-weight: normal;
+	color: #333;
+}	
+
+.BTab.active {
+	border-top: none;
+	background: #FFF;
+	padding-top: 1px;
+	font-weight: normal;
+}
+
+/* Content Form */
+
+.cForm {
+	margin: 0px;
+	padding: 0px;
+	padding-top: 10px;
+}
+
+.cForm input {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	/*color: #444444;*/
+	margin: 0px !important;
+}
+
+/*.cForm button {
+	margin: 0px !important;
+}*/
+
+.cForm textarea {
+	margin: 0px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	/*color: #444444;*/
+}
+
+.cForm label {
+	margin: 0px;
+	line-height: 20px;
+}
+
+.cFormInput {
+	/*background: #FFFFCC;*/
+	/*border: 1px solid #FFCC66;*/
+	padding: 3px;
+	margin: 0px;
+}
+
+.cFormInputN {
+	/*background: #EEEEEE;*/
+	/*border: 1px solid #CCCCCC;*/
+	padding: 3px;
+	margin: 0px;
+}
+
+.cFormSelect {
+	/*background: #FFFFCC;*/
+	/*border: 1px solid #FFCC66;*/
+	/*color: #666666;*/
+	margin: 0px;
+	padding: 1px;
+}
+
+.cFormLabelI {
+	padding-left: 3px;
+	padding-right: 7px;
+}
+
+.cFormLabelF {
+	padding: 3px;
+	padding-right: 7px;
+	padding-bottom: 4px;
+	width: 210px;
+	display: block;
+	float: left;
+}
+
+.cFormItm {
+	clear: both;
+	padding-bottom: 5px;
+}
+
+.cFormItmS {
+	clear: both;
+	padding-bottom: 5px;
+	padding-top: 8px;
+}
+
+.cFormItmH {
+	float: left;
+	padding-bottom: 5px;
+	margin-right: 10px;
+}
+
+.cFormButH {
+	float: left;
+	padding-bottom: 5px;
+	padding-top: 17px;
+	margin-right: 10px;
+}
+
+.cFormItmR {
+	float: right;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 10px;
+}
+
+.cFormHlp {
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.cFormButtonS {
+	margin-right: 10px;
+}
+
+.cFieldset {
+	background: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	padding: 10px;
+	padding-top: 0px;
+	margin: 0px;
+	margin-bottom: 10px;
+}
+
+.cFLegend {
+	background: #4885D7;
+	color: #FFF;
+	line-height: 16px;
+	border: 1px solid #4885D7;
+	font-weight: bold;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+	margin-bottom: 5px;
+}
+
+.cFormKeyW {
+	width: 280px;
+	height: 206px;
+	overflow: auto;
+	border: 1px solid #CCCCCC;
+	margin-top: 3px;
+}
+
+.cFormKey {
+	width: 270px;
+	padding: 3px;
+}
+
+/* Contact Table */
+
+.conInfoTab {
+	border-collapse:separate;
+	border-spacing: 0px;
+	border: none;
+	padding: 0px;
+}
+
+.conInfoTab th, .conInfoTab td {
+	padding: 0px;
+	vertical-align: top;
+}
+
+.conInfoTab th {
+	width: 16px;
+	padding-right: 6px;
+	padding: 2px;
+}
+
+.conInfoTab td {
+	padding: 6px;
+	padding-top: 3px;
+}
+
+/* Map Hacks */
+#map .infoBox {
+	background: #FFF;
+	color: #666;
+	border: 1px solid #666;
+	border-top: none;
+	padding: 7px;
+	margin-top: 8px;
+}
+
+#map .fullBox {
+	background: #EEE;
+	color: #666;
+	border: 1px solid #666;
+	padding: 7px;
+	margin-top: 8px;
+}
+
+/* Faux Buttons */
+
+.fauxBut a:link, .fauxBut a:visited {
+	display: block;
+	background: #72A0E0;
+	color: #FFF;
+	line-height: 25px;
+	text-align: center;
+}
+
+.fauxBut a:hover, .fauxBut a:active {
+	display: block;
+	background: #4885D7;
+	color: #FFF;
+	line-height: 25px;
+	text-align: center;
+}
+
+/* Right Banners */
+
+.aMap {
+	border: 1px solid #999 !important;
+	background: #EEE;
+}
+
+.aMap h6 {
+	color: #666;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 10px;
+}
+
+
+#map a {
+	font-weight: normal;
+	text-decoration: underline;
+}
+
+.map_event {
+	padding-top: 5px;
+}
+
+.map_event a, .aMore a {
+	font-weight: bold !important;
+	text-decoration: none !important;
+}
+
+/* Calendar */
+
+.calendar {
+	width: 100%;
+}
+
+.calendar th {
+	background: #72A0E0;
+	font-size: 12px;
+	color: #FFF;
+}
+
+.calendar td {
+	height: 25px;
+	text-align: center;
+	background: #FFF;
+	font-size: 14px;
+	border: 1px solid #CCC;
+	width: 14%;
+}
+
+.calendar-empty {
+	background: #EEE !important;
+}
+
+.calendar-event {
+	background: #FFFFCC !important;
+}
+
+.calendar-today {
+	border: 1px solid #4885D7 !important;
+}
+
+/* Resources */
+
+.gWrap {
+	padding-right: 0px !important;
+	padding-bottom: 5px !important;
+}
+
+.gBox {
+	background: #FFFFFF;
+	padding: 5px;
+	margin-right: 4px;
+	margin-bottom: 5px;
+	width: 280px;
+	height: 94px;
+	float: left;
+	overflow: hidden;
+}
+
+.gBox h3 {
+	margin: 0px;
+	margin-bottom: 3px;
+	padding: 0px;
+	border-bottom: none !important;
+	clear: none !important;
+}
+
+.gBox h3 a {
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.gBox p {
+	margin: 0px !important;
+	padding: 0px !important;
+	padding-top: 3px !important;
+	font-size: 12px !important;
+}
+
+.gBox img {
+	float: left;
+	margin-right: 10px;
+	border: 1px solid #CCC;
+}
+
+.gBox.over {
+	background: #EEE;
+	padding: 5px;
+	margin-right: 4px;
+	margin-bottom: 5px;
+	width: 280px;
+	height: 94px;
+	float: left;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.gBox.over h3 {
+	margin: 0px;
+	margin-bottom: 3px;
+	padding: 0px;
+	font-weight: bold;
+	color: #333;
+}
+
+.gBox.over h3 a {
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.gBox.over p {
+	margin: 0px !important;
+	padding: 0px !important;
+	padding-top: 3px !important;
+	font-size: 12px !important;
+	color: #666 !important;
+}
+
+.gBox.over img {
+	float: left;
+	margin-right: 10px;
+	border: 1px solid #D4E3FB;
+}
+
+/* Markup indicators for forms */
+
+.reMarkup {
+	color: #999999;
+	font-size: 11px;
+	padding-top: 4px;
+}
+
+.cFormErr {
+	padding-top: 3px;
+	color: #990000;
+	font-weight: bold;
+}
+
+.cUpd {
+	background: #FFFFCC url(../admin/icons/information.gif) 5px 5px no-repeat;
+	padding: 5px;
+	padding-top: 6px;
+	padding-left: 25px;
+	clear: both;
+}
+
+.cErr {
+	background: #FFCCCC url(../admin/icons/exclamation.gif) 5px 5px no-repeat;
+	padding: 5px;
+	padding-top: 6px;
+	padding-left: 25px;
+	margin-bottom: 5px;
+	clear: both;
+}
+
+.cInfo {
+	background: #FFFFFF url(../admin/icons/information.gif) 5px 5px no-repeat;
+	padding: 5px;
+	padding-top: 6px;
+	padding-left: 25px;
+	clear: both;
+}
+
+.aUpd {
+	background: #FFFFCC url(../admin/icons/information.gif) 4px 4px no-repeat;
+	padding: 4px;
+	padding-top: 5px;
+	padding-left: 23px;
+}
+
+.aErr {
+	background: #FFCCCC url(../admin/icons/exclamation.gif) 4px 4px no-repeat;
+	padding: 4px;
+	padding-top: 5px;
+	padding-left: 23px;
+}
+
+.aInfo {
+	background: #CCFFCC url(../admin/icons/information.gif) 4px 4px no-repeat;
+	padding: 4px;
+	padding-top: 5px;
+	padding-left: 23px;
+}
+
+/* Rotators */
+
+.rContent {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	background-color:#EEE;
+  	filter:alpha(opacity=70);
+  	opacity:0.7;
+  	padding-top: 10px;
+  	padding-bottom: 10px;
+}
+	
+.rotatorPane {
+	background: no-repeat center center;
+	cursor: pointer;
+}
+	
+.rContent h2, .rContent p {
+	color: #000;
+	padding: 0px;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 0px;
+}
+	
+.rContent h2 {
+	font-size: 16px;
+	font-weight: bold;
+}
+	
+.rContent p {
+	padding-top: 4px;
+}
+
+/* Twitter */
+
+.tweetPane {
+	position: relative;
+	height: 85px;
+}
+
+.tweetPane h5 {
+	position: absolute; 
+	bottom: 3px; 
+	left: 0px; 
+	width: 200px; 
+	margin: 0px; 
+	padding: 0px;
+	font-weight: normal !important;
+}
+
+/* Styles for each menu-item. */
+.tweetPane h5 a:link, .tweetPane h5 a:visited {
+    color: #CCC;
+    font-weight: normal !important;
+}
+
+/* Styles for each menu-item. */
+.tweetPane h5 a:hover, .tweetPane h5i a:active {
+    color: #CCC;
+    font-weight: normal !important;
+}
+
+.addthis_button_tweet {
+	position: relative;
+	top: 6px !important;
+}
+
+.addthis_button_facebook_like {
+	position: relative;
+	top: 11px !important;
+	color: #FFF !important;
+}
+.addthis_button_compact .at15t_compact {
+    float: left;
+    color: #FFF !important;
+}   

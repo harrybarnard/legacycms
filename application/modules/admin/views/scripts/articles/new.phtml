@@ -1,0 +1,55 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="newarticleForm" jsId="newarticleForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+		<label for="venuetitle"><strong>Title</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+        	name="articletitle" 
+        	type="text" 
+        	promptMessage="Input a title"
+        	invalidMessage="Invalid title"
+        	class="cFormInput" 
+        	id="articletitle" 
+        	value="<?php echo $this->articletitle; ?>" 
+        	size="55" 
+        	style="width: 300px;"/>
+	</div>
+	<div class="cFormItmH">
+		<label for="url"><strong>Category</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="articlecategory"
+        	id="articlecategory"
+        	required="true"
+        	autocomplete="false"
+        	value="<?php echo $this->articlecategory; ?>"
+        	style="width: 300px;">
+    		<?php $this->acatselect(); ?>
+    	</select>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newarticlesubmitButton" 
+			value="Create" 
+			iconClass="newarticleIcon" 
+			onClick="doDialog('/admin/articles/new/','newarticleForm','New Article');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newarticlecancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

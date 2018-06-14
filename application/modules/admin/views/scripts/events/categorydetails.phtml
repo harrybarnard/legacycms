@@ -1,0 +1,39 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="60%" valign="top">
+
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Status: <?php echo ucwords($this->categoryArray['ecat_status']); ?></span>
+			</fieldset>
+
+		</td>
+		<td width="40%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/events/categorysave/id/<?php echo $this->categoryArray['ecat_id']; ?>/','editForm','Save Category','1');">Save</button> 
+					<?php if ($this->categoryArray['ecat_id'] != "1" & $this->acl->isAllowed($this->user->user_role, 'ecategorydelete')): ?>
+					<button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deletecategoryIcon" onClick="getDialog('/admin/events/categorydelete/id/<?php echo $this->categoryArray['ecat_id']; ?>/','Delete Category');">Delete</button>
+		            <?php endif; ?>
+					<?php if ($this->categoryArray['ecat_status'] != 'published' & $this->acl->isAllowed($this->user->user_role, 'ecategorypublish')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="publishButton" value="Publish" iconClass="publishIcon" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/events/categorypublish/id/<?php echo $this->categoryArray['ecat_id']; ?>/','Publish Category');">Publish</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="eventsButton" value="Events" iconClass="eventIcon" onClick="goTo('/admin/events/');">Events...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>	

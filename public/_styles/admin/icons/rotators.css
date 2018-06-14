@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+/* Rotators Icons */
+
+.rotatorsIcon {
+	background-image: url('images.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newslideIcon {
+	background-image: url('image_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deleteslideIcon {
+	background-image: url('image_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

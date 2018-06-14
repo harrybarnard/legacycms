@@ -1,0 +1,185 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dojox.layout.RotatorContainer");
+dojo.require("dijit.layout.ContentPane");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Account Settings | Profile');
+$this->placeholder('title')->set('Login');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="cLWrap">
+
+	<div class="aBox copy nopad">
+		<h2>Account Settings: Profile</h2>
+	</div>
+	<div class="tabBGroup">
+		<span class="BTab active">Profile</span>
+		<a href="<?php echo $this->baseUrl();?>/settings/password/" class="BTab">Password</a>
+		<a href="<?php echo $this->baseUrl();?>/settings/subscriptions/" class="BTab">Subscriptions</a>
+	</div>
+        
+	<p class="Spacer"></p>
+	
+	<?php if ($this->posted != 'N') : ?>
+	<?php echo $this->partial('_partials/info.phtml', array('message' => 'Profile Updated', 'box' => 'Y')); ?>
+	<?php endif; ?>		
+	
+	<?php echo $this->RenderMessages($this->messages); ?>
+	
+	<div class="aBox nopad">
+		
+		<form dojoType="dijit.form.Form" id="profileForm" jsId="profileForm" encType="multipart/form-data" action="<?php echo $this->baseUrl();?>/settings/" method="POST" class="cForm">
+    	
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Identity</legend>
+    		
+        		<div class="cFormItm">
+    				<label><strong>Alias</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="alias" 
+        				value="<?php echo $this->escape($this->userArray['user_alias']); ?>" 
+        				readonly="readonly"
+        				style="width: 220px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">This is your public identity</div>
+        		</div>
+        		
+        		<div class="cFormItmH">
+    				<label><strong>First Name</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="first" 
+        				value="<?php echo $this->escape($this->userArray['upro_first']); ?>" 
+        				style="width: 220px;"
+        				readonly="readonly"
+        				class="cFormInput"/>
+        			<div class="reMarkup">(Private by default)</div>
+        		</div>
+        		
+        		<div class="cFormItmH">
+    				<label><strong>Last Name</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="last" 
+        				value="<?php echo $this->escape($this->userArray['upro_last']); ?>" 
+        				style="width: 220px;"
+        				readonly="readonly"
+        				class="cFormInput"/>
+        			<div class="reMarkup">(Private by default)</div>
+        		</div>
+        		
+        	</fieldset>
+        	
+        	<fieldset class="cFieldset">
+    			<legend class="cFLegend">Contact Details</legend>
+    		
+    			<div class="cFormItm">
+    				<label><strong>E-mail address</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="email" 
+        				value="<?php echo $this->escape($this->userArray['user_email']); ?>" 
+        				regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b" 
+        				trim="true"
+        				required="true" 
+        				readonly="readonly"
+        				promptMessage="Your e-mail address" 
+        				invalidMessage="Invalid e-mail address"
+        				style="width: 340px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">This is used to sign in to your account and receive notifications</div>
+        		</div>
+        		
+        	</fieldset>
+        	
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Location</legend>
+    			
+    			<div class="cFormItmH">
+    				<label for="country"><strong>Country</strong></label><br />
+    				<select dojoType="dijit.form.FilteringSelect"
+        				name="country"
+        				id="country"
+        				required="true"
+        				autocomplete="true"
+        				style="width: 200px;"
+        				class="cFormSelect"
+        				value="<?php if(isset($this->country)) : echo $this->escape($this->country); else: echo 'GB'; endif; ?>"
+        				onchange="countryCheck(this.value);">
+        				<option value="GB">United Kingdom</option>
+        				<option value="#">-----------------------</option>
+    		        	<?php $this->countriesOptions(); ?>
+    				</select>
+    			</div>
+    			
+    			<div class="cFormItmH">
+        			<label for="postcode"><strong>City</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="city" 
+        				id="city"
+        				value="<?php echo $this->escape($this->city);?>"
+        				promptMessage="Enter your city"
+        				invalidMessage="Invalid city"
+        				style="width: 250px;"
+        				class="cFormInput"/>
+        			<div class="reMarkup">(Optional)</div>
+        		</div>
+    		</fieldset>
+    		
+    		<fieldset class="cFieldset">
+        		<legend class="cFLegend">Mail Options</legend>
+        		
+           		<div class="cFormItm">
+           			<label><strong>Preferred Mail Format</strong></label><br />
+           			<label for="format1"><input dojoType="dijit.form.RadioButton" 
+           				id="format1" name="format"
+           				<?php if ($this->format == 'text') : ?>checked="checked" <?php endif;?>value="text" 
+           				type="radio" /> Text Only</label>&nbsp&nbsp
+    				<label for="format2"><input dojoType="dijit.form.RadioButton" 
+           				id="format2" name="format"
+           				<?php if ($this->format == 'html') : ?>checked="checked" <?php endif;?>value="html"
+           				type="radio" /> HTML</label>
+           		</div>
+
+        	</fieldset>
+    		
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Save">Save</button>
+    		</div>
+    	
+    	</form>
+	
+	</div>
+	
+	<p class="Spacer"></p>
+
+</div>
+
+<div class="cRWrap">
+				    
+	<?php echo $this->partial('_partials/searchbox.phtml'); ?>
+	
+	<?php $this->RenderRotator('SideBar'); ?>
+				    	
+</div>
+				    
+<p class="ClearAll"></p>
+				

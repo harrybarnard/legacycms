@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+/* Articles Icons */
+
+.articlesIcon {
+	background-image: url('page_copy.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newarticleIcon {
+	background-image: url('page_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletearticleIcon {
+	background-image: url('page_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

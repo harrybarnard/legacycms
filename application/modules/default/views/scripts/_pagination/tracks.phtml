@@ -1,0 +1,33 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+if ($this->pageCount): ?>
+
+<div class="aNav">
+
+<div class="nButWrapL">Page <?php echo $this->current; ?> of <?php echo $this->last; ?></div>
+
+<div class="nButWrapR"><!-- Previous page link -->
+<?php if (isset($this->previous)): ?>
+<a href="#" onclick="commentsGo('<?php echo $this->url(array('page' => $this->previous,'thisstart' => $this->prevstart)); ?>'); return false;">Previous</a>
+<?php else: ?>
+<span class="nButN">Previous</span>
+<?php endif; ?>
+
+<!-- Next page link -->
+<?php if (isset($this->next)): ?>
+<a href="#" onclick="commentsGo('<?php echo $this->url(array('page' => $this->next,'thisstart' => $this->nextstart,'prevstart' => $this->starttrack)); ?>'); return false;">Next</a>
+<?php else: ?>
+<span class="nButN">Next</span>
+<?php endif; ?>
+
+</div>
+
+<p class="ClearAll"></p>
+</div>
+
+<?php endif; ?>

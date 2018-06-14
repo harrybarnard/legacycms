@@ -1,0 +1,178 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.SimpleTextarea");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Contact');
+$this->placeholder('title')->set('Contact');
+$this->placeholder('section')->set('contact');
+
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile('http://www.google.com/jsapi','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/contact.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="cLWrap">
+
+	<div class="aBox copy nopad">
+		<h2>Contact Us</h2>
+	</div>
+	
+	<p class="Spacer"></p>
+	
+	<?php echo $this->RenderMessages($this->messages); ?>
+	
+	<?php if($this->posted == 'Y') : ?>
+	<div class="aBox copy cInfo">Your message has been sent.</div>
+	<p class="Spacer"></p>
+	<?php endif; ?>
+	
+	<div class="aBox copy botpad">
+	
+		<h3>Send an E-mail</h3>
+		
+        <form dojoType="dijit.form.Form" id="contactForm" jsId="contactForm" encType="multipart/form-data" action="<?php echo $this->baseUrl();?>/contact/" method="POST" class="cForm">
+    	
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Your Details</legend>
+    		
+        		<div class="cFormItmH">
+    				<label><strong>Name</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="name" 
+        				value="<?php echo $this->escape($this->name) ?>" 
+        				regExp=".{3}.*" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Enter your name" 
+        				invalidMessage="Invalid name"
+        				style="width: 220px;"
+        				class="cFormInput"/>
+        		</div>
+        		
+        		<div class="cFormItmH">
+    				<label><strong>E-mail address</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="email" 
+        				value="<?php echo $this->escape($this->email) ?>" 
+        				regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Enter your e-mail address" 
+        				invalidMessage="Invalid e-mail address"
+        				style="width: 306px;"
+        				class="cFormInput"/>
+        		</div>
+        		
+        	</fieldset>
+        	
+    		<fieldset class="cFieldset">
+    			<legend class="cFLegend">Message</legend>
+    			
+    			<div class="cFormItm">
+    				<label><strong>Subject</strong></label><br />
+    				<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="subject" 
+        				value="<?php echo $this->escape($this->subject) ?>" 
+        				trim="true"
+        				required="true" 
+        				promptMessage="Enter a subject" 
+        				style="width: 556px;"
+        				class="cFormInput"/>
+        		</div>
+        		
+        		<div class="cFormItm">
+        			<label><strong>Message</strong></label><br />
+        			<textarea dojoType="dijit.form.SimpleTextarea" name="message" style="width:556px;"><?php echo $this->message; ?></textarea>
+				</div>
+        		
+    		</fieldset>
+    		
+    		<fieldset class="cFieldset">
+        		<legend class="cFLegend">Verification</legend>
+        	
+        	    <div class="cFormItmH" style="padding-top: 5px;">
+    		        <?php echo $this->captcha->render(new Zend_View());?>
+    		    </div>
+    		    
+    		    <div class="cFormItmH">
+    		    	<label for="captcha[input]"><strong>Verification Code</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox" 
+        				type="text" 
+        				name="captcha[input]"
+        				id="captcha"
+        				required="true"
+        				promptMessage="Enter verification code"
+        				style="width: 100px;"
+        				class="cFormInput" />  
+					<input type="hidden" name="captcha[id]" value="<?php echo $this->id; ?>" />
+					<div class="reMarkup">Enter the code on the left</div>
+				</div>
+				
+				<p class="ClearAll"></p>
+				
+			</fieldset>
+    		
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Send Message">Send Message</button>
+    		</div>
+    	
+    	</form>
+	
+	</div>
+	
+	<p class="Spacer"></p>
+				        
+</div>
+
+<div class="cRWrap">
+
+	<?php echo $this->partial('_partials/searchbox.phtml'); ?>
+				    	
+	<div class="aMap" id="map" style="height: 260px;">
+		<h6>This map requires JavaScript. Your browser either does not support JavaScript, or you have JavaScript turned off.</h6>
+	</div>
+				    	
+	<p class="Spacer"></p>
+				    	
+	<div class="rBox">
+		
+		<table class="conInfoTab" border="0" cellspacing="0">
+			<tr>
+				<th><img src="<?php echo $this->baseUrl();?>/_styles/admin/icons/email.gif" width="16" height="16" /></th>
+				<td>Awesome Website<br />
+					1234 Some Street<br />
+					Busytown<br />
+					United Kingdom</td>
+			</tr>
+			<tr>
+				<th><img src="<?php echo $this->baseUrl();?>/_styles/admin/icons/phone.gif" width="16" height="16" /></th>
+				<td>01234 123456</td>
+			</tr>
+			<tr>
+				<th><img src="<?php echo $this->baseUrl();?>/_styles/admin/icons/mouse.gif" width="16" height="16" /></th>
+				<td><a href="mailto:info@ecpuk.org">info@ecpuk.org</a></td>
+			</tr>
+		</table>
+				    		
+	</div>
+				    	
+	<p class="Spacer"></p>
+				    	
+</div>
+				    
+<p class="ClearAll"></p>

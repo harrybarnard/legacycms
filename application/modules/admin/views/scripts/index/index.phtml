@@ -1,0 +1,75 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css')
+                 ->appendStylesheet('/_styles/admin/icons.css')
+                 ->appendStylesheet('/_styles/admin/adminDij/adminDij.css')
+                 ->appendStylesheet('/_styles/admin/files.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Dashboard' );
+$this->placeholder ( 'title' )->set ( 'Dashboard' );
+$this->placeholder('section')->set('index');
+?>
+<div>
+<?php if($this->acl->isAllowed($this->user->user_role, 'aarticles')) : ?>
+<div class="dashItem">
+	<h3 class="articlesIcon"><a href="/admin/articles/">Articles</a></h3>
+	<a href="/admin/articles/">Articles</a>
+	<div class="dashDetails"><?php echo $this->aStats(); ?></div>
+</div>
+<?php endif; ?>
+<?php if($this->acl->isAllowed($this->user->user_role, 'gcomments')) : ?>
+<div class="dashItem">
+	<h3 class="commentsIcon"><a href="/admin/comments/">Comments</a></h3>
+	<a href="/admin/comments/">Comments</a>
+	<div class="dashDetails"><?php echo $this->cStats(); ?></div>
+</div>
+<?php endif; ?>
+<?php if($this->acl->isAllowed($this->user->user_role, 'eevents')) : ?>
+<div class="dashItem">
+	<h3 class="eventIcon"><a href="/admin/events/">Events</a></h3>
+	<a href="/admin/events/">Events</a><?php if($this->acl->isAllowed($this->user->user_role, 'evenues')) : ?> | <a href="/admin/events/venues/">Venues</a><?php endif; ?>
+	<div class="dashDetails"><?php echo $this->eStats(); ?></div>
+</div>
+<?php endif; ?>
+<?php if($this->acl->isAllowed($this->user->user_role, 'mmail')) : ?>
+<div class="dashItem">
+	<h3 class="mailIcon"><a href="/admin/mail/">Mail</a></h3>
+	<a href="/admin/mail/">Mail</a>
+	<div class="dashDetails"><?php echo $this->mStats(); ?></div>
+</div>
+<?php endif; ?>
+<?php if($this->acl->isAllowed($this->user->user_role, 'ppages')) : ?>
+<div class="dashItem">
+	<h3 class="pagesIcon"><a href="/admin/pages/">Pages</a></h3>
+	<a href="/admin/pages/">Pages</a>
+	<div class="dashDetails"><?php echo $this->pStats(); ?></div>
+</div>
+<?php endif; ?>
+<?php if($this->acl->isAllowed($this->user->user_role, 'rotrotators')) : ?>
+<div class="dashItem">
+	<h3 class="rotatorsIcon"><a href="/admin/rotators/">Rotators</a></h3>
+	<a href="/admin/rotators/">Rotators</a>
+	<div class="dashDetails"><?php echo $this->rotStats(); ?></div>
+</div>
+<?php endif; ?>
+<?php if($this->acl->isAllowed($this->user->user_role, 'uusers')) : ?>
+<div class="dashItem">
+	<h3 class="usersIcon"><a href="/admin/users/">Users</a></h3>
+	<a href="/admin/users/">Users</a>
+	<div class="dashDetails"><?php echo $this->uStats(); ?></div>
+</div>
+<?php endif; ?>
+<p class="ClearAll"></p>
+
+</div>

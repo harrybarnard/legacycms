@@ -1,0 +1,15 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if(count($this->attachmentArray)) : ?>
+<?php foreach($this->attachmentArray as $attachment) : ?>
+    <span class="tagItm" <?php if($this->status != 'sent') : ?>onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="deleteAttachment(<?php echo $attachment['attach_id']; ?>);" title="Remove Attachment"<?php endif; ?>><?php echo $attachment['asset_name']; ?>.<?php echo $attachment['asset_extension']; ?></span>
+<?php endforeach; ?>
+<?php else : ?>
+	<span class="tagItm">No Attachments!</span>
+<?php endif;?>

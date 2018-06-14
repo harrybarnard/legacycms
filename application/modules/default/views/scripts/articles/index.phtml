@@ -1,0 +1,47 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dojox.layout.RotatorContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Articles');
+$this->placeholder('title')->set('Articles');
+$this->placeholder('section')->set('articles');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css')
+                 ->headLink(array('rel' => 'alternate','type' => 'application/atom+xml','title' => $registry->articles->feedtitle.' (Atom)','href' => $this->baseUrl().'/articles/atom'))
+                 ->headLink(array('rel' => 'alternate','type' => 'application/rss+xml','title' => $registry->articles->feedtitle.' (RSS)','href' => $this->baseUrl().'/articles/rss'));
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+
+	<h2>Articles</h2>
+
+</div>
+
+<p class="Spacer"></p>
+
+<?php if(count($this->articlesArray) > 0) : ?>
+
+<?php echo $this->partialLoop('_partials/articlelist.phtml', $this->articlesArray); ?>
+
+<?php echo $this->paginationControl($this->articlesArray,'Sliding','_pagination/default.phtml'); ?>
+
+<?php else : ?>
+
+<?php echo $this->partial('_partials/info.phtml', array('message' => 'No articles have been posted yet')); ?>
+
+<?php endif; ?>
+
+<p class="Spacer"></p>

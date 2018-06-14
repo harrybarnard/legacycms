@@ -1,0 +1,166 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->eventArray['event_venue'] != 1) :
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");
+
+var vlat = "'.$this->eventArray['venue_latitude'].'";
+var vlng = "'.$this->eventArray['venue_longitude'].'";
+var vtitle = "'.$this->eventArray['venue_title'].'";';
+
+else :
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");';
+
+endif;
+
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Event | '.$this->eventArray['event_title']);
+$this->placeholder('title')->set('Event');
+$this->placeholder('section')->set('events');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/events.js','text/javascript')
+                   ->appendFile('http://www.google.com/jsapi','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/eventsvenue.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+	<h2><?php echo $this->escape($this->eventArray['ecat_title']); ?> - <?php echo $this->eventArray['event_title']; ?><?php if($this->eventArray['venue_id'] != '1') : ?>, <?php echo $this->eventArray['venue_title']; ?>, <?php echo $this->eventArray['venue_city']; ?><?php endif; ?></h2>
+</div>
+
+<p class="Spacer"></p>
+
+<div class="aBox copy">
+
+	<h5><?php echo $this->EDate($this->eventArray['event_date'],$this->eventArray['event_end']); ?></h5>
+	
+    <?php echo $this->eventArray['event_description']; ?>
+    	
+	<div class="aMore">
+		<?php if($this->eventArray['event_comments'] == 'Y') : ?>
+		<a href="<?php echo $this->baseUrl();?>/events/event/<?php echo $this->eventArray['event_id']; ?>/<?php echo urlencode($this->eventArray['event_title']); ?>/#comment">Comment &raquo;</a>
+		<?php endif; ?>
+		<?php if ($this->eventArray['event_url'] != NULL) : ?>
+		<a href="<?php echo $this->eventArray['event_url']; ?>" target="_blank">Event Website &raquo;</a>
+		<?php endif; ?>
+		<?php if ($this->eventArray['event_tickets'] != NULL) : ?>
+		<a href="<?php echo $this->eventArray['event_tickets']; ?>" target="_blank">Buy Tickets &raquo;</a>
+		<?php endif; ?>
+		<!-- AddThis Button -->
+		<a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250">Bookmark &amp; Share &raquo;</a>
+        <a class="addthis_button_tweet" tm:count="horizontal"></a>
+        <a class="addthis_button_facebook_like"></a>
+		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+		<!-- AddThis Button END -->
+	</div>
+	
+	<div class="aFoot">
+		<div class="aFootL">
+			<a href="<?php echo $this->baseUrl();?>/events/event/<?php echo $this->eventArray['event_id']; ?>/<?php echo urlencode($this->eventArray['event_title']); ?>/#comments"><?php $this->CCount($this->eventArray['event_id'],'E'); ?></a>
+		</div>
+		<div class="aFootR">
+			<div class="tagHead">Category:</div><div class="tagList"><a href="<?php echo $this->baseUrl();?>/events/category/<?php echo urlencode($this->eventArray['ecat_title']); ?>/"><?php echo $this->escape($this->eventArray['ecat_title']); ?></a></div>
+		</div>
+		<p class="ClearAll"></p>
+	</div>
+	
+</div>
+
+<?php if($this->eventArray['venue_id'] != 1) : ?>
+
+<p class="Spacer"></p>
+
+<?php if ($this->eventArray['venue_description'] != NULL) : ?>
+<div class="aBox copy nopad">
+    <?php echo $this->eventArray['venue_description']; ?>
+    <p class="ClearAll"></p>
+</div>
+<p class="Spacer"></p>
+<?php endif; ?>
+<div class="aMap" id="map" style="width: 250px; height: 200px; float: left;">
+	<noscript>
+		<p style="padding-left: 10px; padding-right: 10px; color: #CCC;">This map requires JavaScript. Your browser either doesn't support JavaScript or you have it disabled.</p>
+	</noscript>
+</div>
+<div class="aBox" style="width: 325px; height: 180px; float: right;">
+	<table class="conInfoTab" border="0" cellspacing="0">
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/house.gif" width="16" height="16" /></th>
+			<td><strong><?php echo $this->eventArray['venue_title']; ?></strong><br />
+			    <?php echo $this->eventArray['venue_address']; ?><br />
+				<?php echo $this->eventArray['venue_city']; ?><br />
+				<?php echo $this->eventArray['venue_country']; ?>
+		</tr>
+		<?php if($this->eventArray['venue_phone'] != NULL) : ?>
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/phone.gif" width="16" height="16" /></th>
+			<td><?php echo $this->eventArray['venue_phone']; ?></td>
+		</tr>
+		<?php endif; ?>
+		<?php if($this->eventArray['venue_email'] != NULL) : ?>
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/mouse.gif" width="16" height="16" /></th>
+			<td><a href="mailto:<?php echo $this->eventArray['venue_email']; ?>">E-mail <?php echo $this->eventArray['venue_title']; ?></a></td>
+		</tr>
+		<?php endif; ?>
+		<?php if($this->eventArray['venue_url'] != NULL) : ?>
+		<tr>
+			<th><img src="<?php echo $this->baseUrl();?>/_styles/default/icons/link.gif" width="16" height="16" /></th>
+			<td><a href="<?php echo $this->eventArray['venue_url']; ?>" target="_blank"><?php echo $this->eventArray['venue_title']; ?> Website</a></td>
+		</tr>
+		<?php endif; ?>
+	</table>
+</div>
+<p class="ClearAll"></p>
+
+<?php endif; ?>
+
+<p class="Spacer"></p>
+
+<div class="aBox copy nopad" style="position: relative;">
+	<h3><a name="comments">Comments</a></h3>
+</div>
+
+<p class="Spacer js-on"></p>
+
+<div dojoType="dijit.layout.ContentPane" id="commentsPane" preload="false" href="/comments/comments/type/E/slave/<?php echo $this->eventArray['event_id']; ?>/" loadingMessage="<span class='dijitContentPaneLoading'></span>" class="js-on"></div>
+
+<noscript>
+	<p class="Spacer"></p>
+	<div class="aBox copy cInfo">You must have JavaScript enabled to view comments.</div>
+	<p class="Spacer"></p>
+</noscript>
+
+<?php if($this->eventArray['event_comments'] == 'Y') : ?>
+<?php echo $this->partial('_partials/commentform.phtml', array(
+    'action' => $this->baseUrl().'/events/event/'.$this->eventArray['event_id'].'/'.urlencode($this->eventArray['event_title']).'/#comment',
+    'moderate' => $this->eventArray['event_moderate'],
+    'comment' => $this->comment,
+    'auth' => $this->authenticated,
+    'acl' => $this->acl->isAllowed($this->role, 'gcommentnew'),
+    'messages' => $this->messages)); ?>
+<?php endif; ?>

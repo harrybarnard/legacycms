@@ -1,0 +1,39 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+$registry = Zend_Registry::getInstance(); ?>
+<div class="aBox copy nopad">
+
+	<h3><a href="<?php echo $this->baseUrl();?>/articles/article/<?php echo $this->article_id; ?>/<?php echo urlencode($this->article_title); ?>/"><?php echo $this->escape($this->article_title); ?></a></h3>
+	<h5>Written <?php if($registry->articles->showauthor == true) : ?>by <a href="<?php echo $this->baseUrl();?>/articles/author/<?php echo urlencode($this->user_alias); ?>/"><?php echo $this->escape($this->user_alias); ?></a> <?php endif; ?>on <?php echo $this->ADate($this->article_published); ?></h5>
+                      
+	<?php echo $this->article_intro; ?>
+	
+	<div class="aMore">
+		<?php if($this->article_content != NULL) : ?>
+		<a href="<?php echo $this->baseUrl();?>/articles/article/<?php echo $this->article_id; ?>/<?php echo urlencode($this->article_title); ?>/#more">Read More &raquo;</a> 
+		<?php endif; ?>
+		<?php if($this->article_comments == 'Y') : ?>
+		<a href="<?php echo $this->baseUrl();?>/articles/article/<?php echo $this->article_id; ?>/<?php echo urlencode($this->article_title); ?>/#comment">Comment &raquo;</a>
+		<?php endif; ?>
+	</div>
+	
+	
+	<div class="aFoot">
+		<div class="aFootL">
+			<a href="<?php echo $this->baseUrl();?>/articles/article/<?php echo $this->article_id; ?>/<?php echo urlencode($this->article_title); ?>/#comments"><?php $this->CCount($this->article_id,'A'); ?></a>
+		</div>
+		<div class="aFootR">
+			<div class="tagHead">Category:</div><div class="tagList"><a href="<?php echo $this->baseUrl();?>/articles/category/<?php echo urlencode($this->acat_title); ?>/"><?php echo $this->escape($this->acat_title); ?></a></div>
+			<div class="tagHead">Tags:</div><?php $this->TList($this->article_id,'A','articles'); ?>
+		</div>
+		<p class="ClearAll"></p>
+	</div>
+	
+</div>
+
+<p class="Spacer"></p>

@@ -1,0 +1,38 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td valign="top">
+
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Author: <?php echo $this->eventArray['user_alias']; ?></span>
+				<span class="tagItm">Status: <?php echo ucwords($this->eventArray['event_status']); ?></span>
+			</fieldset>
+
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<?php if ($this->eventArray['event_status'] != 'published' & $this->acl->isAllowed($this->user->user_role, 'eeventpublish')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="publishButton" value="Publish" iconClass="publishIcon" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/events/publish/id/<?php echo $this->eventArray['event_id'];?>/','Publish Event');">Publish</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/events/save/id/<?php echo $this->eventArray['event_id']; ?>/','editForm','Save Event','1');">Save<?php if ($this->eventArray['event_status'] != 'published') : ?> Draft<?php endif; ?></button> 
+					<?php if($this->acl->isAllowed($this->user->user_role, 'eeventdelete')) : ?><button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deleteeventIcon" onClick="getDialog('/admin/events/delete/id/<?php echo $this->eventArray['event_id'];?>/','Delete Event');">Delete</button><?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" iconClass="eventIcon" id="eventsButton" value="Events..." onClick="document.location.href='/admin/events/';">Events...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>	

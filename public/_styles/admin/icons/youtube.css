@@ -1,0 +1,19 @@
+@CHARSET "ISO-8859-1";
+
+/* Articles Icons */
+
+.videosIcon {
+	background-image: url('film.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletevideoIcon {
+	background-image: url('film_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

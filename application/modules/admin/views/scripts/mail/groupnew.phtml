@@ -1,0 +1,56 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="newgroupForm" jsId="newgroupForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+		<label for="url"><strong>Title</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="grouptitle" 
+            type="text" 
+            promptMessage="Input a title"
+            invalidMessage="Invalid title"
+            class="cFormInput" 
+            id="grouptitle" 
+            value="<?php echo $this->grouptitle; ?>" 
+            size="55" 
+            style="width: 300px;"/>
+	</div>
+    <div class="cFormItmH">	
+    	<label for="slave"><strong>Type</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="groupopen"
+        	id="groupopen"
+        	autocomplete="false"
+        	style="width: 300px;"
+        	value="<?php echo $this->groupopen; ?>"
+        	class="cFormSelect">
+    		<option value="Y">Open List - Any user may subscribe</option>
+    		<option value="N">Closed List - Only admins may subscribe users</option>
+    	</select>
+    </div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newgroupsubmitButton" 
+			value="Create" 
+			iconClass="newlistIcon" 
+			onClick="doDialog('/admin/mail/groupnew/','newgroupForm','New Mailing List');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newgroupcancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

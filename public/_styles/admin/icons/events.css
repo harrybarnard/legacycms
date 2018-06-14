@@ -1,0 +1,51 @@
+@CHARSET "ISO-8859-1";
+
+/* Events Icons */
+
+.eventIcon {
+	background-image: url('date.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.neweventIcon {
+	background-image: url('date_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deleteeventIcon {
+	background-image: url('date_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.venueIcon {
+	background-image: url('building.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newvenueIcon {
+	background-image: url('building_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletevenueIcon {
+	background-image: url('building_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

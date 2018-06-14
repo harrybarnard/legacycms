@@ -1,0 +1,170 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.layout.TabContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Users | Manage' );
+$this->placeholder ( 'title' )->set ( 'Users' );
+$this->placeholder('section')->set('users');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="310px" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+
+				<div dojoType="dijit.form.DropDownButton" iconClass="searchIcon">
+					<span>Search</span>
+    				<div dojoType="dijit.TooltipDialog" id="dialog1" title="Search for a user" >
+    					<form dojoType="dijit.form.Form" id="queryForm" jsId="queryForm" encType="multipart/form-data" action="/admin/users/manage/" method="GET" class="cForm" >
+    						<div class="cFormItm">
+								<label for="query"><strong>Query</strong></label><br />
+        						<input dojoType="dijit.form.ValidationTextBox"
+        							required="true"
+        							trim="true"
+            						name="query" 
+            						type="text" 
+            						promptMessage="Input a name, alias<br />or e-mail address"
+            						invalidMessage="Invalid title"
+            						class="cFormInput" 
+            						id="query" 
+            						value="" 
+            						size="55" 
+            						style="width: 280px;"/>
+            					<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Go">Go</button>
+							</div>
+							<p class="ClearAll"></p>
+						</form>
+    				</div>
+    			</div>
+    			<?php if($this->acl->isAllowed($this->user->user_role, 'unewuser')) : ?><button dojoType="dijit.form.Button" type="button" id="newuserButton" iconClass="newuserIcon" value="New User" onClick="getDialog('/admin/users/new/','New User');">New User</button><?php endif; ?>
+    			<?php if($this->acl->isAllowed($this->user->user_role, 'urolenew')) : ?><button dojoType="dijit.form.Button" type="button" id="newroleButton" iconClass="newroleIcon" value="New Role" onClick="getDialog('/admin/users/rolenew/','New Role');">New Role</button><?php endif; ?>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Filter</legend>
+				
+				<?php if ($this->query != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="document.location.href='<?php echo $this->url(array('query' => NULL)); ?>';" title="Remove Filter">Query: <?php echo $this->query; ?></span><?php endif; ?>				
+                <?php if ($this->role != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="document.location.href='<?php echo $this->url(array('role' => NULL)); ?>';" title="Remove Filter">Role: <?php echo $this->role; ?></span><?php endif; ?>
+                <?php if ($this->status != NULL) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="document.location.href='<?php echo $this->url(array('status' => NULL)); ?>';" title="Remove Filter">Status: <?php echo ucwords($this->status); ?></span><?php endif; ?>
+    			<?php if ($this->role == NULL & $this->query == NULL & $this->status == NULL) : ?><span class="tagItm">No active filter</span><?php endif; ?>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td valign="top">
+			
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Account Status</legend>
+				<span class="tagItm" id="statActive"><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'active')); ?>">Active (<?php $this->UStatusCount('active'); ?>)</a></span>
+				<span class="tagItm" id="statInactive"><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'inactive')); ?>">Inactive (<?php $this->UStatusCount('inactive'); ?>)</a></span>
+				<span class="tagItm" id="statSuspended"><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'suspended')); ?>">Suspended (<?php $this->UStatusCount('suspended'); ?>)</a></span>
+			</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<div id="categoriesPane">
+		
+				<fieldset class="cFieldset" style="margin-left: 10px;">
+					<legend class="cFLegend">Roles</legend>
+					<?php if(count($this->roleArray)) : ?>
+<?php foreach($this->roleArray as $role) : ?>
+<span class="tagItm" id="cat<?php echo $role['role_id']; ?>"><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'role' => $role['role_id'])); ?>" title="Right Click To Edit"><?php echo $this->escape($role['role_title']); ?> (<?php $this->URoleCount($role['role_id']); ?>)</a></span>
+<div dojoType="dijit.Menu" id="menu<?php echo $role['role_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="cat<?php echo $role['role_id']; ?>">
+  	<?php if($role['role_id'] > 3) : ?><div dojoType="dijit.MenuItem" iconClass="deleteroleIcon" onClick="getDialog('/admin/users/roledelete/id/<?php echo $role['role_id']; ?>/','Delete Role');">Delete</div><?php endif; ?>
+  	<div dojoType="dijit.MenuItem" iconClass="editroleIcon" onClick="goTo('/admin/users/role/id/<?php echo $role['role_id']; ?>/');">Edit</div>
+</div>
+<?php endforeach; ?>
+<?php else : ?>
+<span class="tagItm">No Roles!</span>
+<?php endif;?>
+				</fieldset>
+			
+			</div>
+			
+		</td>
+	</tr>
+</table>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th width="16"></th>
+		<th>Name</th>
+		<th>Details</th>
+		<th>Role</th>
+		<th>Date</th>
+	</tr>
+	<?php if (count($this->usersArray)) : ?>
+    <?php foreach($this->usersArray as $user) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $user['user_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $user['user_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td>
+			<?php if ($user['user_status'] == 'active') : ?>
+			<a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'active')); ?>" title="Account Active"><img src="/_styles/admin/icons/flag_green.gif" alt="Active" border="0" /></a>
+			<?php elseif ($user['user_status'] == 'inactive') : ?>
+			<a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'inactive')); ?>" title="Account Inactive"><img src="/_styles/admin/icons/flag_yellow.gif" alt="Inactive" border="0" /></a>
+			<?php elseif ($user['user_status'] == 'suspended') : ?>
+			<a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'status' => 'suspended')); ?>" title="Account Suspended"><img src="/_styles/admin/icons/flag_red.gif" alt="Suspended" border="0" /></a>
+			<?php endif; ?>
+		</td>
+		<td>
+			<strong><a href="/admin/users/edit/id/<?php echo $user['user_id']; ?>"><?php echo $user['upro_first']; ?> <?php echo $user['upro_last']; ?></a></strong>
+			<div id="edit<?php echo $user['user_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><a href="/admin/users/edit/id/<?php echo $user['user_id']; ?>">Edit</a><?php if($this->acl->isAllowed($this->user->user_role, 'mmailnew')) : ?> | <a onClick="getDialog('/admin/mail/mailuser/id/<?php echo $user['user_id']; ?>/','New Mail');" style="cursor: pointer;">Send E-mail</a><?php endif; ?></div>
+		</td>
+		<td><strong><?php echo $user['user_alias']; ?></strong><br />
+		<?php if($this->acl->isAllowed($this->user->user_role, 'mmailnew')) : ?><a onclick="getDialog('/admin/mail/mailuser/id/<?php echo $user['user_id']; ?>/','New Mail');" style="cursor: pointer; line-height: 20px;"><?php echo $user['user_email']; ?></a><?php else: ?><?php echo $user['user_email']; ?><?php endif; ?></td>
+		<td><a href="<?php echo $this->url(array('action' => 'manage','page' => NULL,'role' => $user['user_role'])); ?>" title="Add to Filter"><?php echo $user['role_title']; ?></td>
+		<td><?php echo $this->MakeDate('d/m/Y',$user['upro_date']); ?><br />
+		Last Updated</td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="4">
+			<div class="cUpd">No Users!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->usersArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->usersArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

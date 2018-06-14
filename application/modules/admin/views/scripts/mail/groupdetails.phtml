@@ -1,0 +1,41 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="60%" valign="top">
+
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Status: <?php echo ucwords($this->groupArray['mgroup_status']); ?></span>
+				<span class="tagItm"><a href="/admin/mail/manage/group/<?php echo $this->groupArray['mgroup_id']; ?>/">Posts (<?php $this->MGroupCount($this->groupArray['mgroup_id']); ?>)</a></span>
+				<span class="tagItm">Subscribers (<?php $this->MSubscriberCount($this->groupArray['mgroup_id']); ?>)</span>
+			</fieldset>
+
+		</td>
+		<td width="40%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/mail/groupsave/id/<?php echo $this->groupArray['mgroup_id']; ?>/','editForm','Save Mailing List','1');">Save</button> 
+					<?php if ($this->groupArray['mgroup_id'] != '1' & $this->acl->isAllowed($this->user->user_role, 'mlistdelete')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deletelistIcon" onClick="getDialog('/admin/mail/groupdelete/id/<?php echo $this->groupArray['mgroup_id']; ?>/','Delete Mailing List');">Delete</button>
+					<?php endif; ?>
+					<?php if ($this->groupArray['mgroup_status'] != 'published' & $this->acl->isAllowed($this->user->user_role, 'mlistpublish')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="publishButton" value="Publish" iconClass="publishIcon" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/mail/grouppublish/id/<?php echo $this->groupArray['mgroup_id']; ?>/','Publish Mailing List');">Publish</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="mailButton" value="Mail" iconClass="mailIcon" onClick="goTo('/admin/mail/');">Mail...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>	

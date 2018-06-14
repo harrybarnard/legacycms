@@ -1,0 +1,103 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.ComboBox");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Login' );
+$this->placeholder('title')->set('Login');
+?>
+<?php $this->RenderMessages($this->messages); ?>
+    
+    	<form dojoType="dijit.form.Form" id="loginForm" jsId="loginForm" encType="multipart/form-data" action="<?php echo $this->baseUrl ?>/admin/auth/login" method="POST" class="cForm">
+    	
+    		<?php if(isset($_COOKIE['loginEmail']) & isset($_COOKIE['loginPassword'])) : ?>
+    		<div class="cFormItmH">
+    			<label><strong>E-mail address</strong></label><br />
+    			<input dojoType="dijit.form.ValidationTextBox" 
+        			type="text" 
+        			name="email" 
+        			value="<?php echo $_COOKIE['loginEmail']; ?>" 
+        			regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b" 
+        			trim="true"
+        			required="true" 
+        			promptMessage="Enter your e-mail address" 
+        			invalidMessage="Invalid e-mail address"
+        			style="width: 220px;"
+        			class="cFormInput"/>
+        	</div>
+        
+        	<div class="cFormItmH">
+    			<label><strong>Password</strong></label><br />
+    			<input dojoType="dijit.form.ValidationTextBox"
+        			type="password"
+        			name="password" 
+        			value="<?php echo $_COOKIE['loginPassword']; ?>" 
+        			regExp=".{4}.*" 
+        			required="true" 
+        			promptMessage="Enter your password" 
+        			invalidMessage="Minimum of 4 characters"
+        			class="cFormInput"/>
+    		</div>
+    	
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Login">Login</button> &nbsp;&nbsp;&nbsp;
+    			<label for="remember"><input dojotype="dijit.form.CheckBox" name="remember" id="remember" value="1" type="checkbox" checked="checked"/> Remember me?</label> &nbsp;&nbsp;&nbsp;
+    			<a href="<?php echo $this->baseUrl();?>/admin/auth/password">Forgotten your password?</a>
+    		</div>
+    		<?php else : ?>
+    		<div class="cFormItmH">
+    			<label><strong>E-mail address</strong></label><br />
+    			<input dojoType="dijit.form.ValidationTextBox" 
+        			type="text" 
+        			name="email" 
+        			value="<?php echo $this->escape($this->email) ?>" 
+        			regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b" 
+        			trim="true"
+        			required="true" 
+        			promptMessage="Enter your e-mail address" 
+        			invalidMessage="Invalid e-mail address"
+        			style="width: 220px;"
+        			class="cFormInput"/>
+        	</div>
+        
+        	<div class="cFormItmH">
+    			<label><strong>Password</strong></label><br />
+    			<input dojoType="dijit.form.ValidationTextBox"
+        			type="password"
+        			name="password" 
+        			value="" 
+        			regExp=".{4}.*" 
+        			required="true" 
+        			promptMessage="Enter your password" 
+        			invalidMessage="Minimum of 4 characters"
+        			class="cFormInput"/>
+    		</div>
+    	
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Login">Login</button> &nbsp;&nbsp;&nbsp;
+    			<label for="remember"><input dojotype="dijit.form.CheckBox" name="remember" id="remember" value="1" type="checkbox" /> Remember me?</label> &nbsp;&nbsp;&nbsp;
+    			<a href="<?php echo $this->baseUrl();?>/admin/auth/password/">Forgotten your password?</a>
+    		</div>
+    		<?php endif; ?>
+    	
+    	</form>
+
+<p class="ClearAll"></p>
+				

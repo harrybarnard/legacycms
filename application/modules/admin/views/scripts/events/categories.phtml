@@ -1,0 +1,31 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if(count($this->categoryArray)) : ?>
+<?php foreach($this->categoryArray as $category) : ?>
+<?php if($category['ecat_status'] == 'published') : ?>
+<span class="tagItm" id="cat<?php echo $category['ecat_id']; ?>"><a href="<?php echo $this->baseUrl().$this->url(array('action' => 'manage','category' => $category['ecat_id'])); ?>" title="Right Click To Edit"><?php echo $this->escape($category['ecat_title']); ?> (<?php $this->ECatCount($category['ecat_id']); ?>)</a></span>
+<div dojoType="dijit.Menu" id="menu<?php echo $category['ecat_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="cat<?php echo $category['ecat_id']; ?>">
+	<?php if ($category['ecat_id'] != "1" & $this->acl->isAllowed($this->user->user_role, 'ecategorydelete')): ?>
+  	<div dojoType="dijit.MenuItem" iconClass="deletecategoryIcon" onClick="getDialog('/admin/events/categorydelete/id/<?php echo $category['ecat_id']; ?>/','Delete Category');">Delete</div>
+  	<?php endif; ?>
+  	<?php if($this->acl->isAllowed($this->user->user_role, 'ecategoryedit')) : ?><div dojoType="dijit.MenuItem" iconClass="editcategoryIcon" onClick="goTo('/admin/events/category/id/<?php echo $category['ecat_id']; ?>/');">Edit</div><?php endif; ?>
+</div>
+<?php else : ?>
+<span class="tagItm" id="cat<?php echo $category['ecat_id']; ?>" title="Right Click To Edit"><?php echo $this->escape($category['ecat_title']); ?></span>
+<div dojoType="dijit.Menu" id="menu<?php echo $category['ecat_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="cat<?php echo $category['ecat_id']; ?>">
+	<?php if ($category['ecat_id'] != "1" & $this->acl->isAllowed($this->user->user_role, 'ecategorydelete')): ?>
+  	<div dojoType="dijit.MenuItem" iconClass="deletecategoryIcon" onClick="getDialog('/admin/events/categorydelete/id/<?php echo $category['ecat_id']; ?>/','Delete Category');">Delete</div>
+  	<?php endif; ?>
+  	<?php if($this->acl->isAllowed($this->user->user_role, 'ecategoryedit')) : ?><div dojoType="dijit.MenuItem" iconClass="editcategoryIcon" onClick="goTo('/admin/events/category/id/<?php echo $category['ecat_id']; ?>/');">Edit</div><?php endif; ?>
+</div>
+<?php endif; ?>
+<?php endforeach; ?>
+<?php else : ?>
+<span class="tagItm">No Categories!</span>
+<?php endif;?>

@@ -1,0 +1,40 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<div class="aBox copy nopad">
+
+	<?php if($this->resource_asset != NULL) : ?>
+	<a href="<?php echo $this->baseUrl();?>/resources/resource/<?php echo $this->resource_id; ?>/<?php echo urlencode($this->resource_title); ?>/" class="aThumb list"><img src="<?php echo $this->baseUrl();?>/assets/thumb/<?php echo $this->resource_asset; ?>/100/100/" border="0" width="100" height="100" /></a>
+	<?php endif; ?>
+	
+	<h3><a href="<?php echo $this->baseUrl();?>/resources/resource/<?php echo $this->resource_id; ?>/<?php echo urlencode($this->resource_title); ?>/"><?php echo $this->resource_title; ?></a></h3>
+	
+	<p><?php echo $this->resource_description; ?></p>
+	
+	<div class="aMore">
+		<a href="<?php echo $this->baseUrl();?>/resources/resource/<?php echo $this->resource_id; ?>/<?php echo urlencode($this->resource_title); ?>/">View details &raquo;</a> 
+		<?php if($this->resource_comments == 'Y') : ?>
+		<a href="<?php echo $this->baseUrl();?>/resources/resource/<?php echo $this->resource_id; ?>/<?php echo urlencode($this->resource_title); ?>/#comment">Comment on this resource &raquo;</a>
+		<?php endif; ?>
+	</div>
+	
+	<div class="aFoot list">
+		<div class="aFootL">
+			<a href="<?php echo $this->baseUrl();?>/resources/resource/<?php echo $this->resource_id; ?>/<?php echo urlencode($this->resource_title); ?>/#comments"><?php $this->CCount($this->resource_id,'R'); ?></a>
+		</div>
+		<div class="aFootR">
+			<div class="tagHead">Category:</div><div class="tagList"><a href="<?php echo $this->baseUrl();?>/resources/category/<?php echo urlencode($this->rcat_title); ?>/"><?php echo $this->rcat_title; ?></a></div>
+			<div class="tagList"><strong>Type:</strong></div><div class="tagList"><a href="<?php echo $this->baseUrl();?>/resources/type/<?php echo urlencode($this->rtype_title); ?>/"><?php echo $this->rtype_title; ?></a></div>
+			<div class="tagHead">Tags:</div><?php $this->TList($this->resource_id,'R','resources'); ?>
+		</div>
+		<p class="ClearAll"></p>
+	</div>
+	
+</div>
+
+<p class="Spacer"></p>

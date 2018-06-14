@@ -1,0 +1,55 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="maillistForm" jsId="maillistForm" encType="multipart/form-data" onSubmit="return doDialog('/admin/mail/maillist/','maillistForm','New Mail');" class="cForm" >
+    <div class="cFormItm">	
+    	<label for="slave"><strong>To Mailing List</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="slave"
+        	id="slave"
+        	autocomplete="false"
+        	style="width: 240px;"
+        	value="<?php echo $this->slave; ?>"
+        	class="cFormSelect">
+    		<?php $this->MListSelect(); ?>
+    	</select>
+    </div>
+    <div class="cFormItm">
+		<label for="url"><strong>Subject</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="subject" 
+            type="text" 
+            promptMessage="Input a subject"
+            invalidMessage="Invalid subject"
+            class="cFormInput" 
+            id="subject" 
+            value="<?php echo $this->subject; ?>" 
+            size="55" 
+            style="width: 450px;"/>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="newmailsubmitButton" 
+			value="Create" 
+			iconClass="newmailIcon" 
+			onClick="doDialog('/admin/mail/maillist/','maillistForm','New Mail');">Create</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="newmailcancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

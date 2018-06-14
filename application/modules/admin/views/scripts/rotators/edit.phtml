@@ -1,0 +1,102 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Rotators | Edit Rotator' );
+$this->placeholder ( 'title' )->set ( 'Edit Rotator' );
+$this->placeholder('section')->set('rotators');
+?>
+
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="225px" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+
+    			<button dojoType="dijit.form.Button" name="newslideButton" id="newslideButton" iconClass="newslideIcon" value="New Slide" onClick="getDialog('/admin/rotators/slidenew/rotator/<?php echo $this->rotatorArray['rot_id']; ?>/','New Slide');">New Slide</button>
+    			<button dojoType="dijit.form.Button" name="rotatorsButton" id="rotatorsButton" iconClass="rotatorsIcon" value="Rotators..." onClick="goTo('/admin/rotators/');">Rotators...</button>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Details</legend>
+				
+				<span class="tagItm">Name: <?php echo $this->rotatorArray['rot_name']; ?></span>
+				<span class="tagItm">Dimensions: <?php echo $this->rotatorArray['rot_width']; ?> x <?php echo $this->rotatorArray['rot_height']; ?></span>
+				<span class="tagItm">Paging: <?php if ($this->rotatorArray['rot_paging'] == 'Y') : ?>
+					<img src="/_styles/admin/icons/tick.gif" alt="Paging Enabled" title="Paging Enabled" border="0" style="vertical-align: middle;"/>
+			        <?php elseif ($this->rotatorArray['rot_paging'] == 'N') : ?>
+					<img src="/_styles/admin/icons/cross.gif" alt="Paging Disabled" title="Paging Disabled" border="0" style="vertical-align: middle;"/>
+			        <?php endif; ?></span>
+				<span class="tagItm">Delay: <?php echo $this->rotatorArray['rot_delay']; ?></span>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th width="60">Image</th>
+		<th>Title</th>
+		<th>Caption</th>
+		<th>Link</th>
+		<th>Priority</th>
+	</tr>
+	<?php if (count($this->slidesArray)) : ?>
+    <?php foreach($this->slidesArray as $slide) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $slide['rots_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $slide['rots_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td><img src="/admin/assets/thumb/<?php echo $slide['rots_asset']; ?>/60/60/" border="0" width="60" height="60"/></td>
+		<td>
+			<strong><a onclick="getDialog('/admin/rotators/slide/id/<?php echo $slide['rots_id']; ?>/','Edit Slide');" style="cursor: pointer;"><?php echo $slide['rots_title']; ?></a></strong>
+			<div id="edit<?php echo $slide['rots_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><a onclick="getDialog('/admin/rotators/slide/id/<?php echo $slide['rots_id']; ?>/','Edit Slide');" style="cursor: pointer;">Edit</a> | <a onclick="getDialog('/admin/rotators/slidedelete/id/<?php echo $slide['rots_id']; ?>/','Delete Slide');" style="cursor: pointer;">Delete</a></div>
+		</td>
+		<td><?php echo $slide['rots_description']; ?></td>
+		<td><a href="<?php echo $slide['rots_link']; ?>" target="_blank"><?php echo $slide['rots_link']; ?></a></td>
+		<td><?php echo $slide['rots_order']; ?></td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="5">
+			<div class="cUpd">No Slides!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->slidesArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->slidesArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

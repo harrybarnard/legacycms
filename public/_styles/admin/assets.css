@@ -1,0 +1,435 @@
+@CHARSET "ISO-8859-1";
+
+@import url("dijit/adminDij.css");
+@import url("files.css");
+@import url("icons.css");
+
+/* CSS Document */
+
+body {
+	background: #FFF !important;
+	margin: 0px !important;
+	padding: 0px !important;
+	font-family: Tahoma, Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #666666;
+}
+
+html {
+	height: 100%;
+	width: 950px;
+	overflow: hidden;
+}
+
+#preloader {
+  	width:100%; 
+  	height:100%; 
+  	margin:auto; 
+  	padding:0;
+  	background:#CCC url('/_styles/admin/images/page-loader.gif') no-repeat center center;
+    position:absolute;
+    z-index:999;
+}
+
+/* File Tree */
+
+.treeWrap {
+}
+
+/* Panes */
+
+.pane {
+	background: #FFF;
+	padding: 0px !important;
+}
+
+.toolbar {
+	background: #F6F6F6;
+	padding: 5px;
+	height: 24px;
+	border-bottom: 1px solid #DDD;
+}
+
+.toolbar h3 {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+}
+
+.paneCont {
+	padding: 10px;
+	height: 570px;
+	overflow: hidden;
+}
+
+.treePane {
+	padding: 10px;
+	height: 592px;
+	overflow: auto;
+}
+
+.paneFoot {
+	height: 24px;
+	background: #F6F6F6;
+	border-top: 1px solid #DDD;
+}
+
+.paneFoot ul {
+	padding-left: 10px !important;
+	padding-top: 3px !important;
+}
+
+/* Button Icons */
+
+.upIcon {
+	background-image: url('icons/arrow_up.gif'); /* editor icons sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newfolderIcon {
+	background-image: url('icons/folder_add.gif'); /* editor icons sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.uploadIcon {
+	background-image: url('icons/page_add.gif'); /* editor icons sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+/* Form Stuff */
+
+#form_table {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#form_table a:link, #form_table a:visited, #form_table a:hover, #form_table a:active {
+	color: #F0970E;
+}
+
+#form_table td {
+	padding: 5px;
+	line-height: 20px;
+}
+
+#form_table th {
+	text-align: right;
+	vertical-align: top;
+	font-weight: normal;
+}
+
+#form_table h4 {
+	font-size: 14px;
+	font-weight: bold;
+	color: #333333;
+	border-bottom: 2px dotted #333333;
+	margin: 0px;
+	margin-top: 15px;
+	margin-bottom: 0px;
+}
+
+.form_input {
+	background: #FFFFFF;
+	border: 2px solid #F0970E;
+	font-family: Tahoma, Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #333333;
+	margin: 0px;
+	margin-right: 5px;
+	margin-bottom: 2px;
+	padding: 3px;
+	vertical-align: middle;
+}
+
+.form_select {
+	background: #FFFFFF;
+	border: 2px solid #F0970E;
+	font-family: Tahoma, Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #333333;
+	margin: 0px;
+	margin-right: 5px;
+	margin-bottom: 2px;
+	padding: 0px;
+	vertical-align: middle;
+}
+
+.form_checkbox {
+	background: #FFFFFF;
+	color: #333333;
+	margin: 0px;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+
+.form_button {
+	background: #F0970E;
+	border: 0px solid #333333;
+	font-family: Tahoma, Arial, Verdana, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	color: #FFFFFF;
+	margin: 0px;
+	padding: 2px;
+	vertical-align: middle;
+}
+
+.dlgButtons {
+	padding-top: 10px;
+	text-align: center;
+}
+
+.cFormDS {
+	padding-top: 10px;
+	text-align: center;
+}
+
+/* Error Styles */
+
+.cNotif {
+	margin-bottom: 20px;
+}
+
+.cUpd {
+	background: url(icons/information.gif) 4px 4px no-repeat;
+	padding: 5px;
+	padding-left: 24px;
+	clear: both;
+}
+
+.cErr {
+	background: #FFCCCC url(icons/exclamation.gif) 4px 4px no-repeat;
+	padding: 5px;
+	padding-left: 24px;
+	clear: both;
+}
+
+.cInfo {
+	background: #f9f7ba url(icons/information.gif) 4px 4px no-repeat;
+	clear: both;
+}
+
+.cInfo p {
+	padding: 0px;
+	margin: 10px;
+	margin-top: 11px;
+	margin-left: 32px;
+}
+
+.cInfo img {
+	float: right;
+	margin: 10px;
+	cursor: pointer;
+}
+
+/* Properties Table */
+
+.propertiesTable {
+	border: none;
+	margin-bottom: 10px;
+}
+
+.propertiesTable th, .propertiesTable td {
+	padding: 5px;
+}
+
+.propertiesTable th {
+	text-align: right;
+	font-weight: bold;
+}
+
+.propHR {
+	border-bottom : 1px solid #DDD;
+}
+
+/* Tag Stuff */
+
+.tagItm {
+	padding: 5px;
+	padding-left: 9px;
+	font-size: 14px;
+	line-height: 25px;
+}
+
+.tagItm_Ovr {
+	background: url(../images/admin/icons/bullet_delete.gif) -3px 0px no-repeat;
+	padding: 5px;
+	padding-left: 9px;
+	font-size: 14px;
+	line-height: 25px;
+	cursor: pointer;
+}
+
+/* Content Form */
+
+.cForm {
+	margin: 0px;
+	padding: 0px;
+}
+
+.cForm input {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	/*color: #444444;*/
+	margin: 0px !important;
+}
+
+/*.cForm button {
+	margin: 0px !important;
+}*/
+
+.cForm textarea {
+	margin: 0px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	/*color: #444444;*/
+}
+
+.cForm label {
+	margin: 0px;
+	line-height: 20px;
+}
+
+.cFormInput {
+	/*background: #FFFFCC;*/
+	/*border: 1px solid #FFCC66;*/
+	padding: 3px;
+	margin: 0px;
+}
+
+.cFormInputN {
+	/*background: #EEEEEE;*/
+	/*border: 1px solid #CCCCCC;*/
+	padding: 3px;
+	margin: 0px;
+}
+
+.cFormSelect {
+	/*background: #FFFFCC;*/
+	/*border: 1px solid #FFCC66;*/
+	/*color: #666666;*/
+	margin: 0px;
+	padding: 1px;
+}
+
+.cFormLabelI {
+	padding-left: 3px;
+	padding-right: 7px;
+}
+
+.cFormLabelF {
+	padding: 3px;
+	padding-right: 7px;
+	padding-bottom: 4px;
+	width: 210px;
+	display: block;
+	float: left;
+}
+
+.cFormItm {
+	clear: both;
+	padding-bottom: 5px;
+}
+
+.cFormItmS {
+	clear: both;
+	padding-bottom: 5px;
+	padding-top: 8px;
+}
+
+.cFormItmH {
+	float: left;
+	padding-bottom: 5px;
+	margin-right: 10px;
+}
+
+.cFormButH {
+	float: left;
+	padding-bottom: 5px;
+	padding-top: 17px;
+	margin-right: 10px;
+}
+
+.cFormItmR {
+	float: right;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 10px;
+}
+
+.cFormHlp {
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.cFormButtonS {
+	margin-right: 10px;
+}
+
+.cFieldset {
+	background: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	padding: 10px;
+	padding-top: 5px;
+	margin: 0px;
+	margin-bottom: 10px;
+}
+
+.cFLegend {
+	background: #EEEEEE;
+	line-height: 16px;
+	border: 1px solid #DDDDDD;
+	font-weight: bold;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.cFormKeyW {
+	width: 280px;
+	height: 206px;
+	overflow: auto;
+	border: 1px solid #CCCCCC;
+	margin-top: 3px;
+}
+
+.cFormKey {
+	width: 270px;
+	padding: 3px;
+}
+
+.cFormErr {
+	padding-top: 3px;
+	color: #990000;
+	font-weight: bold;
+}
+
+/* Markup indicators for forms */
+
+.reMarkup {
+	color: #999999;
+	font-size: 11px;
+	padding-top: 4px;
+}
+
+.ClearAll {
+	clear: both;
+	height: 0px;
+	font-size: 0px;
+	line-height: 0px;
+	padding: 0px;
+	margin: 0px;
+	float: none;
+}

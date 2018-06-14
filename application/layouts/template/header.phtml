@@ -1,0 +1,42 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<!-- HEADER -->
+
+<div class="hWrap">
+
+<!-- USER MENU -->
+<?php if ($this->authenticated) { ?>
+<div class="tUser">You are logged in as <strong><?php echo $this->escape($this->user->user_alias); ?></strong> - <a href="<?php echo $this->baseUrl();?>/settings/" tabindex="2" rel="nofollow">Settings</a><?php if($this->acl->isAllowed($this->role, 'gadmin')) : ?> - <a href="<?php echo $this->baseUrl();?>/admin/" tabindex="2" rel="nofollow">Control Panel</a><?php endif; ?> - <a href="<?php echo $this->baseUrl();?>/auth/logout" tabindex="2" rel="nofollow">Logout</a></div>
+<?php } else { ?>
+<div class="tUser">Welcome Guest - <a href="<?php echo $this->baseUrl();?>/auth/login/" tabindex="2" rel="nofollow">Login</a> - <a href="<?php echo $this->baseUrl();?>/auth/register/" tabindex="2" rel="nofollow">Register</a></div>
+<?php } ?>
+<!-- END USER MENU -->
+
+<div class="hLogo">
+    <a href="/"><h1>My Awesome Website</h1></a>
+</div>
+
+</div>
+
+<!-- END HEADER -->
+
+<!-- MAIN MENU -->
+				
+<div class="mWrap">
+				
+	<ul class="mMenu">
+		<li><a <?php if($this->placeholder('section') == 'index') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/" tabindex="1">Home</a></li>
+    	<li><a <?php if($this->placeholder('section') == 'articles') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/articles/" tabindex="1">Articles</a></li>
+    	<li><a <?php if($this->placeholder('section') == 'events') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/events/" tabindex="1">Events</a></li>
+    	<li><a <?php if($this->placeholder('section') == 'contact') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/contact/" tabindex="1">Contact</a></li>
+	</ul>
+	
+</div>
+
+<!-- END MAIN MENU -->

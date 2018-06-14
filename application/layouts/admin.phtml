@@ -1,0 +1,98 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+echo '<?xml version="1.0" encoding="utf-8" ?>';
+echo $this->doctype();
+$registry = Zend_Registry::getInstance(); ?>
+<html>
+
+<head>
+
+<!-- META -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex">
+		
+<?php echo $this->headTitle(); ?>
+
+<!-- END META -->
+
+<!-- HEAD LINKS -->
+<?php echo $this->headLink(); ?>
+
+<link href="<?php echo $this->baseUrl();?>/_styles/admin/images/favicon.ico" rel="shortcut icon" >
+
+<!-- END HEAD LINKS -->
+
+<!-- HEAD SCRIPTS -->
+<script type="text/javascript" src="/_scripts/dojo/dojo/dojo.js"></script>
+<?php echo $this->headScript(); ?>
+
+<noscript>
+<style type="text/css">
+#js-on {
+		display:none;
+	}
+</style>
+</noscript>
+
+<!-- END HEAD SCRIPTS -->
+
+<!-- HEAD STYLES -->
+<?php echo $this->headStyle(); ?>
+
+<!-- END HEAD STYLES -->
+	    
+</head>
+
+	<body class="adminDij">
+		
+		<div id="preloader"></div>
+		
+		<div class="tWrap">
+				
+	    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+	    	<tr>
+	    		<td width="142" valign="top">
+        		<ul id="menu" class="tMenu">
+  					<li><a <?php if($this->placeholder('section') == 'index') : ?>class="active"<?php endif; ?> href="/admin/">Dashboard</a></li>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'aarticles')) : ?><li><a <?php if($this->placeholder('section') == 'articles') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/articles/">Articles</a></li><?php endif; ?>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'gcomments')) : ?><li><a <?php if($this->placeholder('section') == 'comments') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/comments/">Comments</a></li><?php endif; ?>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'eevents')) : ?><li><a <?php if($this->placeholder('section') == 'events') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/events/">Events</a></li><?php endif; ?>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'mmail')) : ?><li><a <?php if($this->placeholder('section') == 'mail') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/mail/">Mail</a></li><?php endif; ?>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'ppages')) : ?><li><a <?php if($this->placeholder('section') == 'pages') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/pages/">Pages</a></li><?php endif; ?>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'rotrotators')) : ?><li><a <?php if($this->placeholder('section') == 'rotators') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/rotators/">Rotators</a></li><?php endif; ?>
+  					<?php if($this->acl->hasRole($this->user->user_role) && $this->acl->isAllowed($this->user->user_role, 'uusers')) : ?><li><a <?php if($this->placeholder('section') == 'users') : ?>class="active"<?php endif; ?> href="<?php echo $this->baseUrl();?>/admin/users/">Users</a></li><?php endif; ?>
+ 				</ul>
+    		</td>
+    		<td valign="top">
+  				<div id="template_usermenu">
+  					<a href="/admin/auth/logout" class="userTab">Log Out</a>
+  					<a href="<?php echo $registry->site->site->url; ?>" class="userTab" target="_blank">Open Site</a>
+  					<a href="/admin/" class="userTab<?php if($this->placeholder('section') == 'index') : ?> active<?php endif; ?>">Dashboard</a>
+  					<a href="/admin/settings/" class="userTab<?php if($this->placeholder('section') == 'settings') : ?> active<?php endif; ?>"><img src="<?php echo $this->baseUrl();?>/_styles/admin/icons/status_online.gif" width="16" height="16" border="0"/><?php echo $this->escape($this->user->user_alias); ?></a>
+  				</div>
+    			<div class="tHead">
+      				<div class="template_title">Control Panel: <?php echo $registry->site->site->name; ?></div>
+    			</div>
+    			
+    			
+    			<div id="tContent">
+    				<div id="js-on">
+	            		<h1><?php echo $this->placeholder('title') ?></h1>
+		               <?php echo $this->layout()->content ?>
+		            </div>
+		        </div>
+				
+				<div id="template_foot"><a href="http://www.harrybarnard.com/" target="_blank">&copy; Harry Barnard 2007-<?php $thisyear = strftime( "%Y", time() ); echo $thisyear; ?></a></div>
+		</td>
+		</tr>
+		</table>
+		</div>
+	</body>
+
+</html>

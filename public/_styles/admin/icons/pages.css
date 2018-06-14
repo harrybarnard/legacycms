@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+/* Pages Icons */
+
+.pagesIcon {
+	background-image: url('page_white_copy.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.newpageIcon {
+	background-image: url('page_white_add.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}
+
+.deletepageIcon {
+	background-image: url('page_white_delete.gif');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+}

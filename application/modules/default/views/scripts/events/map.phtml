@@ -1,0 +1,40 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$registry = Zend_Registry::getInstance();
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");';
+
+$this->headTitle($registry->site->site->name.' | Events | Map');
+$this->placeholder('section')->set('events');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/events.js','text/javascript')
+                   ->appendFile('http://www.google.com/jsapi','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/eventsmap.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+
+	<h2>Gig Map</h2>
+	
+</div>
+
+<p class="Spacer"></p>
+
+<div class="aMap" id="map" style="height: 480px;">
+	<h6>This map requires JavaScript. Your browser either does not support JavaScript, or you have JavaScript turned off.</h6>
+</div>
+<p class="Spacer"></p>

@@ -1,0 +1,51 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table class="propertiesTable" border="0" cellspacing="0">
+	<tr>
+		<th class="propHR">File:</th>
+		<td class="propHR"><?php echo $this->assetArray['asset_name']; ?>.<?php echo $this->assetArray['asset_extension']; ?></td>
+	</tr>
+	<tr>
+		<th>Type:</th>
+		<td><?php echo $this->assetArray['asset_mime']; ?></td>
+	</tr>
+	<?php if($this->AssetType($this->assetArray['asset_mime']) == 'image') : ?>
+	<tr>
+		<th>Dimensions:</th>
+		<td><?php echo $this->MakeImageSize($registry->assets->assets->syspath.$this->assetArray['asset_file']); ?></td>
+	</tr>
+	<?php endif; ?>
+	<tr>
+		<th class="propHR">Size:</th>
+		<td class="propHR"><?php echo $this->MakeFileSize($this->assetArray['asset_size']); ?></td>
+	</tr>
+	<tr>
+		<th>Created:</th>
+		<td><?php echo $this->MakeDate('jS F Y g:i:sa',$this->assetArray['asset_date']); ?></td>
+	</tr>
+	<tr>
+		<th>Modified:</th>
+		<td><?php echo $this->MakeDate('jS F Y g:i:sa',$this->assetArray['asset_modified']); ?></td>
+	</tr>
+</table>
+<p class="ClearAll"></p>
+<div class="cFormDS">
+	<button dojoType="dijit.form.Button" 
+		type="button" 
+		name="editassetButton" 
+		value="Edit" 
+		iconClass="editfileIcon" 
+		onClick="getDialog('/admin/assets/asset/asset/<?php echo $this->file['asset_id']; ?>/','Edit Asset');">Edit</button>
+    <button dojoType="dijit.form.Button" 
+    	type="button" 
+    	name="editfoldercancelButton" 
+    	value="Cancel" 
+    	iconClass="cancelIcon" 
+    	onClick="dijit.byId('ajaxDialog').hide();">Close</button>
+</div>

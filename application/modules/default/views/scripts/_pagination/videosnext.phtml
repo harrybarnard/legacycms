@@ -1,0 +1,12 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+if (isset($this->next)): ?>
+<div class="rotNav rotRight" onclick="videosGo('<?php echo $this->url(array('page' => $this->next)); ?>');"><img src="/_styles/default/images/rotator_next.gif"/></div>
+<?php else: ?>
+<div class="rotNav rotRight"><img src="/_styles/default/images/rotator_nextO.gif"/></div>
+<?php endif; ?>

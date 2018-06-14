@@ -1,0 +1,17 @@
+{
+  "name": "harrybarnard/legacycms",
+  "description": "description_text",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Harry Barnard",
+      "email": "harry@harrybarnard.com"
+    }
+  ],
+  "require": {
+    "zendframework/zendframework1": "1.12.20",
+    "deresh/thumb": "v1.0",
+    "james-heinrich/getid3": "v1.9.15"
+  }
+}

@@ -1,0 +1,43 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->AdminRenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="deleteroleForm" jsId="deleteroleForm" encType="multipart/form-data" method="POST" class="cForm" >
+
+	<div class="cFormItm">
+		<label for="roleinherit"><strong>Move Accounts To</strong></label><br />
+        <select dojoType="dijit.form.FilteringSelect"
+        	name="rolemove"
+        	id="rolemove"
+        	autocomplete="false"
+        	style="width: 140px;"
+        	class="cFormSelect">
+    		<?php $this->URolexSelect($this->role,$this->rolemove); ?>
+    	</select>
+	</div>
+	
+	<div class="cFormItmDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="deleterolesubmitButton" 
+			value="Create" 
+			iconClass="users_roledeleteIcon" 
+			onClick="doDialog('<?php echo $this->url(array('module' => 'users',
+                                                           'controller' => 'admin',
+                                                           'action' => 'roledelete',
+                                                           'id' => $this->role),'',true); ?>','deleteroleForm','Delete Role');">Delete</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="deleterolecancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

@@ -1,0 +1,76 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dijit.form.Button");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dojo.parser");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/assets.css')
+                 ->appendStylesheet('/_scripts/uploadify/uploadify.css');
+$this->headScript()->appendFile('/_scripts/jquery/jquery-1.3.2.min.js','text/javascript')
+                   ->appendFile('/_scripts/uploadify/swfobject.js','text/javascript')
+                   ->appendFile('/_scripts/uploadify/jquery.uploadify.min.js','text/javascript')
+                   ->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendFile('/_scripts/admin/assets.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Assets' );
+$this->placeholder ( 'title' )->set ( 'Assets' );
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+<div class="toolbar">
+	<?php if($this->folder != '0') : ?>
+	<button dojoType="dijit.form.Button" type="button" id="closeButton" value="Close" iconClass="cancelIcon" style="float: right;" onClick="window.close();">Close</button>
+	<button dojoType="dijit.form.Button" type="button" id="backButton" value="Back to Folder" iconClass="backIcon" onclick="goTo('<?php echo $this->url(array('action' => 'index','type' => $this->type,'folder' => $this->folder,'method' => $this->method,'field' => $this->field)); ?>');" style="margin-top: -14px;">Back to Folder</button>
+	<?php else: ?>
+	<button dojoType="dijit.form.Button" type="button" id="closeButton" value="Close" iconClass="cancelIcon" style="float: right;" onClick="window.close();">Close</button>
+	<button dojoType="dijit.form.Button" type="button" id="backButton" value="Back to Folder" iconClass="backIcon" onclick="goTo('<?php echo $this->url(array('action' => 'index','type' => $this->type,'folder' => NULL,'method' => $this->method,'field' => $this->field)); ?>');" style="margin-top: -14px;">Back to Folder</button>
+	<?php endif; ?>
+	<input id="fileInput" name="fileInput" type="file" />
+	<button dojoType="dijit.form.Button" type="button" id="uploadButton" value="Upload Files" iconClass="uploadIcon" onClick="$('#fileInput').uploadifyUpload();" style="margin-top: -14px;">Upload Files</button>
+	<button dojoType="dijit.form.Button" type="button" id="clearButton" value="Clear Queue" iconClass="clearassetsIcon" onClick="$('#fileInput').uploadifyClearQueue();" style="margin-top: -14px;">Clear Queue</button>
+</div>
+<div class="paneCont">
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#fileInput").uploadify({
+			'uploader'		: '/_scripts/uploadify/uploadify.swf',
+			'script'        : '/admin/assets/receive/folder/<?php echo $this->folder; ?>/__tkn/<?php echo session_id(); ?>',
+			'buttonImg'     : '/_styles/admin/images/uploadButton.png',
+			'cancelImg'     : '/_styles/admin/icons/cross.gif',
+			'queueID'       : 'fileQueue',
+			'wmode'         : 'transparent',
+			'width'         : 91,
+			'height'		: 24,
+			'multi'         : true,
+			<?php if($this->type == 'image') : ?>
+			'fileDesc'		: 'Image Files',
+			'fileExt'		: '*.jpeg;*.jpg;*.gif;*.png;*.bmp'
+			<?php elseif ($this->type == 'video') : ?>
+			'fileDesc'		: 'Video Files',
+			'fileExt'		: '*.flv'
+			<?php elseif ($this->type == 'audio') : ?>
+			'fileDesc'		: 'Audio Files',
+			'fileExt'		: '*.mp3'
+			<?php elseif ($this->type == 'flash') : ?>
+			'fileDesc'		: 'Flash Files',
+			'fileExt'		: '*.swf'
+			<?php endif; ?>
+		});
+	});
+	</script>
+	<div id="fileQueue"></div>
+</div>
+<div class="paneFoot">
+	<ul class="jqueryFileTree">
+		<li class="uploadIcon">Upload Files</li>
+	</ul>
+</div>

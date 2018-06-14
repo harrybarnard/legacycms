@@ -1,0 +1,46 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="60%" valign="top">
+
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Account Created: <?php echo $this->MakeDate('d/m/Y',$this->userArray['user_date']); ?></span>
+				<span class="tagItm">Account Status: <?php echo ucwords($this->userArray['user_status']); ?></span>
+				<span class="tagItm">Last Updated: <?php echo $this->MakeDate('d/m/Y H:i',$this->userArray['upro_date']); ?></span>
+				<?php if($this->acl->isAllowed($this->user->user_role, 'gcomments')) : ?><span class="tagItm"><a href="<?php echo $this->url(array('action' => 'manage','controller' => 'comments','author' => $this->userArray['user_id'])); ?>">Comments (<?php $this->CCount($this->userArray['user_id'],'U');?>)</a></span><?php endif; ?>
+			</fieldset>
+
+		</td>
+		<td width="40%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<?php if($this->acl->isAllowed($this->user->user_role, 'uedit')) : ?><button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="postDialog('/admin/users/save/id/<?php echo $this->userArray['user_id']; ?>/','editForm','Save User','1');">Save</button><?php endif; ?>
+					<?php if($this->acl->isAllowed($this->user->user_role, 'uedit') & $this->user->user_id != $this->userArray['user_id']) : ?>
+					<?php if ($this->userArray['user_status'] == 'suspended' | $this->userArray['user_status'] == 'inactive') : ?>
+					<button dojoType="dijit.form.Button" type="button" id="activateButton" value="Activate Account" iconClass="activeIcon" onClick="getDialog('/admin/users/status/id/<?php echo $this->userArray['user_id']; ?>/status/active/','User Status');">Activate Account</button>
+					<?php elseif ($this->userArray['user_status'] == 'active') : ?>
+					<button dojoType="dijit.form.Button" type="button" id="activateButton" value="Suspend Account" iconClass="suspendIcon" onClick="getDialog('/admin/users/status/id/<?php echo $this->userArray['user_id']; ?>/status/suspended/','User Status');">Suspend Account</button>
+					<?php endif; ?>
+					<?php endif; ?>
+					<?php if($this->acl->isAllowed($this->user->user_role, 'upassword')) : ?>
+					<button dojoType="dijit.form.Button" type="button" iconClass="passwordIcon" id="passwordButton" value="Reset Password" onClick="getDialog('/admin/users/password/id/<?php echo $this->userArray['user_id']; ?>/','Reset Password');">Reset Password</button>
+					<?php endif; ?>
+					<button dojoType="dijit.form.Button" type="button" iconClass="usersIcon" id="usersButton" value="Users" onClick="goTo('/admin/users/');">Users...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>	

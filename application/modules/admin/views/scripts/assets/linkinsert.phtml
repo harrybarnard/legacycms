@@ -1,0 +1,38 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<form dojoType="dijit.form.Form" id="insertlinkForm" jsId="insertlinkForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+    	<label><strong>Link Type</strong></label><br />
+		<label for="download">
+			<input type="radio" dojoType="dijit.form.RadioButton" name="method" id="download" value="download" checked="checked"/>
+    		Download Asset
+    	</label>
+	</div>
+	<div class="cFormItm">
+		<label for="open">
+			<input type="radio" dojoType="dijit.form.RadioButton" name="method" id="open" value="open" />
+    		Open Asset In Browser
+    	</label>
+	</div>
+	<p class="ClearAll"></p>
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="insertlinksubmitButton" 
+			value="Create" 
+			iconClass="insertimageIcon" 
+			onClick="linkInsert('<?php echo $this->key; ?>');">Insert</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="insertlinkcancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>

@@ -1,0 +1,47 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="60%" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Details</legend>
+				<span class="tagItm">Author: <?php echo $this->mailArray['user_alias']; ?></span>
+				<span class="tagItm">Status: <?php echo ucwords($this->mailArray['mail_status']); ?></span>
+    			<span id="dates">
+		            <?php if ($this->mailArray['mail_status'] == 'sent') : ?>
+					<span class="tagItm">Sent: <?php echo $this->MakeDate('d/m/Y H:i',$this->mailArray['mail_sent']); ?></span>
+		            <?php else: ?>
+					<span class="tagItm">Last Edited: <?php echo $this->MakeDate('d/m/Y H:i',$this->mailArray['mail_date']); ?></span>
+					<?php endif; ?>
+				</span>
+			</fieldset>
+
+		</td>
+		<td width="40%" valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Functions</legend>
+				
+				<div>
+					<?php if ($this->mailArray['mail_status'] != 'sent') : ?>
+					<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="MyFCKObject.UpdateEditorFormValue(); postDialog('/admin/mail/save/id/<?php echo $this->mailArray['mail_id']; ?>/','editForm','Save Mail','1');">Save</button> 
+					<?php if($this->acl->isAllowed($this->user->user_role, 'mmaildelete')) : ?><button dojoType="dijit.form.Button" type="button" id="deleteButton" value="Delete" iconClass="deletemailIcon" onClick="getDialog('/admin/mail/delete/id/<?php echo $this->mailArray['mail_id']; ?>/','Delete Mail');">Delete</button><?php endif; ?>
+		            <?php if ($this->acl->isAllowed($this->user->user_role, 'mmailsend')) : ?>
+					<button dojoType="dijit.form.Button" type="button" id="sendtestButton" iconClass="sendmailIcon" value="Send Test" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/mail/sendtest/id/<?php echo $this->mailArray['mail_id']; ?>/','Send Test Mail');">Send Test</button>
+					<button dojoType="dijit.form.Button" type="button" id="sendButton" iconClass="sendmailIcon" value="Send" onClick="MyFCKObject.UpdateEditorFormValue(); getDialog('/admin/mail/send/id/<?php echo $this->mailArray['mail_id']; ?>/','Send Mail');">Send</button>
+					<?php endif; endif; ?>
+					<button dojoType="dijit.form.Button" type="button" id="mailButton" value="Mail..." iconClass="mailIcon" onClick="goTo('/admin/mail/');">Mail...</button>
+    			</div>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>

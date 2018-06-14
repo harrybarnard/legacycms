@@ -1,0 +1,87 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dojox.layout.RotatorContainer");
+dojo.require("dijit.layout.ContentPane");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Account Settings | Subscriptions');
+$this->placeholder('title')->set('Login');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/user.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="cLWrap">
+
+	<div class="aBox copy nopad">
+		<h2>Account Settings: Subscriptions</h2>
+	</div>
+	<div class="tabBGroup">
+		<a href="<?php echo $this->baseUrl();?>/settings/" class="BTab">Profile</a>
+		<a href="<?php echo $this->baseUrl();?>/settings/password/" class="BTab">Password</a>
+		<span class="BTab active">Subscriptions</span>
+	</div>
+        
+	<p class="Spacer"></p>
+	
+	<?php if ($this->posted != 'N') : ?>
+	<?php echo $this->partial('_partials/info.phtml', array('message' => 'Subscriptions Updated', 'box' => 'Y')); ?>
+	<?php endif; ?>
+	
+	<?php echo $this->RenderMessages($this->messages); ?>
+	
+	<div class="aBox nopad">
+		
+		<form dojoType="dijit.form.Form" id="profileForm" jsId="profileForm" encType="multipart/form-data" action="<?php echo $this->baseUrl();?>/settings/subscriptions/" method="POST" class="cForm">
+		
+			<fieldset class="cFieldset">
+        		<legend class="cFLegend">Subscriptions</legend>
+    	
+		        <?php if(count($this->listsArray) > 0) : ?>
+                <?php foreach($this->listsArray as $list) : ?>
+    			<div class="aBox soft copy botpad <?php if($this->MSubStatus($list['mgroup_id'],$this->user->user_id)) : ?>yBG<?php endif; ?>" style="cursor: default; margin-bottom: 5px;" onclick="toggleCheckbox('list<?php echo $list['mgroup_id']; ?>','sub<?php echo $list['mgroup_id']; ?>');" id="sub<?php echo $list['mgroup_id']; ?>">
+    				<h4><?php echo $list['mgroup_title']; ?></h4>
+    			    <?php echo $list['mgroup_description']; ?><br />
+    				<label for="list<?php echo $list['mgroup_id']; ?>"><input dojotype="dijit.form.CheckBox" name="lists[]" id="list<?php echo $list['mgroup_id']; ?>" value="<?php echo $list['mgroup_id']; ?>" type="checkbox" <?php if($this->MSubStatus($list['mgroup_id'],$this->user->user_id)) : ?>checked="checked"<?php endif; ?>/> <strong>Subscribe to this mailing list</strong></label>
+    			</div>
+    		    <?php endforeach;?>
+    		    <?php endif; ?>
+    		    
+    		</fieldset>
+    		
+    		<div class="cFormItmS">
+    			<button dojoType="dijit.form.Button" type="submit" name="submitButton" value="Save">Save</button>
+    		</div>
+    	
+    	</form>
+	
+	</div>
+	
+	<p class="Spacer"></p>
+
+</div>
+
+<div class="cRWrap">
+				    
+	<?php echo $this->partial('_partials/searchbox.phtml'); ?>
+	
+	<?php $this->RenderRotator('SideBar'); ?>
+				    	
+</div>
+				    
+<p class="ClearAll"></p>
+				

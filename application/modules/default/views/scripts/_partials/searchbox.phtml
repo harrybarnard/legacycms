@@ -1,0 +1,35 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<div class="rBox">
+				    		
+	<h3>Search</h3>
+				    		
+	<form id="searchForm" action="<?php echo $this->baseUrl();?>/search/" method="GET" class="cForm" style="padding: 0px;">
+
+		<div class="cFormItmH" style="padding: 0px;">
+    		<input dojoType="dijit.form.TextBox" 
+        		type="text" 
+        		name="query" 
+        		value="<?php if(isset($this->query)) : echo $this->query; endif; ?>"
+        		style="width: 200px;"
+        		class="cFormInput"/>
+        </div>
+        <div class="cFormItmH" style="padding: 0px;">
+        	<button dojoType="dijit.form.Button" type="submit">Go</button>
+        </div>
+        						
+        <p class="ClearAll"></p>
+			
+	</form>
+				    		
+</div>
+
+<p class="ClearAll"></p>
+
+<p class="Spacer"></p>

@@ -1,0 +1,146 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.layout.TabContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Users | Edit Role' );
+$this->placeholder ( 'title' )->set ( 'Edit Role' );
+$this->placeholder('section')->set('users');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<form dojoType="dijit.form.Form" id="editForm" method="POST" class="cForm" >
+
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<tr>
+			<td width="60%" valign="top">
+
+				<fieldset class="cFieldset">
+					<legend class="cFLegend">Details</legend>
+					<span class="tagItm"><a href="<?php echo $this->url(array('action' => 'manage','controller' => 'users','id' => NULL,'role' => $this->roleArray['role_id'])); ?>">Users (<?php $this->URoleCount($this->roleArray['role_id']); ?>)</a></span>
+				</fieldset>
+
+			</td>
+			<td width="40%" valign="top">
+
+				<fieldset class="cFieldset" style="margin-left: 10px;">
+					<legend class="cFLegend">Functions</legend>
+				
+					<div>
+						<button dojoType="dijit.form.Button" type="button" id="saveButton" value="Save" iconClass="saveIcon" onClick="postDialog('/admin/users/rolesave/id/<?php echo $this->roleArray['role_id']; ?>/','editForm','Save Role');">Save</button> 
+						<?php if($this->acl->isAllowed($this->user->user_role, 'uroledelete') & $this->roleArray['role_id'] > 3) : ?><button dojoType="dijit.form.Button" type="button" id="deleteroleButton" iconClass="deleteroleIcon" value="Delete" onClick="getDialog('/admin/users/roledelete/id/<?php echo $this->roleArray['role_id']; ?>','Delete Role');">Delete</button><?php endif; ?>
+						<button dojoType="dijit.form.Button" type="button" iconClass="usersIcon" id="usersButton" value="Users" onClick="goTo('/admin/users/');">Users...</button>
+    				</div>
+    			
+				</fieldset>
+
+			</td>
+		</tr>
+	</table>
+
+	<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" style="width:100%;" doLayout="false">
+		
+		<div id="GlobalPane" dojoType="dijit.layout.ContentPane" title="Global" style="padding: 10px;">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Settings</legend>
+			
+				<div class="cFormItmH" style="padding-bottom: 1px;">
+					<label for="title"><strong>Name</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				promptMessage="Input a name"
+        				invalidMessage="Invalid name"
+            			name="title" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="title" 
+            			value="<?php echo $this->roleArray['role_title']; ?>" 
+            			size="55" 
+            			style="width: 200px;"/>
+				</div>
+				
+				<div class="cFormItmH" style="padding-bottom: 1px;">
+					<label for="colour"><strong>Comments Colour</strong></label><br />
+        			<input dojoType="dijit.form.ValidationTextBox"
+        				trim="true"
+        				required="true"
+        				promptMessage="Input a hex colour code"
+        				invalidMessage="Invalid hex colour code"
+            			name="colour" 
+            			type="text" 
+            			class="cFormInput" 
+            			id="colour" 
+            			regExp="^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$"
+            			value="<?php echo $this->roleArray['role_colour']; ?>" 
+            			size="55" 
+            			style="width: 100px;"/>
+				</div>
+				
+				<p class="ClearAll"></p>
+			
+			</fieldset>
+
+            <?php $this->UPrvForm('global',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+		<div id="ArticlesPane" dojoType="dijit.layout.ContentPane" title="Articles" style="padding: 10px;">
+		
+			<?php $this->UPrvForm('articles',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+		<div id="AssetsPane" dojoType="dijit.layout.ContentPane" title="Assets" style="padding: 10px;">
+		
+			<?php $this->UPrvForm('assets',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+		<div id="EventsPane" dojoType="dijit.layout.ContentPane" title="Events" style="padding: 10px;">
+		
+			<?php $this->UPrvForm('events',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+		<div id="MailPane" dojoType="dijit.layout.ContentPane" title="Mail" style="padding: 10px;">
+		
+			<?php $this->UPrvForm('mail',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+		<div id="PagesPane" dojoType="dijit.layout.ContentPane" title="Pages" style="padding: 10px;">
+		
+			<?php $this->UPrvForm('pages',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+		<div id="UsersPane" dojoType="dijit.layout.ContentPane" title="Users" style="padding: 10px;">
+		
+			<?php $this->UPrvForm('users',$this->roleArray['role_id']); ?>
+		
+		</div>
+		
+	</div>
+
+</form>

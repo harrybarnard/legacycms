@@ -1,0 +1,109 @@
+@CHARSET "ISO-8859-1";
+
+/*********************/
+/* CMS - Default CSS */
+/*********************/
+
+/* Body */ 
+ 
+body {
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #333333;
+	background-color: #000;
+}
+
+body a:link, body a:visited {
+	color: #ED1E24;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/* Layout */ 
+
+.eWrap {
+	max-width: 580px;
+	position: relative;
+	margin: 0 auto;
+}
+
+
+/* Article Boxes */
+
+.aBox {
+	border: 1px solid #ED1E24;
+	background-color:#111111;
+	padding: 10px;
+	color: #EEE;
+}
+
+.aBox.nopad {
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+}
+
+.aBox.toppad {
+	padding-top: 10px !important;
+	padding-bottom: 5px !important;
+}
+
+.aBox.botpad {
+	padding-top: 5px !important;
+	padding-bottom: 10px !important;
+}
+
+.aBox h2, .aBox h2 a, .aBox h3, .aBox h3 a, .aBox h4, .aBox h4 a {
+	color: #FFF;
+}
+
+.aBox h5 {
+	font-size: 12px;
+	color: #999;
+	font-weight: normal;
+	padding: 0px;
+	padding-bottom: 5px;
+	margin: 0px;
+}
+
+.aBox.toppad h5 {
+	padding-bottom: 0px !important;
+}
+
+.aBox.error {
+}
+
+.aBox.success {
+	min-height: 230px;
+	background: #FFF url('images/ist2_4451791.jpg') bottom right no-repeat;
+	padding-right: 280px;
+}
+
+.aBox.soft {
+	border: 1px solid #4A4A4A !important;
+}
+
+.tagList {
+	float: left;
+	margin-right: 10px;
+	line-height: 25px;
+}
+
+/* Cheeky Cheats */
+
+.ClearAll {
+	clear: both !important;
+	height: 0px !important;
+	font-size: 0px !important;
+	line-height: 0px !important;
+	padding: 0px !important;
+	margin: 0px !important;
+	float: none !important;
+}
+
+.Spacer {
+	height: 10px;
+	font-size: 0px;
+	line-height: 0px;
+	padding: 0px;
+	margin: 0px;
+}

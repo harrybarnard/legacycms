@@ -1,0 +1,31 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Error | '.$this->title);
+$this->placeholder('title')->set($this->title);
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="eWrap">
+
+<div class="aBox error copy nopad">
+    <h2><?php echo $this->title; ?></h2>
+    <?php if ($this->message): ?>
+	<?php echo $this->message; ?>
+	<?php endif; ?>
+	<p class="ClearAll"></p>
+</div>
+
+</div>

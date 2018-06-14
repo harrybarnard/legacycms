@@ -1,0 +1,12 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+?>
+<div class="lBox lBoxOff" onmouseover="this.className='lBox lBoxOn';" onmouseout="this.className='lBox lBoxOff';" onclick="goTo('<?php echo $this->baseUrl();?>/events/event/<?php echo $this->event_id; ?>/<?php echo urlencode($this->event_title); ?>/');">
+	<a href="<?php echo $this->baseUrl();?>/events/event/<?php echo $this->event_id; ?>/<?php echo urlencode($this->event_title); ?>/"><?php echo $this->escape($this->ecat_title); ?> - <?php echo $this->event_title; ?><?php if($this->venue_id != '1') : ?>, <?php echo $this->venue_title; ?>, <?php echo $this->venue_city; ?><?php endif; ?></a>
+	<small><?php echo $this->EDate($this->event_date,$this->event_end); ?></small>
+</div>

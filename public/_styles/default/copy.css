@@ -1,0 +1,64 @@
+@CHARSET "ISO-8859-1";
+
+/******************/
+/* CMS - Copy CSS */
+/******************/
+
+.copy {
+}
+
+.copy h1 {
+	font-size: 24px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.copy h2 {
+	font-size: 22px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.copy h3 {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.copy h4 {
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.copy p {
+	margin: 0px;
+	padding: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.copy ul {
+}
+
+.copy li {
+	padding-bottom: 3px;
+}
+
+.copy p, .copy li {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 160%;
+}

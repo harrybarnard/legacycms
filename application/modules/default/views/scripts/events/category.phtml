@@ -1,0 +1,59 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");';
+
+$registry = Zend_Registry::getInstance();
+Zend_Date::setOptions(array('format_type' => 'php'));
+$this->headTitle($registry->site->site->name.' | Events | Category | '.$this->categoryArray['ecat_title']);
+$this->placeholder('title')->set('Venue');
+$this->placeholder('section')->set('events');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/events.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="aBox copy nopad">
+	<h2>Category: <?php echo $this->categoryArray['ecat_title']; ?></h2>
+</div>
+<p class="Spacer"></p>
+<?php if ($this->page == '1') : ?>
+<?php if ($this->categoryArray['ecat_content'] != NULL) : ?>
+<div class="aBox copy botpad">
+    <?php echo $this->categoryArray['ecat_content']; ?>
+    <p class="ClearAll"></p>
+</div>
+<?php endif; ?>
+<p class="Spacer"></p>
+<?php endif; ?>
+<?php if(count($this->eventsArray) > 0) : ?>
+
+<div class="aBox copy toppad">
+
+<?php echo $this->partialLoop('_partials/eventlist.phtml', $this->eventsArray); ?>
+
+</div>
+
+<p class="Spacer"></p>
+
+<?php echo $this->paginationControl($this->eventsArray,'Sliding','_pagination/default.phtml'); ?>
+
+<?php else : ?>
+
+<?php echo $this->partial('_partials/info.phtml', array('message' => 'No events to display at the moment')); ?>
+
+<?php endif; ?>
+
+<p class="Spacer"></p>

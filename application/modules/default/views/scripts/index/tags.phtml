@@ -1,0 +1,57 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dojox.layout.RotatorContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Tags');
+$this->placeholder('title')->set('Tags');
+$this->placeholder('section')->set('tags');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css');
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<div class="cLWrap">
+
+<div class="aBox copy nopad">
+
+	<h2>Tags</h2>
+
+</div>
+<div class="tabBGroup">
+	<span class="BTab active">All (<?php echo $this->TCount('ALL','ALL'); ?>)</span>
+	<a href="<?php echo $this->baseUrl();?>/articles/tags/" class="BTab">Blog (<?php echo $this->ATagCount('ALL'); ?>)</a>
+	<a href="<?php echo $this->baseUrl();?>/pages/tags/" class="BTab">Pages (<?php echo $this->PTagCount('ALL'); ?>)</a>
+</div>
+
+<p class="Spacer"></p>
+
+<div class="aBox">
+
+	<?php $this->TCloud('ALL','articles','ALL'); ?>
+
+</div>
+
+<p class="Spacer"></p>
+
+</div>
+
+<div class="cRWrap">
+
+	<?php echo $this->partial('_partials/searchbox.phtml'); ?>
+	
+	<?php $this->RenderRotator('SideBar'); ?>
+	
+</div>
+				    
+<p class="ClearAll"></p>

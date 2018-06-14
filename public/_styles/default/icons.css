@@ -1,0 +1,11 @@
+@CHARSET "ISO-8859-1";
+
+/* Default Icons */
+
+.goIcon {
+	background-image: url('dijit/images/goIcon.gif');
+	background-repeat: no-repeat;
+	width: 19px;
+	height: 15px;
+	text-align: center;
+}

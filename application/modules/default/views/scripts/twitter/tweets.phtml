@@ -1,0 +1,42 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$this->registry = Zend_Registry::getInstance();
+?>
+<div class="rBox">
+
+    <h3>Tweets</h3>
+    
+    <?php if(count($this->tweetsArray)) : ?>   
+    
+    <div dojoType="dojox.widget.AutoRotator" id="tweetRotator" jsId="tweetRotator" suspendOnHover="true" transition="dojox.widget.rotator.crossFade" duration="5000" style="height: 85px;">
+        <?php foreach ($this->tweetsArray as $tweet) : ?>
+        <div class="tweetPane" >
+            <?php 
+                $text = $tweet->getContent(); 
+                $created = strtotime($tweet->getDateModified());
+                $time = $this->twitTime($created,time());
+    
+                $text = preg_replace('@(https?://([-\w\.]+)+(/([\w/_\.]*(\?\S+)?(#\S+)?)?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
+                $text = preg_replace('/@(\w+)/', '<a href="http://twitter.com/$1" target="_blank">@$1</a>', $text);
+                $text = preg_replace('/#(\w+)/', ' <a href="http://search.twitter.com/search?q=%23$1" target="_blank">#$1</a>', $text);
+            ?>
+            <?php echo $text; ?>
+            <h5><a href="<?php echo $tweet->getLink(); ?>" target="_blank"><?php echo $time; ?></a></h5>
+        </div>
+        <?php endforeach; ?>
+        
+    </div>
+    
+    <?php else : ?>
+    
+    <p>No tweets to display!</p>
+    
+    <?php endif; ?>    
+    
+</div>

@@ -1,0 +1,158 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.Dialog");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Menu");
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.NumberTextBox");
+dojo.require("dijit.layout.TabContainer");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Articles | Manage' );
+$this->placeholder ( 'title' )->set ( 'Articles' );
+$this->placeholder('section')->set('articles');
+?>
+<div dojoType="dijit.Dialog" id="ajaxDialog" title="Information"></div>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td width="255px" valign="top">
+		
+			<fieldset class="cFieldset">
+				<legend class="cFLegend">Functions</legend>
+
+				<?php if($this->acl->isAllowed($this->user->user_role, 'aarticlenew')) : ?><button dojoType="dijit.form.Button" name="newarticleButton" iconClass="newarticleIcon" id="newarticleButton" value="New Article" onClick="getDialog('/admin/articles/new/','New Article');">New Article</button><?php endif; ?>
+    			<?php if($this->acl->isAllowed($this->user->user_role, 'acategorynew')) : ?><button dojoType="dijit.form.Button" name="newcategoryButton" iconClass="newcategoryIcon" id="newcategoryButton" value="New Category" onClick="getDialog('/admin/articles/categorynew/','New Category');">New Category</button><?php endif; ?>
+    			
+    		</fieldset>
+			
+		</td>
+		<td valign="top">
+
+			<fieldset class="cFieldset" style="margin-left: 10px;">
+				<legend class="cFLegend">Filter</legend>
+				
+				<?php if (isset($this->filter['author'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('author' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Author: <?php echo $this->escape($this->filter['author']); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['category'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('category' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Category: <?php echo $this->escape($this->filter['category']); ?></span><?php endif; ?>
+    			<?php if (isset($this->filter['sort'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('sort' => NULL,'page' => NULL)); ?>');" title="Remove Filter">Sort: <?php echo $this->escape(ucwords($this->filter['sort'])); ?></span><?php endif; ?>
+				<?php if (isset($this->filter['order'])) : ?><span class="tagItm" onmouseover="this.className='tagItm_del';" onmouseout="this.className='tagItm';" onClick="goTo('<?php echo $this->url(array('order' => $this->filter['orderopt'],'page' => NULL)); ?>');" title="Toggle Filter">Order: <?php echo $this->escape(strtoupper($this->filter['order'])); ?></span><?php endif; ?>
+    			<?php if (!count($this->filter)) : ?><span class="tagItm">No active filter</span><?php endif; ?>
+    			
+			</fieldset>
+
+		</td>
+	</tr>
+</table>
+
+<div id="categoriesPane">
+	<fieldset class="cFieldset">
+		<legend class="cFLegend">Categories</legend>
+		<?php if(count($this->categoryArray)) : ?>
+<?php foreach($this->categoryArray as $category) : ?>
+<span class="tagItm" id="cat<?php echo $category['acat_id']; ?>"><a href="<?php echo $this->url(array('action' => 'manage','category' => $category['acat_id'],'page' => NULL)); ?>" title="Right Click To Edit"><?php echo $category['acat_title']; ?> (<?php $this->ACatCount($category['acat_id']); ?>)</a></span>
+<div dojoType="dijit.Menu" id="menu<?php echo $category['acat_id']; ?>" contextMenuForWindow="false" style="display: none;" targetNodeIds="cat<?php echo $category['acat_id']; ?>">
+	<?php if ($category['acat_id'] != "1" & $this->acl->isAllowed($this->user->user_role, 'acategorydelete')): ?>
+  	<div dojoType="dijit.MenuItem" iconClass="deletecategoryIcon" onClick="getDialog('/admin/articles/categorydelete/id/<?php echo $category['acat_id']; ?>/','Delete Category');">Delete</div>
+  	<?php endif; ?>
+  	<?php if ($this->acl->isAllowed($this->user->user_role, 'acategoryedit')): ?><div dojoType="dijit.MenuItem" iconClass="editcategoryIcon" onClick="getDialog('/admin/articles/category/id/<?php echo $category['acat_id']; ?>/','Edit Category');">Edit</div><?php endif; ?>
+</div>
+<?php endforeach; ?>
+<?php else : ?>
+<span class="tagItm">No Categories!</span>
+<?php endif;?>
+	</fieldset>
+</div>
+
+<table border="0" width="100%" cellpadding="5" cellspacing="0" id="managetable">
+	<tr class="managetablerow">
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'article','page' => NULL)); ?>" title="Add to Filter">Article</a> 
+			<?php if ($this->filter['sort'] == 'article') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'author','page' => NULL)); ?>" title="Add to Filter">Author</a>
+			<?php if ($this->filter['sort'] == 'author') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'category','page' => NULL)); ?>" title="Add to Filter">Category</a>
+			<?php if ($this->filter['sort'] == 'category') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+		<th><a href="<?php echo $this->url(array('action' => 'manage','sort' => 'date','page' => NULL)); ?>" title="Add to Filter">Date</a>
+			<?php if ($this->filter['sort'] == 'date') : ?>
+		    <?php if($this->filter['order'] == 'desc') : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_up.gif" alt="Descending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php else : ?>
+		    <a href="<?php echo $this->url(array('action' => 'manage','order' => $this->filter['orderopt'],'page' => NULL)); ?>" title="Toggle Filter"><img src="/_styles/admin/icons/arrow_down.gif" alt="Ascending" title="Toggle Filter" border="0" style="vertical-align: text-top;"/></a>
+		    <?php endif; ?>
+		    <?php endif; ?>
+		</th>
+	</tr>
+	<?php if (count($this->articlesArray)) : ?>
+    <?php foreach($this->articlesArray as $article) : ?>
+    <?php $class = $this->cycle(array("managetable_row1","managetable_row2"))->next(); ?>
+    <tr class="<?php echo $class;?>" onMouseOver="toggleVis('edit<?php echo $article['article_id']; ?>',1); this.className='managetable_highlight';" onMouseOut="toggleVis('edit<?php echo $article['article_id']; ?>',0); this.className='<?php echo $class;?>'">
+		<td>
+			<strong><a href="/admin/articles/edit/id/<?php echo $article['article_id']; ?>"><?php echo $article['article_title']; ?></a> <?php if($article['article_status'] == 'draft') : ?>(draft)<?php endif; ?></strong>
+			<div id="edit<?php echo $article['article_id']; ?>" style="visibility:hidden; margin-top: 4px; margin-bottom: 3px;"><a href="<?php echo $this->url(array('action' => 'edit','id' => $article['article_id'])); ?>">Edit</a><?php if($this->acl->isAllowed($this->user->user_role, 'aarticledelete')) : ?> | <a onclick="getDialog('/admin/articles/delete/id/<?php echo $article['article_id']; ?>/','Delete Article');" style="cursor: pointer;">Delete</a><?php endif; ?></div>
+		</td>
+		<td><a href="<?php echo $this->url(array('action' => 'manage','author' => $article['article_user'],'page' => NULL)); ?>" title="Add to Filter"><?php echo $article['user_alias']; ?></a></td>
+		<td><a href="<?php echo $this->url(array('action' => 'manage','category' => $article['article_category'],'page' => NULL)); ?>" title="Add to Filter"><?php echo $article['acat_title']; ?></a></td>
+		<td><?php if ($article['article_status'] == 'published') : ?>
+		        <?php echo $this->MakeDate('d/m/Y H:i',$article['article_published']); ?>
+        		<br/>Published
+		    <?php else : ?>
+		        <?php echo $this->MakeDate('d/m/Y H:i',$article['article_edit']); ?>
+            	<br/>Last Edited
+		    <?php endif; ?>
+        </td>
+	</tr>
+    <?php endforeach; ?>
+    <?php else : ?>
+    <tr class="managetable_row1">
+    	<td colspan="4">
+			<div class="cUpd">No Articles!</div>
+		</td>
+	</tr>
+    <?php endif;?>
+</table>
+
+<?php if (count($this->articlesArray)) : ?>
+<div class="aNav">
+    <?php echo $this->paginationControl($this->articlesArray,'Sliding','_pagination/default.phtml'); ?>
+    <p class="ClearAll"></p>
+</div>
+
+<p class="Spacer"></p>
+<?php endif; ?>

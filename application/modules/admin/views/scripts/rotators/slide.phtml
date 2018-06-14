@@ -1,0 +1,115 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+if($this->posted == 'N') : ?>
+<?php $this->RenderMessages($this->messages); ?>
+<form dojoType="dijit.form.Form" id="editslideForm" jsId="editslideForm" encType="multipart/form-data" method="POST" class="cForm" >
+    <div class="cFormItm">
+		<label for="url"><strong>Title</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	required="true"
+        	trim="true"
+            name="slidetitle" 
+            type="text" 
+            promptMessage="Input a title"
+            invalidMessage="Invalid title"
+            class="cFormInput" 
+            id="slidetitle" 
+            value="<?php echo $this->slideArray['rots_title']; ?>" 
+            size="55" 
+            style="width: 490px;"/>
+	</div>
+	<div class="cFormItm">
+		<label for="address"><strong>Caption</strong></label><br />
+        <input dojoType="dijit.form.SimpleTextarea"
+        	trim="true"
+        	promptMessage="Input a caption"
+        	invalidMessage="Invalid caption"
+            name="slidedescription" 
+            type="text" 
+            class="cFormInput" 
+            id="slidedescription"
+            value="<?php echo $this->slideArray['rots_description']; ?>" 
+            size="55" 
+            style="width: 490px;"/>
+	</div>
+	<div class="cFormItmH">
+		<label for="url"><strong>Link</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	trim="true"
+            name="slidelink" 
+            type="text"
+            required="true" 
+            promptMessage="Input a valid URL"
+            invalidMessage="Invalid URL"
+            class="cFormInput" 
+            id="slidelink" 
+            value="<?php echo $this->slideArray['rots_link']; ?>" 
+            size="55" 
+            style="width: 390px;"/>
+	</div>
+	<div class="cFormItmH">
+		<label for="url"><strong>Priority</strong></label><br />
+        <input dojoType="dijit.form.ValidationTextBox"
+        	trim="true"
+            name="slidepriority" 
+            type="text" 
+            required="true"
+            regExp="^([0-9 ]+)$"
+            promptMessage="Input a valid integer"
+            invalidMessage="Invalid integer"
+            class="cFormInput" 
+            id="slidepriority" 
+            value="<?php echo $this->slideArray['rots_order']; ?>" 
+            size="10" 
+            style="width: 80px;"/>
+	</div>
+	
+	<p class="ClearAll"></p>
+	
+	<div class="cFormItmH">
+    	<div dojoType="dijit.layout.ContentPane" class="pane" id="assetResponse" preload="true" style="clear:both; height: 180px; width: 180px; overflow: hidden;">
+    		<img src="/admin/assets/thumb/<?php echo $this->slideArray['rots_asset']; ?>/180/180/type/resize" border="0"/>
+    	</div>
+    </div>
+	
+	<div class="cFormItmH">
+    	<label for="content"><strong>Image</strong></label><br />
+    	<div class="cFormItm">
+    		<input dojoType="dijit.form.ValidationTextBox"
+            	name="assetFile" 
+            	type="text" 
+            	class="cFormInput" 
+            	id="assetFile" 
+            	value="<?php echo $this->AssetFile($this->slideArray['rots_asset']); ?>" 
+            	size="55" 
+            	readonly="readonly" 
+            	style="width: 200px;"/>
+            <input type="hidden" name="asset" id="asset" value="<?php echo $this->slideArray['rots_asset']; ?>"/>
+            <button dojoType="dijit.form.Button" type="button" id="assetButton" value="Browse..." iconClass="browseIcon" onClick="openAssetMan('image','select','asset');">Browse...</button>
+    	</div>
+    </div>
+    			
+    <p class="ClearAll"></p>
+    
+	<div class="cFormDS">
+		<button dojoType="dijit.form.Button" 
+			type="button" 
+			name="editslidesubmitButton" 
+			value="Save" 
+			iconClass="saveIcon" 
+			onClick="doDialog('/admin/rotators/slide/id/<?php echo $this->slideArray['rots_id']; ?>/','editslideForm','Edit Slide');">Save</button>
+    	<button dojoType="dijit.form.Button" 
+    		type="button" 
+    		name="editslidecancelButton" 
+    		value="Cancel" 
+    		iconClass="cancelIcon" 
+    		onClick="dijit.byId('ajaxDialog').hide();">Cancel</button>
+    </div>
+</form>
+<?php endif; ?>

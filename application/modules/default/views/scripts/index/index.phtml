@@ -1,0 +1,64 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.form.Button");
+dojo.require("dijit.form.TextBox");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.Tooltip");
+dojo.require("dojox.layout.RotatorContainer");
+dojo.require("dojox.widget.AutoRotator");
+dojo.require("dojox.widget.rotator.Fade");
+
+vidID = "'.$this->video['yt_key'].'";';
+
+$registry = Zend_Registry::getInstance();
+$this->headTitle($registry->site->site->name.' | Home Page');
+$this->placeholder('title')->set('Welcome');
+$this->placeholder('section')->set('index');
+$this->headLink()->appendStylesheet($this->baseUrl().'/_styles/default/screen.css')
+                 ->headLink(array('rel' => 'alternate','type' => 'application/atom+xml','title' => $registry->articles->feedtitle.' (Atom)','href' => $this->baseUrl().'/articles/atom'))
+                 ->headLink(array('rel' => 'alternate','type' => 'application/rss+xml','title' => $registry->articles->feedtitle.' (RSS)','href' => $this->baseUrl().'/articles/rss'));
+$this->headScript()->appendFile($this->baseUrl().'/_scripts/default/common.js','text/javascript')
+                   ->appendFile($this->baseUrl().'/_scripts/default/events.js','text/javascript')
+                   ->appendFile('http://www.google.com/jsapi','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+<?php $this->RenderRotator('HomePage'); ?>
+
+<div class="cLWrap">
+
+    <?php if(count($this->articlesArray) > 0) : ?>
+
+    <?php echo $this->partialLoop('_partials/articlelist.phtml', $this->articlesArray); ?>
+
+    <?php else : ?>
+    
+    <?php echo $this->partial('_partials/info.phtml', array('message' => 'No articles have been posted yet')); ?>
+
+    <?php endif; ?>
+				
+</div>
+				    
+<div class="cRWrap">
+				    
+	<?php echo $this->partial('_partials/searchbox.phtml'); ?>
+	
+	<?php echo $this->partial('_partials/registerbox.phtml',array('authenticated' => $this->authenticated)); ?>
+	
+	<?php $this->ENextEventsList(true); // Display List of Next 3 Events ?>
+	
+<!--	--><?php //echo $this->partial('_partials/twitter.phtml'); ?>
+		
+	<?php $this->TBox(); ?>
+				    
+</div>
+				    
+<p class="ClearAll"></p>

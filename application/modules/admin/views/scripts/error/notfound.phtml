@@ -1,0 +1,23 @@
+<?php
+/**
+ * LEGACY CMS
+ * @author Harry Barnard
+ * @version 2.1
+ * @copyright Copyright (c) 2010 Harry Barnard (http://harrybarnard.com)
+ */
+
+$onloadScript = 'dojo.require("dojo.parser");';
+
+$registry = Zend_Registry::getInstance();
+$this->headLink()->appendStylesheet('/_styles/admin/template.css');
+$this->headScript()->appendFile('/_scripts/admin/common.js','text/javascript')
+                   ->appendScript($onloadScript);
+
+$this->headTitle ( $registry->site->site->name.' Control Panel | Error' );
+$this->placeholder ( 'title' )->set ( $this->title );
+?>
+<?php if ($this->message): ?>
+<?php echo $this->message ?>
+<p class="Spacer"></p>
+<?php endif; ?>
+<p class="ClearAll"></p>
