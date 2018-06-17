@@ -49,3 +49,7 @@ Run
     
 This will create a super admin user with the alias `admin` with the email address
 and password as specified. The initial Lucene Search index will be created.
+
+## Licence
+
+[MIT](https://choosealicense.com/licenses/mit/)
