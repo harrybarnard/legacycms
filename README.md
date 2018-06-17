@@ -40,3 +40,12 @@ accordingly.
 ### Permissions    
 
 Create cache, assets, search/site-index directories and give write permissions to server.
+
+### Create Admin and Search Indexes
+
+Run
+
+    php bin/install.php -e <admin-email> -p <admin-password>
+    
+This will create a super admin user with the alias `admin` with the email address
+and password as specified. The initial Lucene Search index will be created.
